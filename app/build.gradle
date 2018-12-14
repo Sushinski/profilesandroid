@@ -1,0 +1,138 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "ru.profiles.profiles"
+        minSdkVersion 18
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug{
+            minifyEnabled false
+            debuggable true
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    flavorDimensions "staging"
+    productFlavors{
+        all{
+        }
+        local{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.profiles.indev-group.eu/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.profiles.indev-group.eu/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.profiles.indev-group.eu/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.profiles.indev-group.eu/"'
+            buildConfigField "String", "FB_APP_ID", '"385593771789451"'
+            buildConfigField "String", "VK_APP_ID", '"6262196"'
+            buildConfigField "String", "OK_APP_ID", '"1258515968"'
+            buildConfigField "String", "OK_APP_KEY", '"CBAPGEAMEBABABABA"'
+        }
+        development{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.profiles.indev-group.eu/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.profiles.indev-group.eu/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.profiles.indev-group.eu/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.profiles.indev-group.eu/"'
+            buildConfigField "String", "FB_APP_ID", '"385593771789451"'
+            buildConfigField "String", "VK_APP_ID", '"6262196"'
+            buildConfigField "String", "OK_APP_ID", '"1258515968"'
+            buildConfigField "String", "OK_APP_KEY", '"CBAPGEAMEBABABABA"'
+        }
+        ftest2{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.test2.profiles.indev-group.eu/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.test2.profiles.indev-group.eu/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.test2.profiles.indev-group.eu/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.test2.profiles.indev-group.eu/"'
+            buildConfigField "String", "FB_APP_ID", '"385593771789451"'
+            buildConfigField "String", "VK_APP_ID", '"6262196"'
+            buildConfigField "String", "OK_APP_ID", '"1258515968"'
+            buildConfigField "String", "OK_APP_KEY", '"CBAPGEAMEBABABABA"'
+        }
+        staging{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.test2.profiles.indev-group.eu/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.staging.profiles.indev-group.eu/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.staging.profiles.indev-group.eu/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.staging.profiles.indev-group.eu/"'
+            buildConfigField "String", "FB_APP_ID", '"385593771789451"'
+            buildConfigField "String", "VK_APP_ID", '"6262196"'
+            buildConfigField "String", "OK_APP_ID", '"1258515968"'
+        }
+        ftest1{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.test1.profiles.indev-group.eu/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.test1.profiles.indev-group.eu/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.test1.profiles.indev-group.eu/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.test1.profiles.indev-group.eu/"'
+            buildConfigField "String", "FB_APP_ID", '"385593771789451"'
+            buildConfigField "String", "VK_APP_ID", '"6262196"'
+            buildConfigField "String", "OK_APP_ID", '"1258515968"'
+            buildConfigField "String", "OK_APP_KEY", '"CBAPGEAMEBABABABA"'
+        }
+        production{
+            dimension "staging"
+            buildConfigField "String", "API_URL", '"https://api.profiles.ru/"'
+            buildConfigField "String", "SOCKET_URL", '"wss://api.profiles.ru/"'
+            buildConfigField "String", "STORAGE_URL", '"https://storage.profiles.ru/"'
+            buildConfigField "String", "MINIO_URL", '"https://minio.profiles.ru/"'
+            buildConfigField "String", "FB_APP_ID", '"406882653081855"'
+            buildConfigField "String", "VK_APP_ID", '"6341999"'
+            buildConfigField "String", "OK_APP_ID", '"1261638144"'
+            buildConfigField "String", "OK_APP_KEY", '"CBADBEDMEBABABABA"'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // kotlin
+    // dagger
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    // room
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    // rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rx_adapter_version"
+    implementation "android.arch.lifecycle:reactivestreams:1.0.0"
+
+    implementation "androidx.legacy:legacy-support-v4:$support_library_version"
+    implementation "androidx.legacy:legacy-support-core-utils:$support_library_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.appcompat:appcompat:$reactive_streams_version"
+    // work manager
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
+    testImplementation 'junit:junit:4.12'
+    // testing
+    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+}

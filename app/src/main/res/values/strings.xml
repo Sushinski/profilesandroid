@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Profiles</string>
+    <string name="login_email_hint">Email или телефон</string>
+    <string name="forgot_btn_text">Забыли ?</string>
+    <string name="login_btn_text">Войти</string>
+    <string name="login_reg_btn_text">Зарегистрироваться</string>
+    <string name="password_hint">Пароль</string>
+</resources>
