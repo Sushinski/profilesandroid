@@ -3,6 +3,7 @@ package ru.profiles.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
@@ -25,8 +26,8 @@ abstract class LoginFragmentModule {
         @Provides
         @IntoMap
         @ViewModelKey(LoginViewModel::class)
-        fun provideLoginViewModel(authRep: AuthRepository, userRep: UserRepository): ViewModel =
-            LoginViewModel(userRep, authRep)
+        fun provideLoginViewModel(authRep: AuthRepository, userRep: UserRepository, gson: Gson): ViewModel =
+            LoginViewModel(userRep, authRep, gson)
     }
 
     @Module

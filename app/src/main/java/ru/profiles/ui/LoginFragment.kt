@@ -29,14 +29,18 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.login_fragment, container, false).also { it ->
-            it.login_button.setOnClickListener { _ ->
-                viewModel.loginUser(identityText.text.toString(), passwordText.text.toString()).subscribe { auth ->
-                    if (auth.mRefreshToken.isNotEmpty() && auth.mToken.isNotEmpty()) {
-                        Toast.makeText(context, "Auth successful", Toast.LENGTH_LONG).show()
-                    }
+        return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
+            // todo check latest logged user & refresh auth
+                it.login_button.setOnClickListener { _ ->
+                    viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
             }
+
+            viewModel.getLoggedUser().observe(this, Observer{
+                user->
+                if(user != null)
+                    Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_LONG).show()
+            })
         }
     }
 

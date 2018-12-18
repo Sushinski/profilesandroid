@@ -43,13 +43,13 @@ class DataModule {
     @Provides
     @Singleton
     fun provideAuthRepository(authDao: AuthModelDao, authApi: AuthApi): AuthRepository {
-        return AuthRepository(authDao, authApi)
+        return AuthRepository.getInstance(authDao, authApi)
     }
 
     @Provides
     @Singleton
     fun provideUserRepository(userDao: UserModelDao, authApi: AuthApi): UserRepository{
-        return UserRepository(userDao, authApi)
+        return UserRepository.getInstance(userDao, authApi)
     }
 
 }

@@ -6,6 +6,8 @@ import com.google.gson.Gson
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.api.interfaces.AuthApi
@@ -14,13 +16,23 @@ import ru.profiles.model.pojo.AuthResponse
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class AuthRepository(val mAuthDao: AuthModelDao, val mAuthApi: AuthApi) {
+class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
+                                         private val mAuthApi: AuthApi) {
 
-    init{
-        // todo inject
+    companion object{
+        // For Singleton instantiation
+        @Volatile private var instance: AuthRepository? = null
+
+        fun getInstance( authDao: AuthModelDao,
+                        authApi: AuthApi) =
+            instance ?: synchronized(this) {
+                instance ?: AuthRepository(authDao, authApi).also { instance = it }
+            }
     }
 
-    fun getUserAuth(user_id: Int): LiveData<AuthModel> = mAuthDao.getUserAuth(user_id)
+    fun getUserAuth(user_id: Int): LiveData<AuthModel> {
+        return mAuthDao.getUserAuth(user_id)
+    }
 
 
     fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
