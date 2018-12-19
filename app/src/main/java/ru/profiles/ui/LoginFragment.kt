@@ -41,6 +41,11 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                 if(user != null)
                     Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_LONG).show()
             })
+
+            viewModel.getErrorStatus().observe(this, Observer {
+                error->
+                    Toast.makeText(context, error.mUserMessage ?: "Login Error", Toast.LENGTH_LONG).show()
+            })
         }
     }
 

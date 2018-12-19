@@ -12,6 +12,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
+import ru.profiles.livedata.SingleLiveEvent
+import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
 
 
@@ -19,6 +21,8 @@ class LoginViewModel(private val mUserRep: UserRepository,
                      private val mAuthRep: AuthRepository,
                      private val mGson: Gson
 ) : ViewModel() {
+
+    private val mErrorStatus = SingleLiveEvent<ErrorModel>()
 
     private val mDisposables = CompositeDisposable()
 
@@ -32,12 +36,20 @@ class LoginViewModel(private val mUserRep: UserRepository,
                 val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
                 Log.i("ProfilesInfo:" , u)
                 val userModel = mGson.fromJson(u, UserModel::class.java)
-                viewModelScope.launch {
+                    viewModelScope.launch {
                     mUserRep.loginUser(userModel)
                 }
             }},
-            {error-> Log.e("ProfilesError:", "Wrong login data: " + error.toString()) }
+            {
+                    error-> Log.e("ProfilesError:", "Wrong login data: " + error.toString())
+                val errObj = mGson.fromJson(error.message, ErrorModel::class.java)
+                if(errObj != null) mErrorStatus.value = errObj
+            }
         ))
+    }
+
+    fun getErrorStatus(): LiveData<ErrorModel>{
+        return mErrorStatus
     }
 
 
