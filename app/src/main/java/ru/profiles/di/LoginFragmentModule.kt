@@ -14,6 +14,7 @@ import ru.profiles.ui.LoginFragment
 import ru.profiles.viewmodel.LoginViewModel
 
 
+
 @Module(includes=[LoginFragmentModule.ProvideViewModelModule::class])
 abstract class LoginFragmentModule {
 

@@ -18,12 +18,6 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideContext(application: ProfilesApplication): Context {
-        return application.applicationContext
-    }
-
-    @Singleton
-    @Provides
     fun provideDb(app: ProfilesApplication): AppDatabase {
         return AppDatabase.getInstance(app)
     }

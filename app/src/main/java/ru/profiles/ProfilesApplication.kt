@@ -8,7 +8,7 @@ import ru.profiles.di.DaggerAppComponent
 class ProfilesApplication : DaggerApplication() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().application(this).context(applicationContext).build()
+        val appComponent = DaggerAppComponent.builder().application(this).appContext(applicationContext).build()
         appComponent.inject(this)
         return appComponent
     }

@@ -5,16 +5,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
+import java.util.concurrent.TimeoutException
 
 
 class LoginViewModel(private val mUserRep: UserRepository,
@@ -23,6 +26,8 @@ class LoginViewModel(private val mUserRep: UserRepository,
 ) : ViewModel() {
 
     private val mErrorStatus = SingleLiveEvent<ErrorModel>()
+
+    private val mLoggedUser = SingleLiveEvent<UserModel>()
 
     private val mDisposables = CompositeDisposable()
 
@@ -36,14 +41,20 @@ class LoginViewModel(private val mUserRep: UserRepository,
                 val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
                 Log.i("ProfilesInfo:" , u)
                 val userModel = mGson.fromJson(u, UserModel::class.java)
-                    viewModelScope.launch {
+                viewModelScope.launch {
                     mUserRep.loginUser(userModel)
+                    mLoggedUser.value = userModel
                 }
             }},
             {
-                    error-> Log.e("ProfilesError:", "Wrong login data: " + error.toString())
-                val errObj = mGson.fromJson(error.message, ErrorModel::class.java)
-                if(errObj != null) mErrorStatus.value = errObj
+                error->
+                mErrorStatus.value = when(error) {
+                    is HttpException ->
+                            try{mGson.fromJson(error.response().errorBody()?.string(), ErrorModel::class.java)}// todo localize messages
+                            catch (e: JsonSyntaxException){ ErrorModel(mUserMessage = "Login data error")}
+                    is TimeoutException -> ErrorModel(mUserMessage = "Can`t connect to server, try again later.")
+                    else -> ErrorModel(mUserMessage = "Login error")
+                }
             }
         ))
     }
@@ -54,7 +65,7 @@ class LoginViewModel(private val mUserRep: UserRepository,
 
 
     fun getLoggedUser(): LiveData<UserModel>{
-        return mUserRep.getLastLoggedUser()
+        return mLoggedUser
     }
 
 

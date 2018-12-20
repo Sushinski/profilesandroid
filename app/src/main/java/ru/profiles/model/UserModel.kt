@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id")]
 )
 data class UserModel(
+
     @SerializedName("user_id")
     @Expose
     var mUserId: Int = 0,
@@ -61,5 +62,5 @@ data class UserModel(
     @Expose
     var mId: Int = 0
 
-    override fun toString() = mName + mSurname
+    override fun toString() = mName + " " + (mSurname ?: "")
 }

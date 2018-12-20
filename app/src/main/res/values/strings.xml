@@ -5,4 +5,6 @@
     <string name="login_btn_text">Войти</string>
     <string name="login_reg_btn_text">Зарегистрироваться</string>
     <string name="password_hint">Пароль</string>
+    <string name="error_input_msg">Данные неверны</string>
+    <string name="wrong_login_msg">Неправильный логин или пароль</string>
 </resources>

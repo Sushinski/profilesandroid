@@ -1,10 +1,13 @@
 package ru.profiles.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import dagger.android.support.DaggerFragment
@@ -15,14 +18,31 @@ import ru.profiles.profiles.R
 import ru.profiles.viewmodel.LoginViewModel
 import javax.inject.Inject
 
+
 class LoginFragment : DaggerFragment(), LoginFragmentOps {
+
+
+    @Inject
+    lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var appContext: Context
+
+
+    override fun showAlertDialog(title: String, message: String) {
+        AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(message)
+            .setCancelable(false)
+            .setNegativeButton("OK") { dialog, _->dialog.dismiss()}
+            .create()
+            .show()
+    }
 
     companion object {
         fun newInstance() = LoginFragment()
     }
 
-    @Inject
-    lateinit var viewModel: LoginViewModel
 
 
     override fun onCreateView(
@@ -32,7 +52,8 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
                 it.login_button.setOnClickListener { _ ->
-                    viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
+                    if(ensureFields())
+                        viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
             }
 
@@ -44,7 +65,9 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
             viewModel.getErrorStatus().observe(this, Observer {
                 error->
-                    Toast.makeText(context, error.mUserMessage ?: "Login Error", Toast.LENGTH_LONG).show()
+                    showAlertDialog(getString(R.string.error_input_msg),
+                        getString(R.string.wrong_login_msg)
+                    )
             })
         }
     }
@@ -55,6 +78,17 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         /*viewModel.mAuth.observe(this, auth->{
 
         })*/
+    }
+
+    private fun ensureFields() : Boolean {
+        arrayOf(identityText, passwordText)
+            .firstOrNull{it.text.isBlank()}
+            .also { if(it != null ) shakeField(it) }
+            .let{ return it == null }
+    }
+
+    private fun shakeField(view: EditText){
+        view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shaking))
     }
 
 }

@@ -15,7 +15,8 @@ import javax.inject.Singleton
         DataModule::class,
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        ActivityBuilderModule::class
+        ActivityBuilderModule::class,
+        LoginFragmentModule::class
     ]
 )
 @Singleton
@@ -28,7 +29,7 @@ interface AppComponent: AndroidInjector<DaggerApplication> {
         fun application(application: ProfilesApplication): Builder
 
         @BindsInstance
-        fun context(context: Context): Builder
+        fun appContext(context: Context): Builder
 
         fun build(): AppComponent
     }
