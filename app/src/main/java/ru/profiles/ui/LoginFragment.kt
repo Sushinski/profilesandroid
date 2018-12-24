@@ -3,11 +3,14 @@ package ru.profiles.ui
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.jakewharton.rxbinding3.view.clicks
@@ -31,12 +34,10 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
 
     override fun showAlertDialog(title: String, message: String) {
-        AlertDialog.Builder(activity)
-            .setTitle(title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setNegativeButton("OK") { dialog, _->dialog.dismiss()}
-            .create()
+        val alertIcon = ImageView(activity).also { it.setImageResource(R.drawable.baseline_error_white) }
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT)
+            .also { it.setGravity(Gravity.CENTER, 0, 0) }
+            .also { (it.view as LinearLayout).addView(alertIcon) }
             .show()
     }
 
@@ -67,21 +68,13 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
             })
 
             viewModel.getErrorStatus().observe(this, Observer {
-                error->
-                    showAlertDialog(getString(R.string.error_input_msg),
+                showAlertDialog(getString(R.string.error_input_msg),
                         getString(R.string.wrong_login_msg)
                     )
             })
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // todo if none, subscribe to auth events
-        /*viewModel.mAuth.observe(this, auth->{
-
-        })*/
-    }
 
     private fun ensureFields() : Boolean {
         arrayOf(identityText, passwordText)

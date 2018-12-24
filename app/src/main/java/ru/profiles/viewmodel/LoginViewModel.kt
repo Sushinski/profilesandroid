@@ -3,6 +3,7 @@ package ru.profiles.viewmodel
 import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
+import ru.profiles.extensions.toSingleEvent
+import ru.profiles.livedata.LiveEvent
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
@@ -28,14 +31,13 @@ class LoginViewModel(private val mUserRep: UserRepository,
 
     private val mErrorStatus = SingleLiveEvent<ErrorModel>()
 
-    private val mLoggedUser = SingleLiveEvent<UserModel>()
-
     private val mDisposables = CompositeDisposable()
 
     private val viewModelJob = Job()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    private val mLoginEvent = mUserRep.getLoggedUser().toSingleEvent()
 
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (
@@ -44,7 +46,6 @@ class LoginViewModel(private val mUserRep: UserRepository,
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
                     mUserRep.saveLoggedUser(userModel)
-                    mLoggedUser.value = userModel
                 }
             }},
             {
@@ -64,9 +65,9 @@ class LoginViewModel(private val mUserRep: UserRepository,
         return mErrorStatus
     }
 
-    fun getLoggedUser(): LiveData<UserModel>{
+    fun getLoggedUser(): LiveData<UserModel> {
         // todo transform from repo livedata
-        return mLoggedUser
+        return mLoginEvent
     }
 
     override fun onCleared() {
