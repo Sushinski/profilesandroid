@@ -3,6 +3,7 @@ package ru.profiles.viewmodel
 import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -35,14 +36,14 @@ class LoginViewModel(private val mUserRep: UserRepository,
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (
             { auth -> if (auth.mRefreshToken.isNotEmpty() && auth.mToken.isNotEmpty()) {
                 val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
-                Log.i("ProfilesInfo:" , u)
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
-                    mUserRep.loginUser(userModel)
+                    mUserRep.saveLoggedUser(userModel)
                     mLoggedUser.value = userModel
                 }
             }},
@@ -63,12 +64,10 @@ class LoginViewModel(private val mUserRep: UserRepository,
         return mErrorStatus
     }
 
-
     fun getLoggedUser(): LiveData<UserModel>{
+        // todo transform from repo livedata
         return mLoggedUser
     }
-
-
 
     override fun onCleared() {
         if(!mDisposables.isDisposed) mDisposables.dispose()

@@ -126,9 +126,12 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rx_adapter_version"
     implementation "android.arch.lifecycle:reactivestreams:$reactive_streams_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rx_binding_version"
+    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0-alpha2'
 
-    implementation "androidx.legacy:legacy-support-v4:$support_library_version"
-    implementation "androidx.legacy:legacy-support-core-utils:$support_library_version"
+    //implementation "androidx.legacy:legacy-support-v4:$support_library_version"
+    //implementation "androidx.legacy:legacy-support-core-utils:$support_library_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.appcompat:appcompat:$support_library_version"

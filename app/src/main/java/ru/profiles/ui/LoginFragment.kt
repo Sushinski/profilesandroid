@@ -10,13 +10,17 @@ import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.jakewharton.rxbinding3.view.clicks
 import dagger.android.support.DaggerFragment
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.view.*
 import ru.profiles.interfaces.LoginFragmentOps
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.LoginViewModel
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+
 
 
 class LoginFragment : DaggerFragment(), LoginFragmentOps {
@@ -24,9 +28,6 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
     @Inject
     lateinit var viewModel: LoginViewModel
-
-    @Inject
-    lateinit var appContext: Context
 
 
     override fun showAlertDialog(title: String, message: String) {
@@ -44,14 +45,16 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
-                it.login_button.setOnClickListener { _ ->
+            it.login_button.clicks()
+                .throttleFirst(1000, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe{
                     if(ensureFields())
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }

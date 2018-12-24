@@ -34,8 +34,8 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
             }
     }
 
-    fun getUserAuth(user_id: Int): LiveData<AuthModel> {
-        return mAuthDao.getUserAuth(user_id)
+    fun getLastUserAuth(): LiveData<AuthModel> {
+        return mAuthDao.getUserAuth()
     }
 
     fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
