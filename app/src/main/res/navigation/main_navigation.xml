@@ -1,0 +1,24 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/search">
+
+    <fragment
+        android:id="@+id/search"
+        android:label="search"
+        android:name="ru.profiles.ui.SearchFragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/action_search_dest_self"
+            app:destination="@id/search" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="ru.profiles.ui.LoginFragment"
+        android:label="login"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_self"
+            app:destination="@id/login" />
+    </fragment>
+</navigation>

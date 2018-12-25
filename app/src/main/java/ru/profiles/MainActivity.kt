@@ -1,10 +1,11 @@
 package ru.profiles
 
 import android.os.Bundle
+import androidx.navigation.fragment.NavHostFragment
 import ru.profiles.interfaces.MainActivityOps
-import ru.profiles.ui.LoginFragment
 import dagger.android.support.DaggerAppCompatActivity
 import ru.profiles.profiles.R
+
 
 
 class MainActivity : DaggerAppCompatActivity(), MainActivityOps {
@@ -13,11 +14,8 @@ class MainActivity : DaggerAppCompatActivity(), MainActivityOps {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-        //todo forward check login to skip auth
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, LoginFragment.newInstance())
-                .commitNow()
-        }
+
+        val host: NavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
     }
 }

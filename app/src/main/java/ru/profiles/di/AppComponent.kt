@@ -16,7 +16,8 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         ActivityBuilderModule::class,
-        LoginFragmentModule::class
+        LoginFragmentModule::class,
+        SearchFragmentModule::class
     ]
 )
 @Singleton
