@@ -7,7 +7,9 @@ import ru.profiles.extensions.toSingleEvent
 import ru.profiles.model.UserModel
 import javax.inject.Inject
 
-class SearchViewModel @Inject constructor(private val mUserRep: UserRepository):  ViewModel() {
+class SplashViewModel @Inject constructor(private val mUserRep: UserRepository): ViewModel() {
 
-
+    fun getLoggedUser(): LiveData<UserModel> {
+        return mUserRep.getLoggedUser().toSingleEvent()
+    }
 }

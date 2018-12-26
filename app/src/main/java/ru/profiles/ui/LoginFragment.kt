@@ -15,7 +15,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.jakewharton.rxbinding3.view.clicks
+import dagger.android.support.DaggerAppCompatDialogFragment
 import dagger.android.support.DaggerFragment
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -28,7 +30,7 @@ import javax.inject.Inject
 
 
 
-class LoginFragment : DaggerFragment(), LoginFragmentOps {
+class LoginFragment : DaggerAppCompatDialogFragment(), LoginFragmentOps {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -67,8 +69,10 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
             viewModel.getLoggedUser().observe(this, Observer{
                 user->
-                if(user != null)
-                    Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_LONG).show()
+                if(user != null) {
+                    Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_SHORT).show()
+                    NavHostFragment.findNavController(this).navigate(R.id.action_login_to_search)
+                }
             })
 
             viewModel.getErrorStatus().observe(this, Observer {
