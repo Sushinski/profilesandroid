@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding3.view.clicks
 import dagger.android.support.DaggerFragment
 import io.reactivex.schedulers.Schedulers
@@ -28,9 +30,10 @@ import javax.inject.Inject
 
 class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
-
     @Inject
-    lateinit var viewModel: LoginViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var viewModel: LoginViewModel
 
 
     override fun showAlertDialog(title: String, message: String) {
@@ -50,6 +53,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[LoginViewModel::class.java]
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
             it.login_button.clicks()

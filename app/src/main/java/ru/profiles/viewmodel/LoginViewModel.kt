@@ -22,11 +22,12 @@ import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
 import java.util.concurrent.TimeoutException
+import javax.inject.Inject
 
 
-class LoginViewModel(private val mUserRep: UserRepository,
-                     private val mAuthRep: AuthRepository,
-                     private val mGson: Gson
+class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
+                                         private val mAuthRep: AuthRepository,
+                                         private val mGson: Gson
 ) : ViewModel() {
 
     private val mErrorStatus = SingleLiveEvent<ErrorModel>()
