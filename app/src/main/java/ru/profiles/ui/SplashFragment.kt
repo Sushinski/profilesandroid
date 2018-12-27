@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
-import dagger.android.support.DaggerAppCompatDialogFragment
+import dagger.android.support.DaggerFragment
 import ru.profiles.di.ViewModelFactory
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.SplashViewModel
 import javax.inject.Inject
 
-class SplashFragment : DaggerAppCompatDialogFragment() {
+class SplashFragment : DaggerFragment() {
 
     @Inject
     lateinit var mViewModelFactory: ViewModelFactory

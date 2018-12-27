@@ -7,18 +7,23 @@
         android:id="@+id/search"
         android:label="search"
         android:name="ru.profiles.ui.SearchFragment"
-        tools:layout="@layout/search_fragment" >
+        tools:layout="@layout/search_fragment">
     </fragment>
+
     <fragment
         android:id="@+id/login"
         android:name="ru.profiles.ui.LoginFragment"
         android:label="login"
-        tools:layout="@layout/login_fragment" >
+        tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_login_to_search"
             app:destination="@id/search"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_login_to_reg_frag_1"
+            app:destination="@id/reg_frag_1" />
     </fragment>
+
     <fragment
         android:id="@+id/splash"
         android:name="ru.profiles.ui.SplashFragment"
@@ -27,10 +32,32 @@
         <action
             android:id="@+id/action_splash_to_search"
             app:destination="@id/search"
+            app:popUpTo="@id/splash"
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_splash_to_login"
             app:destination="@id/login"
-            app:popUpToInclusive="true"/>
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splash"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reg_frag_1"
+        android:name="ru.profiles.ui.registration.RegistrationFragment1"
+        android:label="RegistrationFragment1" >
+        <action
+            android:id="@+id/action_reg_frag_1_to_reg_frag_2"
+            app:destination="@id/reg_frag_2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reg_frag_2"
+        android:name="ru.profiles.ui.registration.RegistrationFragment2"
+        android:label="RegistrationFragment2" >
+        <action
+            android:id="@+id/action_reg_frag_2_to_search"
+            app:destination="@id/search"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

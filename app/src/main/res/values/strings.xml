@@ -7,4 +7,9 @@
     <string name="password_hint">Пароль</string>
     <string name="error_input_msg">Данные неверны</string>
     <string name="wrong_login_msg">Неправильный логин или пароль</string>
+    <string name="email_hint">Email</string>
+    <string name="passwd_hint">Пароль</string>
+    <string name="passwd_repeat_hint">Повторите пароль</string>
+    <string name="reg_approval_text">Регистрация означает согласие с  лицензионным соглашением</string>
+    <string name="reg_proceed_btn_text">Далее</string>
 </resources>

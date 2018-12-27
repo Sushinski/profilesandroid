@@ -1,7 +1,6 @@
 package ru.profiles.ui
 
-import android.app.AlertDialog
-import android.content.Context
+
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,12 +11,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
 import com.jakewharton.rxbinding3.view.clicks
-import dagger.android.support.DaggerAppCompatDialogFragment
 import dagger.android.support.DaggerFragment
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_fragment.*
@@ -30,7 +29,7 @@ import javax.inject.Inject
 
 
 
-class LoginFragment : DaggerAppCompatDialogFragment(), LoginFragmentOps {
+class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -56,16 +55,24 @@ class LoginFragment : DaggerAppCompatDialogFragment(), LoginFragmentOps {
         savedInstanceState: Bundle?
     ): View {
         viewModel = ViewModelProviders.of(this, viewModelFactory)[LoginViewModel::class.java]
+        (activity as AppCompatActivity)?.supportActionBar?.hide()
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
-            it.login_button.clicks()
+                it.login_button.clicks()
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe{
                     if(ensureFields())
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
+
+                it.login_reg_button.setOnClickListener{
+                    v -> NavHostFragment
+                        .findNavController(this)
+                        .navigate(R.id.action_login_to_reg_frag_1)
+                }
             }
+
 
             viewModel.getLoggedUser().observe(this, Observer{
                 user->
