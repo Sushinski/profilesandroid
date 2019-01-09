@@ -12,4 +12,10 @@
     <string name="passwd_repeat_hint">Повторите пароль</string>
     <string name="reg_approval_text">Регистрация означает согласие с  лицензионным соглашением</string>
     <string name="reg_proceed_btn_text">Далее</string>
+    <string name="name_hint">Имя</string>
+    <string name="surname_hint">Фамилия</string>
+    <string name="enter_button_text">Войти</string>
+    <string name="men_text">Мужчина</string>
+    <string name="woman_text">Женщина</string>
+    <string name="add_photo_text">добавить фотографию</string>
 </resources>

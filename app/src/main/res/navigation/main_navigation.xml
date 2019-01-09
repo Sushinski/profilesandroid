@@ -45,7 +45,8 @@
     <fragment
         android:id="@+id/reg_frag_1"
         android:name="ru.profiles.ui.registration.RegistrationFragment1"
-        android:label="RegistrationFragment1" >
+        android:label="RegistrationFragment1"
+        tools:layout="@layout/registration_fragment_1">
         <action
             android:id="@+id/action_reg_frag_1_to_reg_frag_2"
             app:destination="@id/reg_frag_2" />
@@ -54,7 +55,8 @@
     <fragment
         android:id="@+id/reg_frag_2"
         android:name="ru.profiles.ui.registration.RegistrationFragment2"
-        android:label="RegistrationFragment2" >
+        android:label="RegistrationFragment2"
+        tools:layout="@layout/registration_fragment_2">
         <action
             android:id="@+id/action_reg_frag_2_to_search"
             app:destination="@id/search"
