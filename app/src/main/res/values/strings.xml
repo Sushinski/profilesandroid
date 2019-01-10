@@ -18,4 +18,5 @@
     <string name="men_text">Мужчина</string>
     <string name="woman_text">Женщина</string>
     <string name="add_photo_text">добавить фотографию</string>
+    <string name="image_chooser_text">Выберите фотографию</string>
 </resources>

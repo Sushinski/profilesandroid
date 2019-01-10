@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="image_chooser_items">
+        <item>"Открыть галерею"</item>
+        <item>"Сделать снимок"</item>
+    </string-array>
+</resources>
