@@ -6,6 +6,7 @@ import ru.profiles.MainActivity
 import ru.profiles.ui.LoginFragment
 import ru.profiles.ui.SearchFragment
 import ru.profiles.ui.SplashFragment
+import ru.profiles.ui.registration.ImageEditorFragment
 import ru.profiles.ui.registration.RegistrationFragment1
 import ru.profiles.ui.registration.RegistrationFragment2
 
@@ -26,4 +27,7 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector(modules = [])
     abstract fun bindReg2Fragment() : RegistrationFragment2
+
+    @ContributesAndroidInjector(modules = [])
+    abstract fun bindImgEditorFragment() : ImageEditorFragment
 }

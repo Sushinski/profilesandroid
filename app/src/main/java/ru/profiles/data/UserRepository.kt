@@ -20,11 +20,11 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
             }
     }
 
-    fun getLoggedUser() : LiveData<UserModel> {
+    fun getLastUser() : LiveData<UserModel> {
         return mUserDao.getLastLoggedUser()
     }
 
-    suspend fun saveLoggedUser(user: UserModel){
+    suspend fun saveUser(user: UserModel){
         withContext(IO) {
             mUserDao.clearUsers()
             mUserDao.save(user)

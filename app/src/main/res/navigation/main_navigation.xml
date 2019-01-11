@@ -61,5 +61,25 @@
             android:id="@+id/action_reg_frag_2_to_search"
             app:destination="@id/search"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
+            app:destination="@id/imageEditorFragment" >
+            <argument
+                android:name="imageUri"
+                android:defaultValue="null" />
+        </action>
     </fragment>
+    <fragment
+        android:id="@+id/imageEditorFragment"
+        android:name="ru.profiles.ui.registration.ImageEditorFragment"
+        android:label="ImageEditorFragment" >
+        <argument
+            android:name="imageUri"
+            android:defaultValue="null"
+            app:argType="reference" />
+    </fragment>
+    <argument
+        android:name="imageUri"
+        android:defaultValue="null"
+        app:argType="reference" />
 </navigation>

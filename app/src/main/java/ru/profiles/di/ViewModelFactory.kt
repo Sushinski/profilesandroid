@@ -7,6 +7,7 @@ import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.profiles.viewmodel.LoginViewModel
+import ru.profiles.viewmodel.RegistrationViewModel
 import ru.profiles.viewmodel.SearchViewModel
 import ru.profiles.viewmodel.SplashViewModel
 import javax.inject.Inject
@@ -48,5 +49,9 @@ abstract class ViewModelModule {
     @ViewModelKey(SplashViewModel::class)
     internal abstract fun splashViewModel(viewModel: SplashViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(RegistrationViewModel::class)
+    internal abstract fun registrationViewModel(viewModel: RegistrationViewModel): ViewModel
     //Add more ViewModels here
 }

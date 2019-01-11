@@ -53,7 +53,9 @@ data class UserModel(
     @Expose
     var mEmailForVerification: String? = null,
 
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+
+    var localImageUrl: String? = null
 ) {
 
     @PrimaryKey(autoGenerate = true)

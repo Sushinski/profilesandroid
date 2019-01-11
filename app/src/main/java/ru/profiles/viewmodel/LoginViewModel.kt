@@ -1,10 +1,7 @@
 package ru.profiles.viewmodel
 
 import android.util.Base64
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -17,7 +14,6 @@ import retrofit2.HttpException
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
 import ru.profiles.extensions.toSingleEvent
-import ru.profiles.livedata.LiveEvent
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
@@ -38,7 +34,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val mLoginEvent = mUserRep.getLoggedUser().toSingleEvent()
+    private val mLoginEvent = mUserRep.getLastUser().toSingleEvent()
 
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (
@@ -46,7 +42,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
                 val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
-                    mUserRep.saveLoggedUser(userModel)
+                    mUserRep.saveUser(userModel)
                 }
             }},
             {
