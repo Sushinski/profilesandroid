@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -160,4 +161,5 @@ dependencies {
     implementation 'com.android.support:support-core-utils:28.2.1'
     // cropping library
     implementation "com.albinmathew:photo-crop-library:$image_cropper_version"
+
 }

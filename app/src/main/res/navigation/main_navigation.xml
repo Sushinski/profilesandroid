@@ -64,6 +64,7 @@
         <action
             android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
             app:destination="@id/imageEditorFragment" >
+
             <argument
                 android:name="imageUri"
                 android:defaultValue="null" />
@@ -72,14 +73,11 @@
     <fragment
         android:id="@+id/imageEditorFragment"
         android:name="ru.profiles.ui.registration.ImageEditorFragment"
-        android:label="ImageEditorFragment" >
+        android:label="ImageEditorFragment"
+        tools:layout="@layout/image_editor_fragment">
         <argument
             android:name="imageUri"
             android:defaultValue="null"
-            app:argType="reference" />
+            app:argType="string" />
     </fragment>
-    <argument
-        android:name="imageUri"
-        android:defaultValue="null"
-        app:argType="reference" />
 </navigation>

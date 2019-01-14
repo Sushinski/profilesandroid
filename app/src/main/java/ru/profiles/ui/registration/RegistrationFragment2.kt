@@ -18,7 +18,6 @@ import androidx.navigation.fragment.NavHostFragment
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.registration_fragment_2.view.*
 import ru.profiles.profiles.R
-import ru.profiles.viewmodel.LoginViewModel
 import ru.profiles.viewmodel.RegistrationViewModel
 import javax.inject.Inject
 
@@ -116,10 +115,11 @@ class RegistrationFragment2 : DaggerFragment() {
                 PICK_CAMERA_IMAGE->{mPhotoUri}
                 else->null
             }
-
+            val ad = RegistrationFragment2Directions.actionRegFrag2ToImageEditorFragment()
+            ad.imageUri = regViewModel.mLocalPicUri.toString()
             NavHostFragment
                 .findNavController(this)
-                .navigate(R.id.action_reg_frag_2_to_imageEditorFragment)
+                .navigate(ad)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
