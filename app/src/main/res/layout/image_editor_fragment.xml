@@ -2,18 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <ru.profiles.fresco.zoomable.ZoomableDraweeViewSupport
-        android:id="@+id/main_image"
+    <me.relex.photodraweeview.PhotoDraweeView
+        android:id="@+id/photo_drawee_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:actualImageScaleType="centerCrop"
+        app:failureImage="@drawable/ic_error"
+        app:failureImageScaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@drawable/ic_placeholder"
+        app:placeholderImageScaleType="centerInside"
+        app:progressBarAutoRotateInterval="1000"
+        app:progressBarImage="@drawable/ic_loading"
+        app:progressBarImageScaleType="centerInside" />
 
     <ru.profiles.ui.view.CropOverlayView
         android:id="@+id/crop_overlay"
@@ -24,8 +33,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:borderColor="@android:color/darker_gray"
+        android:focusable="false"
+        android:clickable="false"
         app:overlayColor="#64414141"
         app:marginSide="20dp"
         app:marginTop="50dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/done_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@+id/crop_overlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/crop_overlay"
+        app:layout_constraintVertical_bias="0.9"
+        app:srcCompat="@drawable/round_check_circle_outline_black_48" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

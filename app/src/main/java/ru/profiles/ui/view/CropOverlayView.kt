@@ -5,9 +5,9 @@ import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import com.albinmathew.photocrop.R
 import com.albinmathew.photocrop.cropoverlay.edge.Edge
 import com.albinmathew.photocrop.cropoverlay.utils.PaintUtil
+import ru.profiles.profiles.R
 
 const val DEFAULT_MARGINTOP = 100
 const val DEFAULT_MARGINSIDE = 50
@@ -49,6 +49,7 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
         } finally {
             ta.recycle()
         }
+
         val w = context.resources.displayMetrics.widthPixels
         cropWidth = w - 2 * mMarginSide
         cropHeight = cropWidth
@@ -70,6 +71,7 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
             Edge.RIGHT.coordinate,
             Edge.BOTTOM.coordinate
         )
+
     }
 
     fun getImageBounds(): Rect {
@@ -83,7 +85,7 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val cx = (Edge.LEFT.coordinate + Edge.RIGHT.coordinate) / 2
+       val cx = (Edge.LEFT.coordinate + Edge.RIGHT.coordinate) / 2
         val cy = (Edge.TOP.coordinate + Edge.BOTTOM.coordinate) / 2
         val radius2 = (Edge.RIGHT.coordinate - Edge.LEFT.coordinate) / 2
         clipPath.addCircle(cx, cy, radius2, Path.Direction.CW)
@@ -92,6 +94,8 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
         if (Build.VERSION.SDK_INT < 23) canvas.restore()
         canvas.drawCircle(cx, cy, radius2, mBorderPaint)
     }
+
+
 
 
 }

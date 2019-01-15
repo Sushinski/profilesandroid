@@ -8,8 +8,12 @@ import ru.profiles.di.DaggerAppComponent
 
 class ProfilesApplication : DaggerApplication() {
 
+    override fun onCreate() {
+        super.onCreate()
+        Fresco.initialize(applicationContext)
+    }
+
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        Fresco.initialize(this)
         val appComponent = DaggerAppComponent.builder().application(this).appContext(applicationContext).build()
         appComponent.inject(this)
         return appComponent
