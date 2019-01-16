@@ -69,6 +69,18 @@
                 android:name="imageUri"
                 android:defaultValue="null" />
         </action>
+        <argument
+            android:name="email"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="password"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="imageUri"
+            android:defaultValue='""'
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/imageEditorFragment"
@@ -79,5 +91,8 @@
             android:name="imageUri"
             android:defaultValue="null"
             app:argType="string" />
+        <action
+            android:id="@+id/action_imageEditorFragment_to_reg_frag_2"
+            app:destination="@id/reg_frag_2" />
     </fragment>
 </navigation>

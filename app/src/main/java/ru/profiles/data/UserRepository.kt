@@ -20,8 +20,8 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
             }
     }
 
-    fun getLastUser() : LiveData<UserModel> {
-        return mUserDao.getLastLoggedUser()
+    fun getLoggedUser() : LiveData<UserModel> {
+        return mUserDao.getLoggedUser()
     }
 
     suspend fun saveUser(user: UserModel){

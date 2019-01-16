@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val mLoginEvent = mUserRep.getLastUser().toSingleEvent()
+    private val mLoginEvent = mUserRep.getLoggedUser().toSingleEvent()
 
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (

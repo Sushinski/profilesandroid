@@ -6,10 +6,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
-import ru.profiles.viewmodel.LoginViewModel
-import ru.profiles.viewmodel.RegistrationViewModel
-import ru.profiles.viewmodel.SearchViewModel
-import ru.profiles.viewmodel.SplashViewModel
+import ru.profiles.viewmodel.*
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -53,5 +50,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RegistrationViewModel::class)
     internal abstract fun registrationViewModel(viewModel: RegistrationViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ImageEditViewModel::class)
+    internal abstract fun imageEditViewModel(viewModel: ImageEditViewModel): ViewModel
     //Add more ViewModels here
 }

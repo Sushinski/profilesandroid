@@ -7,12 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.view.*
+import kotlinx.android.synthetic.main.registration_fragment_1.*
 import kotlinx.android.synthetic.main.registration_fragment_1.view.*
+import ru.profiles.extensions.ensureFields
+import ru.profiles.extensions.shakeField
 import ru.profiles.profiles.R
 
 
 class RegistrationFragment1 : DaggerFragment() {
+
+    private val mCheckingFields = arrayOf(email_text, password_text, repeat_password_text)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,9 +29,15 @@ class RegistrationFragment1 : DaggerFragment() {
         a.supportActionBar?.show()
         a.supportActionBar?.title = ""
         v.reg_proceed_btn.setOnClickListener {
-            NavHostFragment
-            .findNavController(this)
-            .navigate(R.id.action_reg_frag_1_to_reg_frag_2)
+            if(ensureFields(mCheckingFields, this::shakeField)) { // todo check email & passwd
+                // save temporary user
+                val action = RegistrationFragment1Directions.actionRegFrag1ToRegFrag2()
+                action.email = email_text.toString()
+                action.password = repeat_password_text.toString()
+                NavHostFragment
+                    .findNavController(this)
+                    .navigate(action)
+            }
         }
         return v
     }

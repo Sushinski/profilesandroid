@@ -7,11 +7,15 @@ import ru.profiles.model.UserModel
 
 @Dao
 interface UserModelDao {
+
     @Insert(onConflict = REPLACE)
     fun save(user: UserModel)
 
-    @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    fun getLastLoggedUser() : LiveData<UserModel>
+    @Query("SELECT * FROM users WHERE is_logged = 'TRUE' LIMIT 1")
+    fun getLoggedUser() : LiveData<UserModel>
+
+    @Update
+    fun update(user: UserModel)
 
     @Query("DELETE FROM users")
     fun clearUsers()

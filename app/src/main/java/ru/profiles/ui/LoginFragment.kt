@@ -6,8 +6,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -21,6 +19,8 @@ import dagger.android.support.DaggerFragment
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.login_fragment.*
 import kotlinx.android.synthetic.main.login_fragment.view.*
+import ru.profiles.extensions.ensureFields
+import ru.profiles.extensions.shakeField
 import ru.profiles.interfaces.LoginFragmentOps
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.LoginViewModel
@@ -35,6 +35,8 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: LoginViewModel
+
+    private val mCheckingFields = arrayOf(identityText, passwordText)
 
 
     override fun showAlertDialog(title: String, message: String) {
@@ -62,7 +64,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe{
-                    if(ensureFields())
+                    if(ensureFields(mCheckingFields, this::shakeField))
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
 
@@ -91,15 +93,5 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
     }
 
 
-    private fun ensureFields() : Boolean {
-        arrayOf(identityText, passwordText)
-            .firstOrNull{it.text.isBlank()}
-            .also { if(it != null ) shakeField(it) }
-            .let{ return it == null }
-    }
-
-    private fun shakeField(view: EditText){
-        view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shaking))
-    }
 
 }

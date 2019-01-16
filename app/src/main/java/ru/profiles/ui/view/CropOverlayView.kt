@@ -5,9 +5,9 @@ import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import com.albinmathew.photocrop.cropoverlay.edge.Edge
-import com.albinmathew.photocrop.cropoverlay.utils.PaintUtil
 import ru.profiles.profiles.R
+import ru.profiles.utils.Edge
+import ru.profiles.utils.PaintUtil
 
 const val DEFAULT_MARGINTOP = 100
 const val DEFAULT_MARGINSIDE = 50

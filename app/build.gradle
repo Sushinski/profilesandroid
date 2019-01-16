@@ -159,7 +159,5 @@ dependencies {
     implementation 'com.android.support:support-core-utils:28.2.1'
     // photo drawee view
     implementation 'me.relex:photodraweeview:2.0.0'
-    // cropping library
-    implementation "com.albinmathew:photo-crop-library:$image_cropper_version"
 
 }

@@ -12,22 +12,30 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.albinmathew.photocrop.cropoverlay.edge.Edge
-import com.albinmathew.photocrop.cropoverlay.utils.ImageViewUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.image_editor_fragment.*
 import kotlinx.android.synthetic.main.image_editor_fragment.view.*
 import ru.profiles.profiles.R
+import ru.profiles.utils.Edge
+import ru.profiles.utils.ImageViewUtil
+import ru.profiles.viewmodel.ImageEditViewModel
 import java.io.File
 import java.io.IOException
+import javax.inject.Inject
 
 
 class ImageEditorFragment: DaggerFragment() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: ImageEditViewModel
+
     private var mSaveUri: Uri? = null
-    private val mOutputFormat = Bitmap.CompressFormat.JPEG
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +46,12 @@ class ImageEditorFragment: DaggerFragment() {
         val a = (activity as AppCompatActivity)
         a.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         a.supportActionBar?.hide()
-        v.done_fab.setOnClickListener { saveOutput(a) }
+        v.done_fab.setOnClickListener {
+            val cropped = getCroppedImage()
+            viewModel.saveCroppedFile(a.applicationContext, cropped)
+            cropped.recycle()
+        }
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[ImageEditViewModel::class.java]
         return v
     }
 
@@ -55,15 +68,6 @@ class ImageEditorFragment: DaggerFragment() {
             photo_drawee_view.setPhotoUri(mSaveUri)
 
         }
-    }
-
-    private fun getCurrentDisplayedImage(): Bitmap {
-        val result = Bitmap.createBitmap(photo_drawee_view.width,
-            photo_drawee_view.height,
-            Bitmap.Config.RGB_565)
-        val c = Canvas(result)
-        photo_drawee_view.draw(c)
-        return result
     }
 
     private fun getCroppedImage(): Bitmap {
@@ -105,49 +109,14 @@ class ImageEditorFragment: DaggerFragment() {
         )
     }
 
-    private fun saveOutput(ctx: Context): Boolean {
-        val croppedImage = getCroppedImage()
-        try {
-            val photoFile: File? = try {
-                createPicFile(ctx)
-            } catch (ex: IOException) {
-                null
-            }
-            // Continue only if the File was successfully created
-            photoFile?.also { file ->
-                mSaveUri = FileProvider.getUriForFile(
-                    ctx,
-                    "ru.profiles.profiles.fileprovider",
-                    file
-                )
-                val outputStream = mSaveUri?.let { ctx.contentResolver?.openOutputStream(it) }
-                outputStream?.let{
-                    croppedImage.compress(mOutputFormat, 90, outputStream)
-                }.also {
-                    outputStream?.close()
-                }
-            }
 
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return false
-        }
-        croppedImage.recycle()
-        return true
-
-    }
-
-    @Throws(IOException::class)
-    private fun createPicFile(ctx: Context): File? {
-        // Create an image file name
-        val storageDir: File? = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return storageDir?.let{
-            File.createTempFile(
-                "img", /* prefix */
-                ".jpg", /* suffix */
-                storageDir /* directory */
-            )
-        }
+    private fun getCurrentDisplayedImage(): Bitmap {
+        val result = Bitmap.createBitmap(photo_drawee_view.width,
+            photo_drawee_view.height,
+            Bitmap.Config.RGB_565)
+        val c = Canvas(result)
+        photo_drawee_view.draw(c)
+        return result
     }
 
 }
