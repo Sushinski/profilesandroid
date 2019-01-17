@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.facebook.drawee.drawable.ScalingUtils
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder
 import dagger.android.support.DaggerFragment
@@ -48,8 +49,10 @@ class ImageEditorFragment: DaggerFragment() {
         a.supportActionBar?.hide()
         v.done_fab.setOnClickListener {
             val cropped = getCroppedImage()
-            viewModel.saveCroppedFile(a.applicationContext, cropped)
-            cropped.recycle()
+            val uri = viewModel.saveCroppedFile(a.applicationContext, cropped)
+            val action = ImageEditorFragmentDirections.actionImageEditorFragmentToRegFrag2()
+            action.imageUri = uri?.toString() ?: ""
+            NavHostFragment.findNavController(this).navigate(action)
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory)[ImageEditViewModel::class.java]
         return v

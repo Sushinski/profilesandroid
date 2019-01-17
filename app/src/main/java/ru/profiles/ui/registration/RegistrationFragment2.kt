@@ -25,7 +25,11 @@ import android.widget.Toast
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
+import android.widget.EditText
 import androidx.core.content.FileProvider
+import kotlinx.android.synthetic.main.registration_fragment_2.*
+import ru.profiles.extensions.ensureFields
+import ru.profiles.extensions.shakeField
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -38,6 +42,8 @@ class RegistrationFragment2 : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var regViewModel: RegistrationViewModel
+
+    lateinit var mCheckedViews: Array<EditText>
 
     companion object {
         val PICK_GALLERY_IMAGE = 0
@@ -55,8 +61,22 @@ class RegistrationFragment2 : DaggerFragment() {
         v.avatar_image.setOnClickListener {
             createChooser(a)
         }
+        v.enter_button.setOnClickListener {
+            if(this.ensureFields(mCheckedViews, EditText::shakeField, "Заполните все поля!")){
+
+            }
+        }
         regViewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
         return v
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        arguments?.let{
+            avatar_image.setImageURI(RegistrationFragment2Args.fromBundle(it).imageUri)
+            set_photo_text.visibility = View.INVISIBLE
+        }
+        mCheckedViews = arrayOf(name_text, surname_text)
     }
 
     private fun createChooser(ctx: Context){

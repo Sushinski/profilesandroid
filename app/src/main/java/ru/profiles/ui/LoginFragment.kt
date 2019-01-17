@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -64,7 +65,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                 .throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe{
-                    if(ensureFields(mCheckingFields, this::shakeField))
+                    if(ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!"))
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
 

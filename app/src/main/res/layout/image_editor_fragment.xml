@@ -32,10 +32,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:borderColor="@android:color/darker_gray"
+        app:borderColor="#263238"
         android:focusable="false"
         android:clickable="false"
-        app:overlayColor="#64414141"
+        app:overlayColor="#80263238"
         app:marginSide="20dp"
         app:marginTop="50dp" />
 

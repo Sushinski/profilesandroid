@@ -20,22 +20,21 @@ class ImageEditViewModel @Inject constructor(private val mUserRep: UserRepositor
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    fun saveCroppedFile(ctx: Context, croppedImage: Bitmap): Boolean {
+    fun saveCroppedFile(ctx: Context, croppedImage: Bitmap): Uri? {
         val saveUri =  createPicFile(ctx)
         try {
             val outputStream = saveUri?.let { ctx.contentResolver?.openOutputStream(it) }
             outputStream?.let{
-                viewModelScope.launch {
-                    croppedImage.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
-                }
+                croppedImage.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
             }.also {
                 outputStream?.close()
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
-            return false
+            return null
         }
-        return true
+        croppedImage.recycle()
+        return saveUri
     }
 
     private fun createPicFile(ctx: Context): Uri? {
@@ -63,7 +62,7 @@ class ImageEditViewModel @Inject constructor(private val mUserRep: UserRepositor
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
+        //viewModelJob.cancel()
     }
 
 }
