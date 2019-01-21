@@ -1,6 +1,8 @@
 package ru.profiles.viewmodel
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,5 +19,14 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var mLocalPicUri: Uri? = null
+    set(value){
+        mUriLiveData.value = value
+        field = value
+    }
 
+    private val mUriLiveData: MutableLiveData<Uri?> = MutableLiveData()
+
+    fun getLocalPicUri(): LiveData<Uri?>{
+        return mUriLiveData
+    }
 }

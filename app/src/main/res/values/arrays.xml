@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="image_chooser_items">
-        <item>"Открыть галерею"</item>
+        <item>"Выбрать из галереи"</item>
         <item>"Сделать снимок"</item>
+    </string-array>
+    <string-array name="image_change_items">
+        <item>"Выбрать из галереи"</item>
+        <item>"Сделать снимок"</item>
+        <item>"Удалить фотографию"</item>
     </string-array>
 </resources>

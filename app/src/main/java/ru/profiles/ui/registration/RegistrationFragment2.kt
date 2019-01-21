@@ -21,14 +21,17 @@ import ru.profiles.profiles.R
 import ru.profiles.viewmodel.RegistrationViewModel
 import javax.inject.Inject
 
-import android.widget.Toast
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
-import android.widget.EditText
+import android.util.Log
+import android.widget.*
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.registration_fragment_2.*
+import kotlinx.android.synthetic.main.splash_fragment.view.*
 import ru.profiles.extensions.ensureFields
+import ru.profiles.extensions.getViewByPosition
 import ru.profiles.extensions.shakeField
 import java.io.File
 import java.io.IOException
@@ -73,28 +76,32 @@ class RegistrationFragment2 : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         arguments?.let{
-            avatar_image.setImageURI(RegistrationFragment2Args.fromBundle(it).imageUri)
-            set_photo_text.visibility = View.INVISIBLE
+            RegistrationFragment2Args.fromBundle(it).imageUri?.let { u->regViewModel.mLocalPicUri = Uri.parse(u) }
         }
+        regViewModel.getLocalPicUri().observe(this, androidx.lifecycle.Observer {
+                v->avatar_image.setImageURI(v.toString())
+                set_photo_text.visibility = if(v == null) View.VISIBLE else View.INVISIBLE
+        })
         mCheckedViews = arrayOf(name_text, surname_text)
     }
 
     private fun createChooser(ctx: Context){
         val builder = AlertDialog.Builder(ctx)
         builder.setTitle(ctx.getString(R.string.image_chooser_text))
-        builder.setItems(ctx.resources.getStringArray(R.array.image_chooser_items)) { d, w ->
+        builder.setAdapter(DialogAdapter(ctx, 0, ctx.resources.getStringArray(
+            regViewModel.mLocalPicUri?.let{R.array.image_change_items} ?: R.array.image_chooser_items))){
+                d, w ->
             when (w) {
-                0 -> {
-                    runGallery()
-                }
-                1 -> {
-                    runCamera(ctx)
-                }
+                0 -> runGallery()
+                1 -> runCamera(ctx)
+                2 -> regViewModel.mLocalPicUri = null
                 else -> {}
             }
         }
         builder.show()
     }
+
+
 
     private fun runGallery(){
         val intent = Intent()
@@ -156,7 +163,7 @@ class RegistrationFragment2 : DaggerFragment() {
         }
     }*/
 
-    var mCurrentPhotoPath: String? = null
+    private var mCurrentPhotoPath: String? = null
 
     @Throws(IOException::class)
     private fun createImageFile(ctx: Context): File? {
@@ -172,6 +179,26 @@ class RegistrationFragment2 : DaggerFragment() {
                 // Save a file: path for use with ACTION_VIEW intents
                 mCurrentPhotoPath = absolutePath
             }
+        }
+    }
+
+    internal class DialogAdapter(ctx: Context, id: Int, items: Array<String>)
+        : ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, items){
+
+        private val mChooserItems = items
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup) : View  {
+            val view: View = super.getView(position, convertView, parent)
+            val text1: TextView = view.findViewById(android.R.id.text1) as TextView
+            val t = mChooserItems[position]
+            text1.text = t
+            text1.setTextColor(
+                context.resources.getColor(
+                    if(t == context.resources.getString(R.string.delete_photo)) R.color.colorAccent //todo
+                    else android.R.color.widget_edittext_dark
+                )
+            )
+            return view
         }
     }
 }
