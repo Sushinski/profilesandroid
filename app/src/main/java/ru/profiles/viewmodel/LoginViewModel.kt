@@ -42,6 +42,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
                 val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
+                    mUserRep.deleteUsers()
                     mUserRep.saveUser(userModel)
                 }
             }},
@@ -63,7 +64,6 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
     }
 
     fun getLoggedUser(): LiveData<UserModel> {
-        // todo transform from repo livedata
         return mLoginEvent
     }
 

@@ -35,7 +35,7 @@ data class UserModel(
     @ColumnInfo(name = "email")
     @SerializedName("email")
     @Expose
-    var mEmail: String = "",
+    var mEmail: String? = null,
 
     @SerializedName("refresh_token_id")
     @Expose
@@ -71,4 +71,8 @@ data class UserModel(
     var mId: Int = 0
 
     override fun toString() = mName + " " + (mSurname ?: "")
+
+    fun isBlank(): Boolean{
+        return mEmail.isNullOrEmpty() || mPhone.isNullOrEmpty()
+    }
 }

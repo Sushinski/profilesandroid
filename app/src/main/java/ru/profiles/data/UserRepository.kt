@@ -26,8 +26,13 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
 
     suspend fun saveUser(user: UserModel){
         withContext(IO) {
-            mUserDao.clearUsers()
             mUserDao.save(user)
+        }
+    }
+
+    suspend fun deleteUsers(){
+        withContext(IO){
+            mUserDao.clearUsers()
         }
     }
 
