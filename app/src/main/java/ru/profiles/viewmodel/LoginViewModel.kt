@@ -43,6 +43,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
                     mUserRep.deleteUsers()
+                    userModel.mIsLogged = true
                     mUserRep.saveUser(userModel)
                 }
             }},

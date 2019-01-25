@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -61,6 +62,11 @@ class RegistrationFragment1 : DaggerFragment() {
                         .findNavController(this)
                         .navigate(action)
                 }
+            }
+        })
+        regViewModel.getRegistrationError().observe(this, Observer { error ->
+            error.mFields?.let {
+                Toast.makeText(context, "${it.keys.first()}:${it[it.keys.first()]?.first()}", Toast.LENGTH_SHORT).show()
             }
         })
         reg_proceed_btn.setOnClickListener {

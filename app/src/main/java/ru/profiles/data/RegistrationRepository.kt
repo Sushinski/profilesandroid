@@ -23,13 +23,14 @@ class RegistrationRepository private constructor(private val mRegApi: Registrati
     }
 
     fun registerUser(identity: String, pswd: String) : Single<RegistrationResponse> {
-        // todo check existing auth
-        val r = RegistrationRequest(identity, pswd, pswd, null,null)
+        val r = RegistrationRequest(identity, pswd, pswd, null,null, identity, identity, 0)
         Log.i("ProfilesInfo", "reg request: "  + Gson().toJson(r,   RegistrationRequest::class.java))
         return mRegApi.registerUser(r)
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).firstOrError()
     }
+
+   // fun updateUserInfo(User)
 
 }

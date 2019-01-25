@@ -18,5 +18,14 @@ data class RegistrationRequest (
     var mSmsCode: String?,
     @SerializedName("promocode")
     @Expose
-    var mPromocode: String?
+    var mPromocode: String?,
+    @SerializedName("first_name")
+    @Expose
+    var mFirstName: String,
+    @SerializedName("last_name")
+    @Expose
+    var mLastName: String,
+    @SerializedName("gender")
+    @Expose
+    var mGender: Int
 )

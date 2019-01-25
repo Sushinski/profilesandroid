@@ -20,7 +20,7 @@ data class ErrorModel (
 
     @Expose
     @SerializedName("fields")
-    val mFields: Map<String, Array<String>>? = null
+    val mFields: Map<String, ArrayList<Any>>? = null
 ){
 
     data class FieldErrorObject (

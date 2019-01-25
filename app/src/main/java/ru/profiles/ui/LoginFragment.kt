@@ -37,7 +37,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
 
     private lateinit var viewModel: LoginViewModel
 
-    private val mCheckingFields = arrayOf(identityText, passwordText)
+    private lateinit var mCheckingFields: Array<EditText>
 
 
     override fun showAlertDialog(title: String, message: String) {
@@ -58,7 +58,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         savedInstanceState: Bundle?
     ): View {
         viewModel = ViewModelProviders.of(this, viewModelFactory)[LoginViewModel::class.java]
-        (activity as AppCompatActivity)?.supportActionBar?.hide()
+        (activity as AppCompatActivity).supportActionBar?.hide()
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
                 it.login_button.clicks()
@@ -93,6 +93,10 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mCheckingFields = arrayOf(identityText, passwordText)
+    }
 
 
 }

@@ -78,6 +78,12 @@ class RegistrationFragment2 : DaggerFragment() {
         arguments?.let{
             RegistrationFragment2Args.fromBundle(it).imageUri?.let { u->regViewModel.mLocalPicUri = Uri.parse(u) }
         }
+        regViewModel.getRegisteredUser().observe(this, androidx.lifecycle.Observer {
+            user->
+                if (user.mName != user.mEmail) name_text.setText(user.mName)
+                if(user.mSurname != user.mEmail) surname_text.setText(user.mSurname)
+                radioGroup_gender.check(user.mGender)
+        })
         regViewModel.getLocalPicUri().observe(this, androidx.lifecycle.Observer {
                 v->avatar_image.setImageURI(v.toString())
                 set_photo_text.visibility = if(v == null) View.VISIBLE else View.INVISIBLE

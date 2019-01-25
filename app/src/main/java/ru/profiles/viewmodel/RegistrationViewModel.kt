@@ -81,7 +81,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                             try{
                                 val e = error.response().errorBody()?.string()
                                 Log.e("ProfilesError", e)
-                                mGson.fromJson(e, ErrorModel::class.java)
+                                 mGson.fromJson(e, ErrorModel::class.java)
                             }// todo localize messages
                             catch (e: JsonSyntaxException){ ErrorModel(mUserMessage = "Login data error")
                             }
@@ -91,5 +91,9 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                 }
             )
         )
+    }
+
+    fun getRegistrationError(): LiveData<ErrorModel>{
+        return mErrorStatus
     }
 }

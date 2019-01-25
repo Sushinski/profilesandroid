@@ -1,12 +1,11 @@
 package ru.profiles.api.interfaces
 
+import com.facebook.imagepipeline.request.ImageRequest
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 import ru.profiles.model.pojo.*
 
-interface RegistrationApi  {
+interface RegistrationApi {
 
     @Headers("Content-Type: application/json", "Cache-Control: no-cache")
     @POST("/api/v1/user_register/")
@@ -19,5 +18,18 @@ interface RegistrationApi  {
     fun requestSms(
         @Body sms_request: SmsRequest
     )
+
+    @Headers("Content-Type: application/json", "Cache-Control: no-cache")
+    @GET("/api/v1/users/profile/")
+    fun getUserInfo(
+        @QueryMap fields: Map<String, String>
+    ): Observable<UserInfoResponse>
+
+
+    @Headers("Content-Type: application/json", "Cache-Control: no-cache")
+    @PUT("/api/v1/users/profile/")
+    fun updateUserInfo(
+        request: UserInfoRequest
+    ): Observable<Unit>
 
 }

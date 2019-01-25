@@ -11,7 +11,7 @@ interface UserModelDao {
     @Insert(onConflict = REPLACE)
     fun save(user: UserModel)
 
-    @Query("SELECT * FROM users WHERE is_logged = 'TRUE' LIMIT 1")
+    @Query("SELECT * FROM users WHERE is_logged = 1 LIMIT 1")
     fun getLoggedUser() : LiveData<UserModel>
 
     @Update

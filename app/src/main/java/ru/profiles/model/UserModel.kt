@@ -20,10 +20,10 @@ data class UserModel(
     var mName: String = "",
 
     @ColumnInfo(name = "surname")
-    var mSurname: String? = null,
+    var mSurname: String = "",
 
     @ColumnInfo(name = "gender")
-    var mGender: String? = null,
+    var mGender: Int = 0,
 
     @ColumnInfo(name = "phone")
     var mPhone: String? = null,
