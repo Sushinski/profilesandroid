@@ -12,7 +12,7 @@ import ru.profiles.api.interfaces.AuthApi
 import java.io.IOException
 
 
-class AuthApiBuilder private constructor(){
+class AuthApiBuilder private constructor() : BaseBuilder() {
 
     companion object {
         fun buildForUrl(base_url: String, gson_converter: Converter.Factory): AuthApi{
@@ -20,19 +20,9 @@ class AuthApiBuilder private constructor(){
                 .baseUrl(base_url)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(gson_converter)
-                .client(OkHttpClient().newBuilder().addInterceptor(LoggingInterceptor()).build() )
+                .client(OkHttpClient().newBuilder().addInterceptor(LoggingInterceptor("AuthRequest")).build() )
                 .build().create()
         }
     }
-
-    private class LoggingInterceptor : Interceptor {
-        @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-            val request = chain.request()
-            Log.i("ProfilesRequest", request.toString())
-            return chain.proceed(request)
-        }
-    }
-
 
 }

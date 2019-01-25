@@ -20,15 +20,19 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
             }
     }
 
-    fun getLastLoggedUser() : LiveData<UserModel> {
-        return mUserDao.getLastLoggedUser()
+    fun getLoggedUser() : LiveData<UserModel> {
+        return mUserDao.getLoggedUser()
     }
 
-
-    suspend fun loginUser(user: UserModel){
+    suspend fun saveUser(user: UserModel){
         withContext(IO) {
-            mUserDao.clearUsers()
             mUserDao.save(user)
+        }
+    }
+
+    suspend fun deleteUsers(){
+        withContext(IO){
+            mUserDao.clearUsers()
         }
     }
 

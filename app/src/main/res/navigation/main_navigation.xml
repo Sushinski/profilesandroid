@@ -1,0 +1,100 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/splash">
+
+    <fragment
+        android:id="@+id/search"
+        android:label="search"
+        android:name="ru.profiles.ui.SearchFragment"
+        tools:layout="@layout/search_fragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/login"
+        android:name="ru.profiles.ui.LoginFragment"
+        android:label="login"
+        tools:layout="@layout/login_fragment">
+        <action
+            android:id="@+id/action_login_to_search"
+            app:destination="@id/search"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_login_to_reg_frag_1"
+            app:destination="@id/reg_frag_1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/splash"
+        android:name="ru.profiles.ui.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/splash_fragment">
+        <action
+            android:id="@+id/action_splash_to_search"
+            app:destination="@id/search"
+            app:popUpTo="@id/splash"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splash_to_login"
+            app:destination="@id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splash"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reg_frag_1"
+        android:name="ru.profiles.ui.registration.RegistrationFragment1"
+        android:label="RegistrationFragment1"
+        tools:layout="@layout/registration_fragment_1">
+        <action
+            android:id="@+id/action_reg_frag_1_to_reg_frag_2"
+            app:destination="@id/reg_frag_2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reg_frag_2"
+        android:name="ru.profiles.ui.registration.RegistrationFragment2"
+        android:label="RegistrationFragment2"
+        tools:layout="@layout/registration_fragment_2">
+        <action
+            android:id="@+id/action_reg_frag_2_to_search"
+            app:destination="@id/search"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
+            app:destination="@id/imageEditorFragment" >
+        </action>
+        <argument
+            android:name="email"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="string" />
+        <argument
+            android:name="password"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="string" />
+        <argument
+            android:name="imageUri"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageEditorFragment"
+        android:name="ru.profiles.ui.registration.ImageEditorFragment"
+        android:label="ImageEditorFragment"
+        tools:layout="@layout/image_editor_fragment">
+        <argument
+            android:name="imageUri"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_imageEditorFragment_to_reg_frag_2"
+            app:destination="@id/reg_frag_2"
+            app:popUpTo="@+id/reg_frag_2"
+            app:popUpToInclusive="true"/>
+    </fragment>
+</navigation>

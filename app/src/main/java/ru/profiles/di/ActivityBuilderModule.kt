@@ -9,6 +9,6 @@ import ru.profiles.MainActivity
 @Module
 abstract class ActivityBuilderModule {
 
-    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    @ContributesAndroidInjector(modules = [])
     abstract fun bindMainActivity() : MainActivity
 }

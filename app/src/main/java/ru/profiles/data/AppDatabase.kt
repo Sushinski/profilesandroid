@@ -4,14 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.dao.UserModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.model.UserModel
-import ru.profiles.worker.AppDatabaseWorker
 
 @Database(entities = [UserModel::class, AuthModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
@@ -29,15 +25,7 @@ abstract class AppDatabase : RoomDatabase(){
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "Profiles.db")
-                .addCallback(object : Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        val request = OneTimeWorkRequestBuilder<AppDatabaseWorker>().build()
-                        WorkManager.getInstance().enqueue(request)
-                    }
-                })
-                .build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "Profiles.db").build()
         }
     }
 }

@@ -3,14 +3,14 @@
 buildscript {
     ext{
         room_version = '2.1.0-alpha03'
-        kotlin_version = '1.3.0'
+        kotlin_version = '1.3.11'
         coroutines_version = '1.0.1'
         material_version = '1.0.0'
-        constraint_layout_version = '2.0.0-alpha2'
+        constraint_layout_version = '2.0.0-alpha3'
         ktlint_version = '0.29.0'
-        support_library_version = '1.0.0'
+        support_library_version = '1.0.2'
         recycler_view_version = '1.0.0'
-        work_version = '1.0.0-alpha11'
+        work_version = '1.0.0-beta01'
         dagger_version ='2.16'
         app_compat_version = '28.0.0'
         okhttp_version = '3.9.0'
@@ -21,6 +21,8 @@ buildscript {
         rxjava_version = '2.2.4'
         lifecycle_version ='2.0.0'
         reactive_streams_version = '1.0.2'
+        rx_binding_version = '3.0.0-alpha2'
+        image_cropper_version = '1.0.3'
     }
 
     repositories {
@@ -30,6 +32,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // safe args
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha09"
     }
 }
 

@@ -1,22 +1,32 @@
 package ru.profiles.ui
 
-import androidx.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.lifecycle.ViewModelProviders
+import dagger.android.support.DaggerFragment
+import ru.profiles.di.ViewModelFactory
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.SearchViewModel
+import javax.inject.Inject
 
-class SearchFragment : Fragment() {
+class SearchFragment : DaggerFragment() {
+
+    @Inject
+    lateinit var mViewModelFactory: ViewModelFactory
+
+    private lateinit var mViewModel: SearchViewModel
 
     companion object {
         fun newInstance() = SearchFragment()
     }
 
-    lateinit var viewModel: SearchViewModel
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SearchViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,11 +34,4 @@ class SearchFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.search_fragment, container, false)
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }

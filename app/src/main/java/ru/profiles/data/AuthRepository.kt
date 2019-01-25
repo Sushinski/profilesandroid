@@ -8,6 +8,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import okhttp3.Response
+import retrofit2.adapter.rxjava2.Result
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.api.interfaces.AuthApi
@@ -18,6 +20,8 @@ import javax.inject.Inject
 
 class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
                                          private val mAuthApi: AuthApi) {
+
+
 
     companion object{
         // For Singleton instantiation
@@ -30,10 +34,9 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
             }
     }
 
-    fun getUserAuth(user_id: Int): LiveData<AuthModel> {
-        return mAuthDao.getUserAuth(user_id)
+    fun getLastUserAuth(): LiveData<AuthModel> {
+        return mAuthDao.getUserAuth()
     }
-
 
     fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
         // todo check existing auth

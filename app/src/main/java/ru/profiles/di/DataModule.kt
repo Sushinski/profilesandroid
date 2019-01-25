@@ -6,21 +6,17 @@ import dagger.Module
 import dagger.Provides
 import ru.profiles.ProfilesApplication
 import ru.profiles.api.interfaces.AuthApi
+import ru.profiles.api.interfaces.RegistrationApi
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.dao.UserModelDao
 import ru.profiles.data.AppDatabase
 import ru.profiles.data.AuthRepository
+import ru.profiles.data.RegistrationRepository
 import ru.profiles.data.UserRepository
 import javax.inject.Singleton
 
 @Module(includes = [ApiModule::class])
 class DataModule {
-
-    @Singleton
-    @Provides
-    fun provideContext(application: ProfilesApplication): Context {
-        return application.applicationContext
-    }
 
     @Singleton
     @Provides
@@ -52,4 +48,9 @@ class DataModule {
         return UserRepository.getInstance(userDao, authApi)
     }
 
+    @Provides
+    @Singleton
+    fun provideRegistrationRepository(registrationApi: RegistrationApi): RegistrationRepository{
+        return RegistrationRepository.getInstance(registrationApi)
+    }
 }

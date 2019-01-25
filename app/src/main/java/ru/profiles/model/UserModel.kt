@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id")]
 )
 data class UserModel(
+
     @SerializedName("user_id")
     @Expose
     var mUserId: Int = 0,
@@ -19,10 +20,10 @@ data class UserModel(
     var mName: String = "",
 
     @ColumnInfo(name = "surname")
-    var mSurname: String? = null,
+    var mSurname: String = "",
 
     @ColumnInfo(name = "gender")
-    var mGender: String? = null,
+    var mGender: Int = 0,
 
     @ColumnInfo(name = "phone")
     var mPhone: String? = null,
@@ -34,7 +35,7 @@ data class UserModel(
     @ColumnInfo(name = "email")
     @SerializedName("email")
     @Expose
-    var mEmail: String = "",
+    var mEmail: String? = null,
 
     @SerializedName("refresh_token_id")
     @Expose
@@ -52,7 +53,15 @@ data class UserModel(
     @Expose
     var mEmailForVerification: String? = null,
 
-    val imageUrl: String? = null
+    @ColumnInfo(name = "image_uri")
+    val mImageUrl: String? = null,
+
+    @ColumnInfo(name = "local_image_uri")
+    var mLocalImageUrl: String? = null,
+
+    @ColumnInfo(name = "is_logged")
+    var mIsLogged: Boolean = false
+
 ) {
 
     @PrimaryKey(autoGenerate = true)
@@ -61,5 +70,9 @@ data class UserModel(
     @Expose
     var mId: Int = 0
 
-    override fun toString() = mName + mSurname
+    override fun toString() = mName + " " + (mSurname ?: "")
+
+    fun isBlank(): Boolean{
+        return mEmail.isNullOrEmpty() || mPhone.isNullOrEmpty()
+    }
 }

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'androidx.navigation.safeargs'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -98,6 +99,14 @@ android {
             buildConfigField "String", "OK_APP_KEY", '"CBADBEDMEBABABABA"'
         }
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'arm64-v8a'
+            universalApk false
+        }
+    }
 }
 
 dependencies {
@@ -126,9 +135,10 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$rx_adapter_version"
     implementation "android.arch.lifecycle:reactivestreams:$reactive_streams_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:$rx_binding_version"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:$rx_binding_version"
+    implementation 'com.jakewharton.rxbinding3:rxbinding-material:3.0.0-alpha2'
 
-    implementation "androidx.legacy:legacy-support-v4:$support_library_version"
-    implementation "androidx.legacy:legacy-support-core-utils:$support_library_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.appcompat:appcompat:$support_library_version"
@@ -139,4 +149,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+    // navigation
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
+    // fresco
+    implementation 'com.facebook.fresco:fresco:1.11.0'
+    // For WebP support, without animations
+    implementation 'com.facebook.fresco:webpsupport:1.11.0'
+    // Provide the Android support library (you might already have this or a similar dependency)
+    implementation 'com.android.support:support-core-utils:28.2.1'
+    // photo drawee view
+    implementation 'me.relex:photodraweeview:2.0.0'
+
 }
