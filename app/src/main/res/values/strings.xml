@@ -19,5 +19,7 @@
     <string name="woman_text">Женщина</string>
     <string name="add_photo_text">добавить фотографию</string>
     <string name="image_chooser_text">Выбрать фотографию</string>
+    <string name="search_title">Найти услугу</string>
     <string name="delete_photo">Удалить фотографию</string>
+    <string name="search_field_main_text">Найти</string>
 </resources>

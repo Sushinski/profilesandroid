@@ -8,6 +8,8 @@
     android:layout_height="match_parent"
     tools:context="ru.profiles.ui.SearchFragment">
 
+    <include layout="@layout/search_toolbar_view" />
+
 
     <Button
         android:id="@+id/button"
