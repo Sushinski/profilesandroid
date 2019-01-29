@@ -43,18 +43,7 @@ class SearchFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = inflater.inflate(R.layout.search_fragment, container, false)
-        return v
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        search_text_view.clearFocus()
-        search_text_view.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
-            search_button.visibility = if(b || !search_text_view.text.isEmpty()) View.INVISIBLE else View.VISIBLE
-            voice_search_button.visibility = search_button.visibility
-        }
+        return inflater.inflate(R.layout.search_fragment, container, false)
     }
 
 }
