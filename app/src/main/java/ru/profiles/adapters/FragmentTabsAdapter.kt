@@ -21,7 +21,7 @@ class FragmentTabsAdapter(mFragmentManager: FragmentManager) : FragmentStatePage
         mFragmentList.add(fragment)
     }
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return position.toString()
+    override fun getPageTitle(position: Int): CharSequence? {
+        return null
     }
 }

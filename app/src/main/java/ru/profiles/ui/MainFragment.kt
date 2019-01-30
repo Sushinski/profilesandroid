@@ -1,5 +1,6 @@
 package ru.profiles.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import ru.profiles.di.ViewModelFactory
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.MainViewModel
 import javax.inject.Inject
+
+
 
 
 class MainFragment : DaggerFragment() {
@@ -42,10 +45,10 @@ class MainFragment : DaggerFragment() {
             search_button.visibility = if(b || !search_text_view.text.isEmpty()) View.INVISIBLE else View.VISIBLE
             voice_search_button.visibility = search_button.visibility
         }
-        initFragments()
+        activity?.let { initFragments(it.applicationContext) }
     }
 
-    private fun initFragments(){
+    private fun initFragments(ctx: Context){
         activity?.supportFragmentManager?.let {
             val a = FragmentTabsAdapter(it)
             for (f in arrayOf(
@@ -54,17 +57,21 @@ class MainFragment : DaggerFragment() {
                 ChatFragment(),
                 NotificationFragment(),
                 ProfileFragment()
-            )) {
-                a.addTab(f)
+            ).withIndex()) {
+                a.addTab(f.value)
             }
             a
         }?.also{
             content_viewpager.adapter = it
             content_tablayout.setupWithViewPager(content_viewpager)
-
+            val imageResIds = intArrayOf(
+                R.drawable.round_calendar_today_black_48dp,
+                R.drawable.baseline_search_black_48dp,
+                R.drawable.round_message_black_48dp,
+                R.drawable.round_notifications_black_48dp,
+                R.drawable.round_menu_black_48dp)
+            for (t in 0 until content_tablayout.tabCount) content_tablayout.getTabAt(t)?.setIcon(imageResIds[t])
         }
-
-
     }
 
 }
