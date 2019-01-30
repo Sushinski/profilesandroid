@@ -2,7 +2,6 @@ package ru.profiles.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import ru.profiles.MainActivity
 import ru.profiles.ui.*
 import ru.profiles.ui.registration.ImageEditorFragment
 import ru.profiles.ui.registration.RegistrationFragment1
@@ -35,7 +34,7 @@ abstract class FragmentBuilderModule {
     abstract fun bindSearchFragment() : SearchFragment
 
     @ContributesAndroidInjector
-    abstract fun bindCalendarFragment() : CalendarFragment
+    abstract fun bindCalendarFragment() : FeedFragment
 
     @ContributesAndroidInjector
     abstract fun bindChatFragment() : ChatFragment

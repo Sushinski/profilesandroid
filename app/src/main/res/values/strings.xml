@@ -22,4 +22,8 @@
     <string name="search_title">Найти услугу</string>
     <string name="delete_photo">Удалить фотографию</string>
     <string name="search_field_main_text">Найти</string>
+    <string name="feed_fragment_title">Лента</string>
+    <string name="chat_fragment_title">Сообщения</string>
+    <string name="notification_fragment_title">Уведомления</string>
+    <string name="profile_fragment_title">Профиль</string>
 </resources>

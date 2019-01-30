@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.search_toolbar_view.*
 import ru.profiles.adapters.FragmentTabsAdapter
 import ru.profiles.di.ViewModelFactory
+import ru.profiles.interfaces.AppBarSetter
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.MainViewModel
 import javax.inject.Inject
-
-
 
 
 class MainFragment : DaggerFragment() {
@@ -24,6 +25,14 @@ class MainFragment : DaggerFragment() {
     lateinit var mViewModelFactory: ViewModelFactory
 
     private lateinit var mViewModel: MainViewModel
+
+    private val mFragments: Array<Fragment> = arrayOf(
+        FeedFragment(),
+        SearchFragment(),
+        ChatFragment(),
+        NotificationFragment(),
+        ProfileFragment()
+    )
 
     companion object {
         fun newInstance() = MainFragment()
@@ -40,24 +49,13 @@ class MainFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        search_text_view.clearFocus()
-        search_text_view.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
-            search_button.visibility = if(b || !search_text_view.text.isEmpty()) View.INVISIBLE else View.VISIBLE
-            voice_search_button.visibility = search_button.visibility
-        }
-        activity?.let { initFragments(it.applicationContext) }
+        activity?.let { initPager(it.applicationContext) }
     }
 
-    private fun initFragments(ctx: Context){
+    private fun initPager(ctx: Context){
         activity?.supportFragmentManager?.let {
             val a = FragmentTabsAdapter(it)
-            for (f in arrayOf(
-                CalendarFragment(),
-                SearchFragment(),
-                ChatFragment(),
-                NotificationFragment(),
-                ProfileFragment()
-            ).withIndex()) {
+            for (f in mFragments.withIndex()) {
                 a.addTab(f.value)
             }
             a
@@ -71,7 +69,24 @@ class MainFragment : DaggerFragment() {
                 R.drawable.round_notifications_black_48dp,
                 R.drawable.round_menu_black_48dp)
             for (t in 0 until content_tablayout.tabCount) content_tablayout.getTabAt(t)?.setIcon(imageResIds[t])
+
         }
+
+        content_viewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                (mFragments[position] as AppBarSetter).getBarTitle(ctx).let{
+                    val a = (activity as AppCompatActivity)
+                    if(it != null) {
+                        a.supportActionBar?.show()
+                        a.supportActionBar?.title = it
+                    }else{
+                        a.supportActionBar?.hide()
+                    }
+                }
+            }
+        }.also { it.onPageSelected(0) })
+
     }
 
 }
