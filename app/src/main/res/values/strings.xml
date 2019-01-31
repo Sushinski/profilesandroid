@@ -26,4 +26,12 @@
     <string name="chat_fragment_title">Сообщения</string>
     <string name="notification_fragment_title">Уведомления</string>
     <string name="profile_fragment_title">Профиль</string>
+    <string name="cancel_button_text">Отменить</string>
+    <string name="all_button_text">Все</string>
+    <string name="goods_button_text">Товары</string>
+    <string name="specialists_button_text">Специалисты</string>
+    <string name="organizations_button_text">Организации</string>
+    <string name="questions_button_text">Вопросы</string>
+    <string name="articles_button_text">Статьи</string>
+    <string name="posts_button_text">Посты</string>
 </resources>

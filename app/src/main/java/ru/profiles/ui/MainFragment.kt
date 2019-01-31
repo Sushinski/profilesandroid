@@ -69,7 +69,8 @@ class MainFragment : DaggerFragment() {
                 R.drawable.round_notifications_black_48dp,
                 R.drawable.round_menu_black_48dp)
             for (t in 0 until content_tablayout.tabCount) content_tablayout.getTabAt(t)?.setIcon(imageResIds[t])
-
+            content_viewpager.setOnTouchListener { v, event -> true }
+            content_viewpager.offscreenPageLimit = 4 // all pages keeped
         }
 
         content_viewpager.addOnPageChangeListener(object: ViewPager.SimpleOnPageChangeListener() {
