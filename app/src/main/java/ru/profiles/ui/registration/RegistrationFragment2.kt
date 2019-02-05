@@ -94,9 +94,9 @@ class RegistrationFragment2 : DaggerFragment() {
     private fun createChooser(ctx: Context){
         val builder = AlertDialog.Builder(ctx)
         builder.setTitle(ctx.getString(R.string.image_chooser_text))
-        builder.setAdapter(DialogAdapter(ctx, 0, ctx.resources.getStringArray(
+        builder.setAdapter(DialogAdapter(ctx, ctx.resources.getStringArray(
             regViewModel.mLocalPicUri?.let{R.array.image_change_items} ?: R.array.image_chooser_items))){
-                d, w ->
+                _, w ->
             when (w) {
                 0 -> runGallery()
                 1 -> runCamera(ctx)
@@ -188,7 +188,7 @@ class RegistrationFragment2 : DaggerFragment() {
         }
     }
 
-    internal class DialogAdapter(ctx: Context, id: Int, items: Array<String>)
+    internal class DialogAdapter(ctx: Context, items: Array<String>)
         : ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, items){
 
         private val mChooserItems = items
@@ -198,6 +198,7 @@ class RegistrationFragment2 : DaggerFragment() {
             val text1: TextView = view.findViewById(android.R.id.text1) as TextView
             val t = mChooserItems[position]
             text1.text = t
+            @Suppress("DEPRECATION")
             text1.setTextColor(
                 context.resources.getColor(
                     if(t == context.resources.getString(R.string.delete_photo)) R.color.colorAccent //todo

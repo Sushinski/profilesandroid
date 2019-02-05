@@ -1,17 +1,14 @@
 package ru.profiles.ui.registration
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment
@@ -24,8 +21,6 @@ import ru.profiles.profiles.R
 import ru.profiles.utils.Edge
 import ru.profiles.utils.ImageViewUtil
 import ru.profiles.viewmodel.ImageEditViewModel
-import java.io.File
-import java.io.IOException
 import javax.inject.Inject
 
 

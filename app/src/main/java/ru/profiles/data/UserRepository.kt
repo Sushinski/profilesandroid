@@ -24,15 +24,25 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
         return mUserDao.getLoggedUser()
     }
 
+    fun getRegisteredUser() : LiveData<UserModel>{
+        return mUserDao.getRegisteredUser()
+    }
+
     suspend fun saveUser(user: UserModel){
         withContext(IO) {
             mUserDao.save(user)
         }
     }
 
-    suspend fun deleteUsers(){
+    suspend fun deleteRegisteredUser(){
         withContext(IO){
-            mUserDao.clearUsers()
+            mUserDao.clearUser(false)
+        }
+    }
+
+    suspend fun deleteLoggedUser(){
+        withContext(IO){
+            mUserDao.clearUser(true)
         }
     }
 

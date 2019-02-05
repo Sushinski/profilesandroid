@@ -19,6 +19,7 @@ import javax.inject.Singleton
         ViewModelModule::class
     ]
 )
+@SuppressWarnings("deprecated")
 @Singleton
 interface AppComponent: AndroidInjector<DaggerApplication> {
 

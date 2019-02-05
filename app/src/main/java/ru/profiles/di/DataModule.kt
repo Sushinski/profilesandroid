@@ -1,7 +1,5 @@
 package ru.profiles.di
 
-import android.app.Application
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.profiles.ProfilesApplication

@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.AuthModelDao
@@ -53,7 +50,11 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     }
 
     fun getRegisteredUser(): LiveData<UserModel> {
-        return mUserRep.getLoggedUser().toSingleEvent()
+        return mUserRep.getRegisteredUser().toSingleEvent()
+    }
+
+    fun clearRegisteredUser(){
+        runBlocking { mUserRep.deleteRegisteredUser() }
     }
 
     fun regUser(identity: String, pswd: String){
@@ -69,7 +70,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                         else if(android.util.Patterns.PHONE.matcher(identity).matches())
                             u.mPhone = identity
                         viewModelScope.launch {
-                            mUserRep.deleteUsers()
+                            mUserRep.deleteRegisteredUser()
                             mUserRep.saveUser(u)
                         }
                     }

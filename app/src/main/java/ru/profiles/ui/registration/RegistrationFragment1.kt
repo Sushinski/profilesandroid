@@ -34,7 +34,7 @@ class RegistrationFragment1 : DaggerFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var regViewModel: RegistrationViewModel
+    private lateinit var regViewModel: RegistrationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +52,7 @@ class RegistrationFragment1 : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
         reg_approval_text.movementMethod = LinkMovementMethod.getInstance()
         mCheckingFields = arrayOf(email_text, password_text, repeat_password_text)
+        regViewModel.clearRegisteredUser()
         regViewModel.getRegisteredUser().observe(this, Observer { user ->
             user?.also {
                 if (!user.isBlank()) {
@@ -66,8 +67,8 @@ class RegistrationFragment1 : DaggerFragment() {
         })
         regViewModel.getRegistrationError().observe(this, Observer { error ->
             error.mFields?.let {
-                Toast.makeText(context, "${it.keys.first()}:${it[it.keys.first()]?.first()}", Toast.LENGTH_SHORT).show()
-            }
+                Toast.makeText(context, "${it[it.keys.first()]?.first()}", Toast.LENGTH_SHORT).show()
+            } ?: let{ Toast.makeText(context, "Ошибка, попробуйте позже", Toast.LENGTH_SHORT).show() }
         })
         reg_proceed_btn.setOnClickListener {
             if (ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!") &&

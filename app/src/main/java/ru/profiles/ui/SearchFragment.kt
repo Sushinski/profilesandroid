@@ -44,8 +44,8 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        search_text_view.onFocusChangeListener = View.OnFocusChangeListener { view, b ->
-            if(!b) this.activity?.hideKeyBoard(view)
+        search_text_view.onFocusChangeListener = View.OnFocusChangeListener { v, b ->
+            if(!b) this.activity?.hideKeyBoard(v)
             val t = ChangeBounds()
             t.duration = 150
             TransitionManager.beginDelayedTransition(search_fragment_layout as ViewGroup, t)
@@ -56,7 +56,7 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
 
         }
         cancel_button.setOnClickListener {
-                v->search_text_view.setText("")
+                _->search_text_view.setText("")
                 search_text_view.clearFocus()
         }
     }

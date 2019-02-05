@@ -75,5 +75,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel::class)
     internal abstract fun profileViewModel(viewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ImageEditViewModel::class)
+    internal abstract fun imageEditViewModel(viewModel: ImageEditViewModel): ViewModel
     //Add more ViewModels here
 }
