@@ -31,4 +31,12 @@
 export ANDROID_HOME=android-sdk-linux
 app/build.gradle
 бампнуть версию:
-Жй::q
+```
+    defaultConfig {
+        applicationId "ru.profiles"
+        minSdkVersion 18
+        multiDexEnabled true
+        targetSdkVersion 28
+        versionCode 3
+```
+
