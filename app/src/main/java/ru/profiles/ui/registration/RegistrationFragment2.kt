@@ -118,7 +118,7 @@ class RegistrationFragment2 : DaggerFragment() {
 
     var mPhotoUri: Uri? = null
 
-    private fun runCamera(ctx: Context){
+    private fun runCamera(ctx: Context){ // todo get file object for uploading
         // todo check camera feature
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {

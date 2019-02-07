@@ -15,17 +15,20 @@ import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.RegistrationRepository
+import ru.profiles.data.ResourcesRepository
 import ru.profiles.data.UserRepository
 import ru.profiles.extensions.isEmailValid
 import ru.profiles.extensions.toSingleEvent
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
+import java.security.KeyStore
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(private val mUserRep: UserRepository,
                                                 private val mRegRep: RegistrationRepository,
+                                                private val mResRep: ResourcesRepository,
                                                 private val mGson: Gson
 ) : ViewModel() {
 
@@ -55,6 +58,17 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
 
     fun clearRegisteredUser(){
         runBlocking { mUserRep.deleteRegisteredUser() }
+    }
+
+    fun saveImage(imageUri: Uri){
+        val file = FileUtils.getFile(this, imageUri)
+       val requestFile = RequestBody.create(
+           MediaType.parse(getContentResolver().getType(imageUri)),
+           file
+       )
+        mDisposables.add(
+            mResRep.saveImageFile()
+        )
     }
 
     fun regUser(identity: String, pswd: String){
