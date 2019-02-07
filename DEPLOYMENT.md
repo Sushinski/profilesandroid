@@ -29,3 +29,6 @@
 
 
 export ANDROID_HOME=android-sdk-linux
+app/build.gradle
+бампнуть версию:
+Жй::q
