@@ -13,6 +13,9 @@
 - в gradle.properties установить переменные-пути: 
     Keys.repo=[путь к папке с ключами, размещёнными выше]
     service_account=[ имя json-файла ключа сервисаного аккаунта(лежит также в папке с ключами)]
+    * profiles-upload-keystore.jks
+    * profiles.properties
+    * api-8539613066776331638-470215-b9a28f59aa25.json
 
 Запустить сборку/размещение:
  - gradlew.bat [действие][flavour][config][packagetype]
