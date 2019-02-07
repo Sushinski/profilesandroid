@@ -25,3 +25,4 @@
     с переменным для development - конфигурации -см. секцию  productFlavors  в app/build.gradle)
 
 
+export ANDROID_HOME=android-sdk-linux
