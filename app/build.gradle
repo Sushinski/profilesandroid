@@ -31,6 +31,7 @@ android {
     defaultConfig {
         applicationId "ru.profiles"
         minSdkVersion 18
+        multiDexEnabled true
         targetSdkVersion 28
         versionCode 3
         versionName "1.0"
@@ -203,4 +204,6 @@ dependencies {
 
     // photo drawee view
     implementation 'me.relex:photodraweeview:2.0.0'
+    // multidex
+    implementation 'com.android.support:multidex:1.0.3'
 }

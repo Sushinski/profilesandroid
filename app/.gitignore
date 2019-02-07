@@ -2,3 +2,4 @@
 *.json
 /release
 *.jks
+*.iml

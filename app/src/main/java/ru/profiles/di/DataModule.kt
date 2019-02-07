@@ -52,7 +52,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesResourcesRepo(resources: ResourcesApi): ResourcesRepository{
-        return ResourcesRepository.getInstance(resources)
+    fun providesResourcesRepo(authDao: AuthModelDao, resources: ResourcesApi): ResourcesRepository{
+        return ResourcesRepository.getInstance(authDao, resources)
     }
 }
