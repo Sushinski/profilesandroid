@@ -12,7 +12,6 @@ android {
             if (project.hasProperty("Keys.repo")) {
                 def projectPropsFile = file(project.property("Keys.repo") + "/profiles.properties")
                 if (projectPropsFile.exists()) {
-                    println "read profiles.properties"
                     Properties props = new Properties()
                     props.load(new FileInputStream(projectPropsFile))
                     storeFile file(file(project.property("Keys.repo") + props['RELEASE_STORE_FILE']))
@@ -133,12 +132,19 @@ android {
 }
 
 play {
-    serviceAccountCredentials = file(project.property("Keys.repo") + "/" + project.property("service_account"))
-    track = "internal"
-    userFraction = 1
-    releaseStatus = "inProgress"
-    defaultToAppBundles = true
-    resolutionStrategy = "ignore"
+    if (project.hasProperty("Keys.repo")) {
+        def projectPropsFile = file(project.property("Keys.repo") + "/profiles.properties")
+        if (projectPropsFile.exists()) {
+            Properties props = new Properties()
+            props.load(new FileInputStream(projectPropsFile))
+            serviceAccountCredentials = file(props['SERVICE_ACCOUNT_KEYFILE'])
+            track = "internal"
+            userFraction = 1
+            releaseStatus = "inProgress"
+            defaultToAppBundles = true
+            resolutionStrategy = "ignore"
+        }
+    }
 }
 
 dependencies {
