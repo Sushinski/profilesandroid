@@ -1,6 +1,6 @@
 build
-.idea
-.idea/*
+.idea/
 .idea/*.*
 .gradle/*.*
 local.properties
+*.iml
