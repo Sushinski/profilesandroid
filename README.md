@@ -1,6 +1,1 @@
-# Подготовка хоста под билды
-```
-git clone ssh://git@gitlabce.indev-group.eu:10022/profiles/profilesandroid.git
-cd profilesandroid/
-
-```
+Описание настройки build-deployment в файле deployment.readme
