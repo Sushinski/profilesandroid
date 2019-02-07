@@ -1,21 +1,27 @@
-Настройка сборочной машины:
+РќР°СЃС‚СЂРѕР№РєР° СЃР±РѕСЂРѕС‡РЅРѕР№ РјР°С€РёРЅС‹:
 - jdk/jre 1.8
 - android sdk (https://developer.android.com/studio/) - command line tools only
-- лицензия на sdk - (где взять?)
-- ключи (где их взять?) - разместить в локальной папке сборочной машины
+- Р»РёС†РµРЅР·РёСЏ РЅР° sdk - (РіРґРµ РІР·СЏС‚СЊ?)
+- РєР»СЋС‡Рё (РіРґРµ РёС… РІР·СЏС‚СЊ?) - СЂР°Р·РјРµСЃС‚РёС‚СЊ РІ Р»РѕРєР°Р»СЊРЅРѕР№ РїР°РїРєРµ СЃР±РѕСЂРѕС‡РЅРѕР№ РјР°С€РёРЅС‹
 
-Получить исходники:
-- Установить git
+РџРѕР»СѓС‡РёС‚СЊ РёСЃС…РѕРґРЅРёРєРё:
+- РЈСЃС‚Р°РЅРѕРІРёС‚СЊ git
 - git clone ssh://git@gitlabce.indev-group.eu:10022/profiles/profilesandroid.git
 
 - cd profilesandroid/
-- в local.properties установить путь к android sdk
-- в gradle.properties установить переменные-пути: 
-    Keys.repo=[путь к папке с ключами, размещёнными выше]
-    service_account=[ имя json-файла ключа сервисаного аккаунта(лежит также в папке с ключами)]
+- РІ local.properties СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїСѓС‚СЊ Рє android sdk
+- РІ gradle.properties СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРµРјРµРЅРЅС‹Рµ-РїСѓС‚Рё: 
+    Keys.repo=[РїСѓС‚СЊ Рє РїР°РїРєРµ СЃ РєР»СЋС‡Р°РјРё, СЂР°Р·РјРµС‰С‘РЅРЅС‹РјРё РІС‹С€Рµ]
+    service_account=[ РёРјСЏ json-С„Р°Р№Р»Р° РєР»СЋС‡Р° СЃРµСЂРІРёСЃР°РЅРѕРіРѕ Р°РєРєР°СѓРЅС‚Р°(Р»РµР¶РёС‚ С‚Р°РєР¶Рµ РІ РїР°РїРєРµ СЃ РєР»СЋС‡Р°РјРё)]
 
-Запустить сборку/размещение:
- - gradlew.bat [действие][flavour][config][packagetype]
-    например: gradlew.bat publishDevelopmentReleaseBundle
-        (соберёт, подпишет и разместит в google play релизную сборку в формате app bundle
-        с переменным для development - конфигурации -см. секцию  productFlavors  в app/build.gradle)
+Р—Р°РїСѓСЃС‚РёС‚СЊ СЃР±РѕСЂРєСѓ/СЂР°Р·РјРµС‰РµРЅРёРµ:
+ - gradlew.bat [РґРµР№СЃС‚РІРёРµ][flavour][config][packagetype]
+    РЅР°РїСЂРёРјРµСЂ: 
+    gradlew.bat assembleDevelopmentDebug - СЃРѕР±РµСЂС‘С‚ debug СЃР±РѕСЂРєСѓ
+    СЃ РїРµСЂРµРјРµРЅРЅС‹Рј РґР»СЏ development - РєРѕРЅС„РёРіСѓСЂР°С†РёРё 
+    
+    gradlew.bat publishDevelopmentReleaseBundle
+    (СЃРѕР±РµСЂС‘С‚, РїРѕРґРїРёС€РµС‚ Рё СЂР°Р·РјРµСЃС‚РёС‚ РІ google play СЂРµР»РёР·РЅСѓСЋ СЃР±РѕСЂРєСѓ РІ С„РѕСЂРјР°С‚Рµ app bundle
+    СЃ РїРµСЂРµРјРµРЅРЅС‹Рј РґР»СЏ development - РєРѕРЅС„РёРіСѓСЂР°С†РёРё -СЃРј. СЃРµРєС†РёСЋ  productFlavors  РІ app/build.gradle)
+
+
