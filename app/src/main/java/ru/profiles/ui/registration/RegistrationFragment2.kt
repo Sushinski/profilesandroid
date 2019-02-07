@@ -28,8 +28,11 @@ import android.os.Environment
 import android.util.Log
 import android.widget.*
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import kotlinx.android.synthetic.main.registration_fragment_2.*
 import kotlinx.android.synthetic.main.splash_fragment.view.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import ru.profiles.extensions.ensureFields
 import ru.profiles.extensions.getViewByPosition
 import ru.profiles.extensions.shakeField
@@ -66,6 +69,9 @@ class RegistrationFragment2 : DaggerFragment() {
         }
         v.enter_button.setOnClickListener {
             if(this.ensureFields(mCheckedViews, EditText::shakeField, "Заполните все поля!")){
+                regViewModel.mLocalPicUri?.toFile()?.let{file->
+                    RequestBody.create(MediaType.get("image"), file)
+                }?.also { image_body->regViewModel.saveUser(image_body, name_text.toString(), surname_text.toString()) }
 
             }
         }
@@ -118,8 +124,7 @@ class RegistrationFragment2 : DaggerFragment() {
 
     var mPhotoUri: Uri? = null
 
-    private fun runCamera(ctx: Context){ // todo get file object for uploading
-        // todo check camera feature
+    private fun runCamera(ctx: Context){
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 val photoFile: File? = try {

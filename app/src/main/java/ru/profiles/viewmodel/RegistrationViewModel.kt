@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.AuthModelDao
@@ -60,16 +61,13 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
         runBlocking { mUserRep.deleteRegisteredUser() }
     }
 
-    fun saveImage(imageUri: Uri){
-        val file = FileUtils.getFile(this, imageUri)
-       val requestFile = RequestBody.create(
-           MediaType.parse(getContentResolver().getType(imageUri)),
-           file
-       )
-        mDisposables.add(
-            mResRep.saveImageFile()
-        )
+    fun saveUser(imageFile: RequestBody, name: String, surname: String){
+        // todo save user
+        /*mDisposables.add(
+            mResRep.saveImageFile(imageFile)
+                .doAfterSuccess(mUserRep.)*/
     }
+
 
     fun regUser(identity: String, pswd: String){
         mDisposables.add(
