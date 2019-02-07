@@ -70,9 +70,9 @@ data class UserModel(
     @Expose
     var mId: Int = 0
 
-    override fun toString() = mName + " " + (mSurname ?: "")
+    override fun toString() = "$mEmail"
 
     fun isBlank(): Boolean{
-        return mEmail.isNullOrEmpty() || mPhone.isNullOrEmpty()
+        return mEmail.isNullOrEmpty()
     }
 }

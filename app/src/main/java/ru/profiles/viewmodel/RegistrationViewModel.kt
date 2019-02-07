@@ -9,26 +9,27 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.RegistrationRepository
+import ru.profiles.data.ResourcesRepository
 import ru.profiles.data.UserRepository
 import ru.profiles.extensions.isEmailValid
 import ru.profiles.extensions.toSingleEvent
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
+import java.security.KeyStore
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(private val mUserRep: UserRepository,
                                                 private val mRegRep: RegistrationRepository,
+                                                private val mResRep: ResourcesRepository,
                                                 private val mGson: Gson
 ) : ViewModel() {
 
@@ -53,8 +54,20 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     }
 
     fun getRegisteredUser(): LiveData<UserModel> {
-        return mUserRep.getLoggedUser().toSingleEvent()
+        return mUserRep.getRegisteredUser().toSingleEvent()
     }
+
+    fun clearRegisteredUser(){
+        runBlocking { mUserRep.deleteRegisteredUser() }
+    }
+
+    fun saveUser(imageFile: RequestBody, name: String, surname: String){
+        // todo save user
+        /*mDisposables.add(
+            mResRep.saveImageFile(imageFile)
+                .doAfterSuccess(mUserRep.)*/
+    }
+
 
     fun regUser(identity: String, pswd: String){
         mDisposables.add(
@@ -69,7 +82,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                         else if(android.util.Patterns.PHONE.matcher(identity).matches())
                             u.mPhone = identity
                         viewModelScope.launch {
-                            mUserRep.deleteUsers()
+                            mUserRep.deleteRegisteredUser()
                             mUserRep.saveUser(u)
                         }
                     }

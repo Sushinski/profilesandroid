@@ -1,18 +1,14 @@
 package ru.profiles.di
 
-import android.app.Application
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.profiles.ProfilesApplication
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.api.interfaces.RegistrationApi
+import ru.profiles.api.interfaces.ResourcesApi
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.dao.UserModelDao
-import ru.profiles.data.AppDatabase
-import ru.profiles.data.AuthRepository
-import ru.profiles.data.RegistrationRepository
-import ru.profiles.data.UserRepository
+import ru.profiles.data.*
 import javax.inject.Singleton
 
 @Module(includes = [ApiModule::class])
@@ -52,5 +48,11 @@ class DataModule {
     @Singleton
     fun provideRegistrationRepository(registrationApi: RegistrationApi): RegistrationRepository{
         return RegistrationRepository.getInstance(registrationApi)
+    }
+
+    @Provides
+    @Singleton
+    fun providesResourcesRepo(resources: ResourcesApi): ResourcesRepository{
+        return ResourcesRepository.getInstance(resources)
     }
 }

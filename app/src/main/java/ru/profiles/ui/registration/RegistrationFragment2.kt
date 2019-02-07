@@ -28,8 +28,11 @@ import android.os.Environment
 import android.util.Log
 import android.widget.*
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import kotlinx.android.synthetic.main.registration_fragment_2.*
 import kotlinx.android.synthetic.main.splash_fragment.view.*
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import ru.profiles.extensions.ensureFields
 import ru.profiles.extensions.getViewByPosition
 import ru.profiles.extensions.shakeField
@@ -66,6 +69,9 @@ class RegistrationFragment2 : DaggerFragment() {
         }
         v.enter_button.setOnClickListener {
             if(this.ensureFields(mCheckedViews, EditText::shakeField, "Заполните все поля!")){
+                regViewModel.mLocalPicUri?.toFile()?.let{file->
+                    RequestBody.create(MediaType.get("image"), file)
+                }?.also { image_body->regViewModel.saveUser(image_body, name_text.toString(), surname_text.toString()) }
 
             }
         }
@@ -94,9 +100,9 @@ class RegistrationFragment2 : DaggerFragment() {
     private fun createChooser(ctx: Context){
         val builder = AlertDialog.Builder(ctx)
         builder.setTitle(ctx.getString(R.string.image_chooser_text))
-        builder.setAdapter(DialogAdapter(ctx, 0, ctx.resources.getStringArray(
+        builder.setAdapter(DialogAdapter(ctx, ctx.resources.getStringArray(
             regViewModel.mLocalPicUri?.let{R.array.image_change_items} ?: R.array.image_chooser_items))){
-                d, w ->
+                _, w ->
             when (w) {
                 0 -> runGallery()
                 1 -> runCamera(ctx)
@@ -119,7 +125,6 @@ class RegistrationFragment2 : DaggerFragment() {
     var mPhotoUri: Uri? = null
 
     private fun runCamera(ctx: Context){
-        // todo check camera feature
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(ctx.packageManager)?.also {
                 val photoFile: File? = try {
@@ -188,7 +193,7 @@ class RegistrationFragment2 : DaggerFragment() {
         }
     }
 
-    internal class DialogAdapter(ctx: Context, id: Int, items: Array<String>)
+    internal class DialogAdapter(ctx: Context, items: Array<String>)
         : ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, items){
 
         private val mChooserItems = items
@@ -198,6 +203,7 @@ class RegistrationFragment2 : DaggerFragment() {
             val text1: TextView = view.findViewById(android.R.id.text1) as TextView
             val t = mChooserItems[position]
             text1.text = t
+            @Suppress("DEPRECATION")
             text1.setTextColor(
                 context.resources.getColor(
                     if(t == context.resources.getString(R.string.delete_photo)) R.color.colorAccent //todo

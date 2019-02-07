@@ -19,5 +19,19 @@
     <string name="woman_text">Женщина</string>
     <string name="add_photo_text">добавить фотографию</string>
     <string name="image_chooser_text">Выбрать фотографию</string>
+    <string name="search_title">Найти услугу</string>
     <string name="delete_photo">Удалить фотографию</string>
+    <string name="search_field_main_text">Найти</string>
+    <string name="feed_fragment_title">Лента</string>
+    <string name="chat_fragment_title">Сообщения</string>
+    <string name="notification_fragment_title">Уведомления</string>
+    <string name="profile_fragment_title">Профиль</string>
+    <string name="cancel_button_text">Отменить</string>
+    <string name="all_button_text">Все</string>
+    <string name="goods_button_text">Товары</string>
+    <string name="specialists_button_text">Специалисты</string>
+    <string name="organizations_button_text">Организации</string>
+    <string name="questions_button_text">Вопросы</string>
+    <string name="articles_button_text">Статьи</string>
+    <string name="posts_button_text">Посты</string>
 </resources>

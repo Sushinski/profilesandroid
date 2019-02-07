@@ -1,13 +1,19 @@
 package ru.profiles.viewmodel
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import ru.profiles.data.UserRepository
-import ru.profiles.extensions.toSingleEvent
-import ru.profiles.model.UserModel
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(private val mUserRep: UserRepository):  ViewModel() {
 
+    init{
+        Log.i("ProfilesInfo", this.toString() + " constructor")
+    }
 
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.i("ProfilesInfo", this.toString() + " onCleared")
+    }
 }

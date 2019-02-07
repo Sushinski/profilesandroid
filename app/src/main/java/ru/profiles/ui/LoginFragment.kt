@@ -62,15 +62,14 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
         return inflater.inflate(R.layout.login_fragment, container, false).also { it -> run{
             // todo check latest logged user & refresh auth
                 it.login_button.clicks()
-                .throttleFirst(1000, TimeUnit.MILLISECONDS)
-                .observeOn(Schedulers.io())
+                .throttleFirst(3, TimeUnit.SECONDS)
                 .subscribe{
                     if(ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!"))
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
                 }
 
                 it.login_reg_button.setOnClickListener{
-                    v -> NavHostFragment
+                    _ -> NavHostFragment
                         .findNavController(this)
                         .navigate(R.id.action_login_to_reg_frag_1)
                 }

@@ -15,7 +15,7 @@ fun <T : Fragment> T.ensureFields(fields: Array<EditText>, reaction: EditText.()
 }
 
 fun View.shakeField(){
-    this.requestFocusFromTouch()
+    this.requestFocus()
     this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.shaking))
 }
 
