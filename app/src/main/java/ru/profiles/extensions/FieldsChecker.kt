@@ -2,10 +2,20 @@ package ru.profiles.extensions
 
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ru.profiles.profiles.R
+
+fun CheckBox.hasChecked(falseReaction: CheckBox.()->Unit, errMessage: String): Boolean{
+    return this.isChecked.also {
+        if (!it) {
+            falseReaction()
+            Toast.makeText(this.context, errMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+}
 
 fun <T : Fragment> T.ensureFields(fields: Array<EditText>, reaction: EditText.()->Unit, errMessage: String) : Boolean {
     fields.firstOrNull{ it.text.isBlank() }

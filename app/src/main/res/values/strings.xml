@@ -10,7 +10,9 @@
     <string name="email_hint">Email</string>
     <string name="passwd_hint">Пароль</string>
     <string name="passwd_repeat_hint">Повторите пароль</string>
-    <string name="reg_approval_text">Регистрация означает согласие с  <a href="https://profiles.ru/pages/terms">лицензионным соглашением</a></string>
+    <string name="reg_approval_text">Регистрация означает согласие с
+        <a href="https://profiles.ru/pages/terms">лицензионным соглашением и пользовательским соглашением</a>
+    </string>
     <string name="reg_proceed_btn_text">Далее</string>
     <string name="name_hint">Имя</string>
     <string name="surname_hint">Фамилия</string>
@@ -34,4 +36,7 @@
     <string name="questions_button_text">Вопросы</string>
     <string name="articles_button_text">Статьи</string>
     <string name="posts_button_text">Посты</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

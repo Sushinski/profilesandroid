@@ -71,8 +71,7 @@ class RegistrationFragment2 : DaggerFragment() {
             if(this.ensureFields(mCheckedViews, EditText::shakeField, "Заполните все поля!")){
                 regViewModel.mLocalPicUri?.toFile()?.let{file->
                     RequestBody.create(MediaType.get("image"), file)
-                }?.also { image_body->regViewModel.saveUser(image_body, name_text.toString(), surname_text.toString()) }
-
+                }
             }
         }
         regViewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
@@ -81,20 +80,13 @@ class RegistrationFragment2 : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        arguments?.let{
+        /*arguments?.let{
             RegistrationFragment2Args.fromBundle(it).imageUri?.let { u->regViewModel.mLocalPicUri = Uri.parse(u) }
-        }
-        regViewModel.getRegisteredUser().observe(this, androidx.lifecycle.Observer {
-            user->
-                if (user.mName != user.mEmail) name_text.setText(user.mName)
-                if(user.mSurname != user.mEmail) surname_text.setText(user.mSurname)
-                radioGroup_gender.check(user.mGender)
-        })
+        }*/
         regViewModel.getLocalPicUri().observe(this, androidx.lifecycle.Observer {
                 v->avatar_image.setImageURI(v.toString())
                 set_photo_text.visibility = if(v == null) View.VISIBLE else View.INVISIBLE
         })
-        mCheckedViews = arrayOf(name_text, surname_text)
     }
 
     private fun createChooser(ctx: Context){

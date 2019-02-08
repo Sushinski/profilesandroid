@@ -46,7 +46,7 @@ class ImageEditorFragment: DaggerFragment() {
             val cropped = getCroppedImage()
             val uri = viewModel.saveCroppedFile(a.applicationContext, cropped)
             val action = ImageEditorFragmentDirections.actionImageEditorFragmentToRegFrag2()
-            action.imageUri = uri?.toString() ?: ""
+            //action.imageUri = uri?.toString() ?: ""
             NavHostFragment.findNavController(this).navigate(action)
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory)[ImageEditViewModel::class.java]

@@ -7,7 +7,7 @@
         android:id="@+id/main"
         android:name="ru.profiles.ui.MainFragment"
         android:label="main"
-        tools:layout="@layout/main_fragment"></fragment>
+        tools:layout="@layout/main_fragment"/>
 
     <fragment
         android:id="@+id/login"
@@ -47,8 +47,8 @@
         android:label="RegistrationFragment1"
         tools:layout="@layout/registration_fragment_1">
         <action
-            android:id="@+id/action_reg_frag_1_to_reg_frag_2"
-            app:destination="@id/reg_frag_2" />
+            android:id="@+id/action_reg_frag_1_to_reg_frag_12"
+            app:destination="@id/reg_frag_12" />
     </fragment>
 
     <fragment
@@ -64,21 +64,6 @@
             android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
             app:destination="@id/imageEditorFragment" >
         </action>
-        <argument
-            android:name="email"
-            app:nullable="true"
-            android:defaultValue="@null"
-            app:argType="string" />
-        <argument
-            android:name="password"
-            app:nullable="true"
-            android:defaultValue="@null"
-            app:argType="string" />
-        <argument
-            android:name="imageUri"
-            app:nullable="true"
-            android:defaultValue="@null"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/imageEditorFragment"
@@ -95,5 +80,11 @@
             app:destination="@id/reg_frag_2"
             app:popUpTo="@+id/reg_frag_2"
             app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment android:id="@+id/reg_frag_12" android:name="ru.profiles.ui.registration.RegistrationFragment12"
+              android:label="RegistrationFragment12">
+        <action
+            android:id="@+id/action_reg_frag_12_to_reg_frag_2"
+            app:destination="@id/reg_frag_2" />
     </fragment>
 </navigation>

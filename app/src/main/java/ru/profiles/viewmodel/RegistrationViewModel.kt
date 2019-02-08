@@ -69,9 +69,9 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     }
 
 
-    fun regUser(identity: String, pswd: String){
+    fun regUser(identity: String, pswd: String, name: String, surname: String, gender: Int){
         mDisposables.add(
-            mRegRep.registerUser(identity, pswd).subscribe (
+            mRegRep.registerUser(identity, pswd, name, surname, gender).subscribe (
                 {
                     auth->if (auth.mRefreshToken.isNotEmpty() && auth.mToken.isNotEmpty()) {
                         //val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))

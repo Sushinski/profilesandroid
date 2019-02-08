@@ -22,15 +22,13 @@ class RegistrationRepository private constructor(private val mRegApi: Registrati
             }
     }
 
-    fun registerUser(identity: String, pswd: String) : Single<RegistrationResponse> {
-        val r = RegistrationRequest(identity, pswd, pswd, null,null, identity, identity, 0)
+    fun registerUser(identity: String, pswd: String, name: String, surname: String, gender: Int) : Single<RegistrationResponse> {
+        val r = RegistrationRequest(identity, pswd, pswd, null,null, name, surname, gender)
         Log.i("ProfilesInfo", "reg request: "  + Gson().toJson(r,   RegistrationRequest::class.java))
         return mRegApi.registerUser(r)
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).firstOrError()
     }
-
-   // fun updateUserInfo(User)
 
 }
