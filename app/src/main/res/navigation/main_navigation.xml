@@ -64,6 +64,11 @@
             android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
             app:destination="@id/imageEditorFragment" >
         </action>
+        <argument
+            android:name="imageUri"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/imageEditorFragment"

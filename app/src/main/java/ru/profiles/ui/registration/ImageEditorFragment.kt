@@ -46,7 +46,7 @@ class ImageEditorFragment: DaggerFragment() {
             val cropped = getCroppedImage()
             val uri = viewModel.saveCroppedFile(a.applicationContext, cropped)
             val action = ImageEditorFragmentDirections.actionImageEditorFragmentToRegFrag2()
-            //action.imageUri = uri?.toString() ?: ""
+            action.imageUri = uri?.toString() ?: ""
             NavHostFragment.findNavController(this).navigate(action)
         }
         viewModel = ViewModelProviders.of(this, viewModelFactory)[ImageEditViewModel::class.java]
@@ -62,6 +62,7 @@ class ImageEditorFragment: DaggerFragment() {
                 .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP)
                 .build()
             photo_drawee_view.hierarchy = h
+            photo_drawee_view.minimumScale = 1f
             mSaveUri = Uri.parse(ImageEditorFragmentArgs.fromBundle(it).imageUri)
             photo_drawee_view.setPhotoUri(mSaveUri)
 

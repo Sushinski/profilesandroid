@@ -1,15 +1,17 @@
 package ru.profiles.ui.view
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import android.view.WindowManager
 import ru.profiles.profiles.R
 import ru.profiles.utils.Edge
 import ru.profiles.utils.PaintUtil
 
-const val DEFAULT_MARGINTOP = 100
+const val DEFAULT_MARGINTOP = 150
 const val DEFAULT_MARGINSIDE = 50
 const val DEFAULT_BOARDER_COLOR = -0x1
 const val DEFAULT_BACKGROUND_COLOR = -0x4fd6cfc1
@@ -42,8 +44,9 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
     init {
         val ta = context.obtainStyledAttributes(mAttrs, R.styleable.CropOverlayView, 0, 0)
         try {
-            mMarginTop = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginTop, DEFAULT_MARGINTOP)
-            mMarginSide = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginSide, DEFAULT_MARGINSIDE)
+            //mMarginTop = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginTop, DEFAULT_MARGINTOP)
+            //mMarginSide = ta.getDimensionPixelSize(R.styleable.CropOverlayView_marginSide, DEFAULT_MARGINSIDE)
+            initMargins()
             mBorderPaintColor = ta.getColor(R.styleable.CropOverlayView_borderColor, DEFAULT_BOARDER_COLOR)
             mBackgroundColor = ta.getColor(R.styleable.CropOverlayView_overlayColor, DEFAULT_BACKGROUND_COLOR)
         } finally {
@@ -96,6 +99,30 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
     }
 
 
+    private fun initMargins(){
+        val sz = getScreenSize(mContext, mContext.resources.configuration.orientation)
+        mMarginTop = sz.y / 4
+        mMarginSide = sz.x / 12
+    }
 
+    private fun getScreenSize(con: Context, orientation: Int): Point {
+        val wm = con.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        val realSize = Point()
+        display.getRealSize(realSize)
+        return if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Point(
+                Math.min(size.x, size.y),
+                Math.max(size.x, size.y)
+            )
+        } else {
+            Point(
+                Math.max(size.x, size.y),
+                Math.min(size.x, size.y)
+            )
+        }
+    }
 
 }

@@ -2,12 +2,11 @@ package ru.profiles.ui.registration
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -64,6 +63,7 @@ class RegistrationFragment1 : DaggerFragment() {
         })
         reg_proceed_btn.setOnClickListener {
             if (ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!") &&
+                radioGroup_gender.isSomeoneChecked(RadioGroup::shakeField, "Выберите пол!") &&
                 approval_checkBox.hasChecked(CheckBox::shakeField, "Подтвердите согласие!") &&
                 email_text.isEmailValid(EditText::shakeField, "Исправьте Email!")
             ) {
@@ -76,6 +76,15 @@ class RegistrationFragment1 : DaggerFragment() {
                         R.id.women_radio_button->1
                         else->-1
                     })
+            }
+        }
+        show_hidden_button.setOnClickListener {
+            if(password_text.transformationMethod == null) {
+                password_text.transformationMethod = PasswordTransformationMethod()
+                (it as ImageButton).setImageResource(R.drawable.round_visibility_black_48dp)
+            }else {
+                password_text.transformationMethod = null
+                (it as ImageButton).setImageResource(R.drawable.round_visibility_off_black_48dp)
             }
         }
     }

@@ -49,7 +49,8 @@ class RegistrationFragment2 : DaggerFragment() {
 
     lateinit var regViewModel: RegistrationViewModel
 
-    lateinit var mCheckedViews: Array<EditText>
+
+    private var mPhotoUri: Uri? = null
 
     companion object {
         val PICK_GALLERY_IMAGE = 0
@@ -63,26 +64,23 @@ class RegistrationFragment2 : DaggerFragment() {
         val v =  inflater.inflate(R.layout.registration_fragment_2, container, false)
         val a = (activity as AppCompatActivity)
         a.supportActionBar?.show()
-        a.supportActionBar?.title = ""
         v.avatar_image.setOnClickListener {
             createChooser(a)
         }
         v.enter_button.setOnClickListener {
-            if(this.ensureFields(mCheckedViews, EditText::shakeField, "Заполните все поля!")){
-                regViewModel.mLocalPicUri?.toFile()?.let{file->
-                    RequestBody.create(MediaType.get("image"), file)
-                }
+            regViewModel.mLocalPicUri?.toFile()?.let{file->
+                RequestBody.create(MediaType.get("image"), file)
             }
         }
         regViewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
         return v
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        /*arguments?.let{
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments?.let{
             RegistrationFragment2Args.fromBundle(it).imageUri?.let { u->regViewModel.mLocalPicUri = Uri.parse(u) }
-        }*/
+        }
         regViewModel.getLocalPicUri().observe(this, androidx.lifecycle.Observer {
                 v->avatar_image.setImageURI(v.toString())
                 set_photo_text.visibility = if(v == null) View.VISIBLE else View.INVISIBLE
@@ -105,16 +103,12 @@ class RegistrationFragment2 : DaggerFragment() {
         builder.show()
     }
 
-
-
     private fun runGallery(){
         val intent = Intent()
         intent.action = Intent.ACTION_GET_CONTENT
         intent.type = "image/*"
         startActivityForResult(intent, PICK_GALLERY_IMAGE)
     }
-
-    var mPhotoUri: Uri? = null
 
     private fun runCamera(ctx: Context){
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -155,13 +149,13 @@ class RegistrationFragment2 : DaggerFragment() {
     }
 
 
-    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
-            if (mCropImageUri != null && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+   /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+            if (mPhotoUri != null && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // required permissions granted, start crop image activity
-                startCropImageActivity(mCropImageUri ?: return )
+                startCropImageActivity(mPhotoUri ?: return )
             } else {
-                Toast.makeText(activity!!, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity!!, "Для продолжения требуется разрешение!", Toast.LENGTH_LONG).show()
             }
         }
     }*/
