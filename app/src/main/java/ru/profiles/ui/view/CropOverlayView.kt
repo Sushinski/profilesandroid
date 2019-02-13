@@ -77,18 +77,10 @@ class CropOverlayView(val mContext: Context, val mAttrs: AttributeSet? = null)  
 
     }
 
-    fun getImageBounds(): Rect {
-        return Rect(
-            Edge.LEFT.coordinate.toInt(),
-            Edge.TOP.coordinate.toInt(),
-            Edge.RIGHT.coordinate.toInt(),
-            Edge.BOTTOM.coordinate.toInt()
-        )
-    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-       val cx = (Edge.LEFT.coordinate + Edge.RIGHT.coordinate) / 2
+        val cx = (Edge.LEFT.coordinate + Edge.RIGHT.coordinate) / 2
         val cy = (Edge.TOP.coordinate + Edge.BOTTOM.coordinate) / 2
         val radius2 = (Edge.RIGHT.coordinate - Edge.LEFT.coordinate) / 2
         clipPath.addCircle(cx, cy, radius2, Path.Direction.CW)

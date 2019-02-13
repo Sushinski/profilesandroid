@@ -12,7 +12,7 @@ data class UserModel(
 
     @SerializedName("user_id")
     @Expose
-    var mUserId: Int = 0,
+    var mUserId: Long = 0,
 
     @ColumnInfo(name = "name")
     @SerializedName("username")

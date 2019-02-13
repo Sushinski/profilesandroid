@@ -1,22 +1,21 @@
 package ru.profiles.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
-import com.google.gson.Gson
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
-import okhttp3.Response
-import retrofit2.adapter.rxjava2.Result
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.model.pojo.AuthRequest
 import ru.profiles.model.pojo.AuthResponse
+import ru.profiles.model.pojo.TokenRefreshBody
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
+
 
 class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
                                          private val mAuthApi: AuthApi) {
@@ -34,12 +33,27 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
             }
     }
 
-    fun getLastUserAuth(): LiveData<AuthModel> {
+    suspend fun saveAuth(authModel: AuthModel?){
+        withContext(Dispatchers.IO) {
+            mAuthDao.saveAuth(authModel)
+        }
+    }
+
+    fun getAuth(): Single<AuthModel?> {
         return mAuthDao.getUserAuth()
+            .subscribeOn(Schedulers.io())
+            .timeout(5, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).firstOrError()
+    }
+
+    fun refreshToken(refreshToken: String): Single<AuthResponse>{
+        return mAuthApi.updateAuth(TokenRefreshBody(refreshToken))
+            .subscribeOn(Schedulers.io())
+            .timeout(5, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).firstOrError()
     }
 
     fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
-        // todo check existing auth
         return mAuthApi.authorizeUser(AuthRequest(identity, pswd))
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)

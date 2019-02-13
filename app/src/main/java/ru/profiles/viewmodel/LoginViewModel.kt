@@ -15,6 +15,7 @@ import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
 import ru.profiles.extensions.toSingleEvent
 import ru.profiles.livedata.SingleLiveEvent
+import ru.profiles.model.AuthModel
 import ru.profiles.model.ErrorModel
 import ru.profiles.model.UserModel
 import java.util.concurrent.TimeoutException
@@ -45,6 +46,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
                     mUserRep.deleteLoggedUser()
                     userModel.mIsLogged = true
                     mUserRep.saveUser(userModel)
+                    mAuthRep.saveAuth(AuthModel(auth.mToken, auth.mRefreshToken))
                 }
             }},
             {

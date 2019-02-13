@@ -18,12 +18,7 @@ class MainActivity : DaggerAppCompatActivity(), MainActivityOps {
         setContentView(R.layout.main_activity)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        /*val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
-        val navController = host.navController*/
-        //setupActionBar(navController, AppBarConfiguration(navController.graph))
-
+        
     }
 
     override fun onSupportNavigateUp()

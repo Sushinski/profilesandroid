@@ -15,11 +15,6 @@ import okhttp3.MultipartBody
 
 
 
-
-
-
-
-
 class ResourcesRepository private constructor(private val mAuthDao: AuthModelDao,
                                               private val mResourcesApi: ResourcesApi) {
 
@@ -35,14 +30,11 @@ class ResourcesRepository private constructor(private val mAuthDao: AuthModelDao
 
     fun saveImageFile(imageFile: RequestBody ): Single<FileUploadResponse> {
         val imageBody = MultipartBody.Part.createFormData("file", "user_image", imageFile)
-
-        mAuthDao.getUserAuth().value?.let{
-            return mResourcesApi.uploadFile(it.mJwtToken, imageBody)
+        return mAuthDao.getUserAuth().flatMap{ auth->mResourcesApi.uploadFile(auth.mJwtToken, imageBody)}
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .firstOrError()
-        }
     }
 
 }

@@ -6,6 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import ru.profiles.model.pojo.AuthRequest
 import ru.profiles.model.pojo.AuthResponse
+import ru.profiles.model.pojo.TokenRefreshBody
 
 interface AuthApi {
 
@@ -19,5 +20,6 @@ interface AuthApi {
     @Headers("Content-Type: application/json", "Cache-Control: no-cache")
     @POST("/api/v1/delegate/")
     fun updateAuth(
-    ): Observable<String>
+        @Body refreshBody: TokenRefreshBody
+    ): Observable<AuthResponse>
 }
