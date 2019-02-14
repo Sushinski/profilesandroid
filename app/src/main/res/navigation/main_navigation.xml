@@ -15,9 +15,9 @@
         android:label="login"
         tools:layout="@layout/login_fragment">
         <action
-            android:id="@+id/action_login_to_search"
+            android:id="@+id/action_login_to_main"
             app:destination="@id/main"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_login_to_reg_frag_1"
             app:destination="@id/reg_frag_1" />

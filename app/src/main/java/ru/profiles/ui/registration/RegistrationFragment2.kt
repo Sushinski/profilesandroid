@@ -2,6 +2,7 @@ package ru.profiles.ui.registration
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -22,11 +23,15 @@ import ru.profiles.viewmodel.RegistrationViewModel
 import javax.inject.Inject
 
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
+import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import kotlinx.android.synthetic.main.registration_fragment_2.*
@@ -53,8 +58,9 @@ class RegistrationFragment2 : DaggerFragment() {
     private var mPhotoUri: Uri? = null
 
     companion object {
-        val PICK_GALLERY_IMAGE = 0
-        val PICK_CAMERA_IMAGE = 1
+        const val PICK_GALLERY_IMAGE = 0
+        const val PICK_CAMERA_IMAGE = 1
+        const val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 0
     }
 
     override fun onCreateView(
@@ -67,25 +73,33 @@ class RegistrationFragment2 : DaggerFragment() {
         v.avatar_image.setOnClickListener {
             createChooser(a)
         }
-        v.enter_button.setOnClickListener {
-            regViewModel.mLocalPicUri?.toFile()?.let{file->
-                RequestBody.create(MediaType.get("image"), file)
-            }
-        }
         regViewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
         return v
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let{
-            RegistrationFragment2Args.fromBundle(it).imageUri?.let { u->regViewModel.mLocalPicUri = Uri.parse(u) }
+            RegistrationFragment2Args.fromBundle(it).imageUri?.let {
+                    u->regViewModel.mLocalPicUri = Uri.parse(u)
+            }
         }
         regViewModel.getLocalPicUri().observe(this, androidx.lifecycle.Observer {
                 v->avatar_image.setImageURI(v.toString())
                 set_photo_text.visibility = if(v == null) View.VISIBLE else View.INVISIBLE
         })
+
+        enter_button.setOnClickListener {
+            regViewModel.mLocalPicUri?.let {
+                u->activity?.contentResolver?.openInputStream(u)
+            }?.let{
+                    s->regViewModel.saveUserImage(RequestBody.create(MediaType.parse("multipart/form-data"), s.readBytes()))
+                s.close()
+            }
+        }
     }
+
 
     private fun createChooser(ctx: Context){
         val builder = AlertDialog.Builder(ctx)
@@ -104,11 +118,29 @@ class RegistrationFragment2 : DaggerFragment() {
     }
 
     private fun runGallery(){
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
+        if (!ensureExternalStoragePermissionGranted()) {
+            return;
+        }
+        val intent = Intent(
+            Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         startActivityForResult(intent, PICK_GALLERY_IMAGE)
     }
+
+     private fun ensureExternalStoragePermissionGranted(): Boolean {
+         context?.let{
+                 c->ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE)
+         }?.let {
+             p ->
+             return if (p != PackageManager.PERMISSION_GRANTED) {
+                 requestPermissions(
+                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                     PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+                 false
+             } else true
+         }
+     }
 
     private fun runCamera(ctx: Context){
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -149,16 +181,15 @@ class RegistrationFragment2 : DaggerFragment() {
     }
 
 
-   /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
-            if (mPhotoUri != null && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // required permissions granted, start crop image activity
-                startCropImageActivity(mPhotoUri ?: return )
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                runGallery()
             } else {
                 Toast.makeText(activity!!, "Для продолжения требуется разрешение!", Toast.LENGTH_LONG).show()
             }
         }
-    }*/
+    }
 
     private var mCurrentPhotoPath: String? = null
 

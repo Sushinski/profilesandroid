@@ -46,8 +46,6 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
 
     private val mDisposables = CompositeDisposable()
 
-    private var mRefreshDisposable: Disposable? = null
-
     var mLocalPicUri: Uri? = null
     set(value){
         mUriLiveData.value = value
@@ -56,17 +54,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
 
     private val mUriLiveData: MutableLiveData<Uri?> = MutableLiveData()
 
-    init{
-        Log.i("ProfilesInfo", "${this.javaClass} created")
-        mDisposables.add(mAuthRep.getAuth().subscribe(
-            {
-                authResponse->authResponse?.let { scheduleRefreshToken(AuthModel(it.mJwtToken, it.mRefreshToken)) }
-            },
-            {
-                error->{}
-            }
-        ))
-    }
+
 
     fun getLocalPicUri(): LiveData<Uri?>{
         return mUriLiveData
@@ -79,7 +67,6 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     fun clearRegisteredUser(){
         runBlocking { mUserRep.deleteRegisteredUser() }
     }
-
 
     fun regUser(identity: String, pswd: String, name: String, surname: String, gender: Int){
         mDisposables.add(
@@ -94,7 +81,6 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                             mUserRep.saveUser(u)
                             mAuthRep.saveAuth(am)
                         }
-                        scheduleRefreshToken(am)
                     }
                 },
                 {
@@ -116,21 +102,23 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
         )
     }
 
-    private fun scheduleRefreshToken(authModel: AuthModel){
-        viewModelScope.launch {
-            delay(5 * 60 * 1000)
-            mRefreshDisposable = mAuthRep.refreshToken(authModel.mRefreshToken).subscribe (
-                { authResponse ->
-                    viewModelScope.launch {
-                        Log.i("ProfilesInfo", "Saves refreshed tokens")
-                        mAuthRep.saveAuth(AuthModel(authResponse.mToken, authResponse.mRefreshToken))
+    fun saveUserImage(imageBody: RequestBody){
+        mDisposables.add(mResRep.saveImageFile(imageBody).subscribe(
+            {
+                response ->{}
+            },
+            {
+                error->
+                when(error) {
+                    is HttpException -> try {
+                        Log.i("ProfilesError", error.response().errorBody()?.string())
+                    }// todo localize messages
+                    catch (e: JsonSyntaxException) {
+                        ErrorModel(mUserMessage = "Login data error")
                     }
-                },
-                {
-                    error-> Log.i("ProfilesInfo", "Error refreshing tokens")
                 }
-            )
-        }
+            }
+        ))
     }
 
     fun getRegistrationError(): LiveData<ErrorModel>{
@@ -140,7 +128,6 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
     override fun onCleared() {
         Log.i("ProfilesInfo", "${this.javaClass} cleared")
         if(!mDisposables.isDisposed) mDisposables.dispose()
-        mRefreshDisposable?.let{ if(!it.isDisposed) it.dispose() }
         viewModelJob.cancel()
         super.onCleared()
     }

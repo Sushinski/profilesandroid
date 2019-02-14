@@ -21,6 +21,7 @@ import ru.profiles.profiles.R
 import ru.profiles.utils.Edge
 import ru.profiles.utils.ImageViewUtil
 import ru.profiles.viewmodel.ImageEditViewModel
+import java.io.File
 import javax.inject.Inject
 
 

@@ -33,24 +33,29 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
             }
     }
 
-    suspend fun saveAuth(authModel: AuthModel?){
+    suspend fun saveAuth(authModel: AuthModel){
         withContext(Dispatchers.IO) {
             mAuthDao.saveAuth(authModel)
         }
     }
 
-    fun getAuth(): Single<AuthModel?> {
-        return mAuthDao.getUserAuth()
-            .subscribeOn(Schedulers.io())
-            .timeout(5, TimeUnit.SECONDS)
-            .observeOn(AndroidSchedulers.mainThread()).firstOrError()
+    suspend fun updateAuth(authModel: AuthModel){
+        withContext(Dispatchers.IO) {
+            mAuthDao.updateAuth(authModel)
+        }
     }
 
-    fun refreshToken(refreshToken: String): Single<AuthResponse>{
+    fun getAuth(): Observable<AuthModel?> {
+        return mAuthDao.getUserAuth()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).share()
+    }
+
+    fun refreshToken(refreshToken: String): Observable<AuthResponse>{
         return mAuthApi.updateAuth(TokenRefreshBody(refreshToken))
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)
-            .observeOn(AndroidSchedulers.mainThread()).firstOrError()
+            .observeOn(AndroidSchedulers.mainThread()).share()
     }
 
     fun authUser(identity: String, pswd: String) : Single<AuthResponse> {

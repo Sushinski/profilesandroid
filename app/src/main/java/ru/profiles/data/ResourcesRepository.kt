@@ -1,10 +1,8 @@
 package ru.profiles.data
 
-import android.net.Uri
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType
 import ru.profiles.api.interfaces.ResourcesApi
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.pojo.FileUploadResponse
@@ -29,7 +27,7 @@ class ResourcesRepository private constructor(private val mAuthDao: AuthModelDao
     }
 
     fun saveImageFile(imageFile: RequestBody ): Single<FileUploadResponse> {
-        val imageBody = MultipartBody.Part.createFormData("file", "user_image", imageFile)
+        val imageBody = MultipartBody.Part.createFormData("file", null, imageFile)
         return mAuthDao.getUserAuth().flatMap{ auth->mResourcesApi.uploadFile(auth.mJwtToken, imageBody)}
                 .subscribeOn(Schedulers.io())
                 .timeout(10, TimeUnit.SECONDS)

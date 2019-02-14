@@ -36,13 +36,13 @@ class RegistrationFragment1 : DaggerFragment() {
         val v = inflater.inflate(R.layout.registration_fragment_1, container, false)
         val a = (activity as AppCompatActivity)
         a.supportActionBar?.show()
-        a.supportActionBar?.title = ""
         regViewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
+
         return v
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         reg_approval_text.movementMethod = LinkMovementMethod.getInstance()
         mCheckingFields = arrayOf(email_text, password_text, name_text, surname_text)
         regViewModel.clearRegisteredUser()

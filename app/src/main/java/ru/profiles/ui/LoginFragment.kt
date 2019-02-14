@@ -79,8 +79,8 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
             viewModel.getLoggedUser().observe(this, Observer{
                 user->
                 if(user != null) {
-                    Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_SHORT).show()
-                    NavHostFragment.findNavController(this).navigate(R.id.action_login_to_search)
+                    //Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_SHORT).show()
+                    NavHostFragment.findNavController(this).navigate(R.id.action_login_to_main)
                 }
             })
 

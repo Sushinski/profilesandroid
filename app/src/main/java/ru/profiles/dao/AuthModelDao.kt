@@ -10,10 +10,13 @@ import ru.profiles.model.AuthModel
 interface AuthModelDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAuth(auth: AuthModel?)
+    fun saveAuth(auth: AuthModel)
 
     @Query("SELECT * FROM auth ORDER BY id LIMIT 1")
     fun getUserAuth(): Observable<AuthModel?>
+
+    @Update
+    fun updateAuth(auth: AuthModel)
 
     @Delete
     fun delete(auth: AuthModel)

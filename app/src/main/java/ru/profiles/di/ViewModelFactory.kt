@@ -80,5 +80,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ImageEditViewModel::class)
     internal abstract fun imageEditViewModel(viewModel: ImageEditViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainActivityViewModel::class)
+    internal abstract fun mainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
     //Add more ViewModels here
 }

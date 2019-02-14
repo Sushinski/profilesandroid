@@ -13,8 +13,6 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector(modules = [])
     abstract fun bindLoginFragment() : LoginFragment
 
-
-
     @ContributesAndroidInjector(modules = [])
     abstract fun bindSplashFragment() : SplashFragment
 

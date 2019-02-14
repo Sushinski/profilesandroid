@@ -39,14 +39,14 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (
-            { auth -> if (auth.mRefreshToken.isNotEmpty() && auth.mToken.isNotEmpty()) {
-                val u = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
+            { auth -> if (auth.mRefreshToken.isNotEmpty() && auth.mJwtToken.isNotEmpty()) {
+                val u = String(Base64.decode(auth.mJwtToken.split('.')[1], Base64.DEFAULT))
                 val userModel = mGson.fromJson(u, UserModel::class.java)
                 viewModelScope.launch {
                     mUserRep.deleteLoggedUser()
                     userModel.mIsLogged = true
                     mUserRep.saveUser(userModel)
-                    mAuthRep.saveAuth(AuthModel(auth.mToken, auth.mRefreshToken))
+                    mAuthRep.saveAuth(AuthModel(auth.mJwtToken, auth.mRefreshToken))
                 }
             }},
             {

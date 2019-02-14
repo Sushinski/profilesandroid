@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class AuthResponse(
     @SerializedName("token")
     @Expose
-    var mToken: String = "",
+    var mJwtToken: String = "",
 
     @SerializedName("refresh_token")
     @Expose
