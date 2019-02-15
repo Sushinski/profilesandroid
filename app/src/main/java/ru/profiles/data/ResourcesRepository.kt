@@ -27,10 +27,9 @@ class ResourcesRepository private constructor(private val mAuthDao: AuthModelDao
     }
 
     fun saveImageFile(imageFile: RequestBody ): Single<FileUploadResponse> {
-        val imageBody = MultipartBody.Part.createFormData("file", null, imageFile)
-        return mAuthDao.getUserAuth().flatMap{ auth->mResourcesApi.uploadFile(auth.mJwtToken, imageBody)}
+        val imageBody = MultipartBody.Part.createFormData("file", "user_image", imageFile)
+        return mAuthDao.getUserAuth().flatMap{ auth->mResourcesApi.uploadFile("Bearer ${auth.mJwtToken}", imageBody)}
                 .subscribeOn(Schedulers.io())
-                .timeout(10, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .firstOrError()
     }

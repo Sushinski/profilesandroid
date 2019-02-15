@@ -4,10 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.api.interfaces.AuthApi
@@ -42,6 +39,12 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
     suspend fun updateAuth(authModel: AuthModel){
         withContext(Dispatchers.IO) {
             mAuthDao.updateAuth(authModel)
+        }
+    }
+
+    suspend fun clearAuth(){
+        withContext(Dispatchers.IO){
+            mAuthDao.deleteAuth()
         }
     }
 

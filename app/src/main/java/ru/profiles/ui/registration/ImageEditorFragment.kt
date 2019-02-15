@@ -54,7 +54,6 @@ class ImageEditorFragment: DaggerFragment() {
         return v
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let{
@@ -66,7 +65,6 @@ class ImageEditorFragment: DaggerFragment() {
             photo_drawee_view.minimumScale = 1f
             mSaveUri = Uri.parse(ImageEditorFragmentArgs.fromBundle(it).imageUri)
             photo_drawee_view.setPhotoUri(mSaveUri)
-
         }
     }
 

@@ -21,26 +21,18 @@ import kotlinx.android.synthetic.main.registration_fragment_2.view.*
 import ru.profiles.profiles.R
 import ru.profiles.viewmodel.RegistrationViewModel
 import javax.inject.Inject
-
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
-import android.provider.OpenableColumns
-import android.util.Log
 import android.widget.*
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.registration_fragment_2.*
-import kotlinx.android.synthetic.main.splash_fragment.view.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import ru.profiles.extensions.ensureFields
-import ru.profiles.extensions.getViewByPosition
-import ru.profiles.extensions.shakeField
+import ru.profiles.extensions.disableBackButton
+import ru.profiles.viewmodel.LoginViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -53,7 +45,6 @@ class RegistrationFragment2 : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var regViewModel: RegistrationViewModel
-
 
     private var mPhotoUri: Uri? = null
 
@@ -69,7 +60,9 @@ class RegistrationFragment2 : DaggerFragment() {
     ): View? {
         val v =  inflater.inflate(R.layout.registration_fragment_2, container, false)
         val a = (activity as AppCompatActivity)
+        a.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         a.supportActionBar?.show()
+        this.disableBackButton()
         v.avatar_image.setOnClickListener {
             createChooser(a)
         }
@@ -92,12 +85,21 @@ class RegistrationFragment2 : DaggerFragment() {
 
         enter_button.setOnClickListener {
             regViewModel.mLocalPicUri?.let {
-                u->activity?.contentResolver?.openInputStream(u)
+                    u->activity?.contentResolver?.openInputStream(u)
             }?.let{
-                    s->regViewModel.saveUserImage(RequestBody.create(MediaType.parse("multipart/form-data"), s.readBytes()))
-                s.close()
+                s->
+                s.use {
+                    r -> regViewModel.saveUserImage(RequestBody.create(MediaType.parse("image/*"), r.readBytes()))
+                    upload_progress.visibility = View.VISIBLE
+                }
             }
         }
+
+        regViewModel.getPicUploadStatus().observe(this, Observer {
+            success-> if(success) NavHostFragment.findNavController(this).navigate(R.id.action_reg_frag_2_to_main)
+            upload_progress.visibility = View.INVISIBLE
+        })
+
     }
 
 
@@ -118,9 +120,7 @@ class RegistrationFragment2 : DaggerFragment() {
     }
 
     private fun runGallery(){
-        if (!ensureExternalStoragePermissionGranted()) {
-            return;
-        }
+        if (!ensureExternalStoragePermissionGranted()) return
         val intent = Intent(
             Intent.ACTION_PICK,
             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -204,7 +204,6 @@ class RegistrationFragment2 : DaggerFragment() {
                 ".jpg", /* suffix */
                 storageDir /* directory */
             ).apply {
-                // Save a file: path for use with ACTION_VIEW intents
                 mCurrentPhotoPath = absolutePath
             }
         }

@@ -11,14 +11,13 @@ import ru.profiles.profiles.R
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import ru.profiles.extensions.disableBackButton
 
 
 class RegistrationFragment12 : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +34,10 @@ class RegistrationFragment12 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val a = (activity as AppCompatActivity)
+        a.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        a.supportActionBar?.show()
+        this.disableBackButton()
         proceed_to_email_button.setOnClickListener {
             val intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_EMAIL)
             activity?.let {
@@ -56,4 +59,6 @@ class RegistrationFragment12 : Fragment() {
                 .navigate(action)
         }
     }
+
+
 }

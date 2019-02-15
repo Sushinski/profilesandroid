@@ -18,6 +18,6 @@ interface AuthModelDao {
     @Update
     fun updateAuth(auth: AuthModel)
 
-    @Delete
-    fun delete(auth: AuthModel)
+    @Query("DELETE FROM auth")
+    fun deleteAuth()
 }

@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import ru.profiles.data.AuthRepository
 import ru.profiles.data.UserRepository
@@ -42,6 +39,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
             { auth -> if (auth.mRefreshToken.isNotEmpty() && auth.mJwtToken.isNotEmpty()) {
                 val u = String(Base64.decode(auth.mJwtToken.split('.')[1], Base64.DEFAULT))
                 val userModel = mGson.fromJson(u, UserModel::class.java)
+                runBlocking { mAuthRep.clearAuth() }
                 viewModelScope.launch {
                     mUserRep.deleteLoggedUser()
                     userModel.mIsLogged = true

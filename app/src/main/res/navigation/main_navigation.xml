@@ -47,8 +47,8 @@
         android:label="RegistrationFragment1"
         tools:layout="@layout/registration_fragment_1">
         <action
-            android:id="@+id/action_reg_frag_1_to_reg_frag_12"
-            app:destination="@id/reg_frag_12" />
+                android:id="@+id/action_reg_frag_1_to_reg_frag_12"
+                app:destination="@id/reg_frag_12" app:popUpTo="@+id/reg_frag_1" app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -57,9 +57,9 @@
         android:label="RegistrationFragment2"
         tools:layout="@layout/registration_fragment_2">
         <action
-            android:id="@+id/action_reg_frag_2_to_search"
-            app:destination="@id/main"
-            app:popUpToInclusive="true" />
+                android:id="@+id/action_reg_frag_2_to_main"
+                app:destination="@id/main"
+                app:popUpToInclusive="true" app:popUpTo="@+id/reg_frag_2"/>
         <action
             android:id="@+id/action_reg_frag_2_to_imageEditorFragment"
             app:destination="@id/imageEditorFragment" >

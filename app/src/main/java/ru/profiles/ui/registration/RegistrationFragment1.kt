@@ -67,10 +67,11 @@ class RegistrationFragment1 : DaggerFragment() {
                 approval_checkBox.hasChecked(CheckBox::shakeField, "Подтвердите согласие!") &&
                 email_text.isEmailValid(EditText::shakeField, "Исправьте Email!")
             ) {
-                regViewModel.regUser(email_text.text.toString(),
+                regViewModel.regUser(
+                    email_text.text.toString(),
                     password_text.text.toString(),
-                    name_text.toString(),
-                    surname_text.toString(),
+                    name_text.text.toString(),
+                    surname_text.text.toString(),
                     when(radioGroup_gender.checkedRadioButtonId){
                         R.id.men_radio_button->0
                         R.id.women_radio_button->1

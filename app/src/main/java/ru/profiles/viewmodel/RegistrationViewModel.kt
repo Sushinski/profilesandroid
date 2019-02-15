@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
@@ -40,6 +41,8 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
 
     private val mErrorStatus = SingleLiveEvent<ErrorModel>()
 
+    private val mPicUploadStatus = SingleLiveEvent<Boolean>()
+
     private val viewModelJob = Job()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -60,7 +63,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
         return mUriLiveData
     }
 
-    fun getRegisteredUser(): LiveData<UserModel> {
+    fun getRegisteredUser(): LiveData<UserModel> { // todo replace with login data
         return mUserRep.getRegisteredUser().toSingleEvent()
     }
 
@@ -70,14 +73,16 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
 
     fun regUser(identity: String, pswd: String, name: String, surname: String, gender: Int){
         mDisposables.add(
-            mRegRep.registerUser(identity, pswd, name, surname, gender).subscribe (
+            mRegRep.registerUser(identity, pswd, name, surname, gender)
+                .subscribe (
                 {
                     auth->if (auth.mRefreshToken.isNotEmpty() && auth.mToken.isNotEmpty()) {
                         val a = String(Base64.decode(auth.mToken.split('.')[1], Base64.DEFAULT))
                         val u = mGson.fromJson(a, UserModel::class.java)
                         val am = AuthModel(auth.mToken, auth.mRefreshToken)
+                        runBlocking { mUserRep.deleteRegisteredUser() }
                         viewModelScope.launch {
-                            mUserRep.deleteRegisteredUser()
+                            mAuthRep.clearAuth()
                             mUserRep.saveUser(u)
                             mAuthRep.saveAuth(am)
                         }
@@ -92,8 +97,7 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
                                 Log.e("ProfilesError", e)
                                  mGson.fromJson(e, ErrorModel::class.java)
                             }// todo localize messages
-                            catch (e: JsonSyntaxException){ ErrorModel(mUserMessage = "Login data error")
-                            }
+                            catch (e: JsonSyntaxException){ ErrorModel(mUserMessage = "Login data error") }
                         is TimeoutException -> ErrorModel(mUserMessage = "Can`t connect to server, try again later.")
                         else -> ErrorModel(mUserMessage = "Login error")
                     }
@@ -102,21 +106,26 @@ class RegistrationViewModel @Inject constructor(private val mUserRep: UserReposi
         )
     }
 
-    fun saveUserImage(imageBody: RequestBody){
+    fun getPicUploadStatus(): LiveData<Boolean>{
+        return mPicUploadStatus
+    }
+
+    fun saveUserImage(imageBody: RequestBody) {
         mDisposables.add(mResRep.saveImageFile(imageBody).subscribe(
             {
-                response ->{}
+                response -> mPicUploadStatus.value = true
             },
             {
                 error->
                 when(error) {
                     is HttpException -> try {
-                        Log.i("ProfilesError", error.response().errorBody()?.string())
+                        Log.i("ProfilesInfo", error.response().errorBody()?.string())
                     }// todo localize messages
                     catch (e: JsonSyntaxException) {
-                        ErrorModel(mUserMessage = "Login data error")
+                        ErrorModel(mUserMessage = "Registration data error")
                     }
                 }
+                mPicUploadStatus.value = false
             }
         ))
     }
