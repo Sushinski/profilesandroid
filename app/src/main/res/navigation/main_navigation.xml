@@ -17,6 +17,7 @@
         <action
             android:id="@+id/action_login_to_main"
             app:destination="@id/main"
+            app:popUpTo="@id/login"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_login_to_reg_frag_1"
@@ -36,7 +37,6 @@
         <action
             android:id="@+id/action_splash_to_login"
             app:destination="@id/login"
-            app:launchSingleTop="true"
             app:popUpTo="@id/splash"
             app:popUpToInclusive="true" />
     </fragment>

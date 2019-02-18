@@ -64,8 +64,10 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                 it.login_button.clicks()
                 .throttleFirst(3, TimeUnit.SECONDS)
                 .subscribe{
-                    if(ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!"))
+                    if(ensureFields(mCheckingFields, EditText::shakeField, "Заполните все поля!")) {
+                        login_reg_button.isEnabled = false // todo disable UI
                         viewModel.loginUser(identityText.text.toString(), passwordText.text.toString())
+                    }
                 }
 
                 it.login_reg_button.setOnClickListener{
@@ -82,6 +84,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                     //Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_SHORT).show()
                     NavHostFragment.findNavController(this).navigate(R.id.action_login_to_main)
                 }
+                login_reg_button.isEnabled = true // todo enable UI
             })
 
             viewModel.getErrorStatus().observe(this, Observer {
