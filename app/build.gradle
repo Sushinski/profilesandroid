@@ -130,7 +130,7 @@ play {
         if (projectPropsFile.exists()) {
             Properties props = new Properties()
             props.load(new FileInputStream(projectPropsFile))
-            serviceAccountCredentials = file(props['SERVICE_ACCOUNT_KEYFILE'])
+            serviceAccountCredentials = file(project.property("Keys.repo") + "/" + props['SERVICE_ACCOUNT_KEYFILE'])
             track = "internal"
             userFraction = 1
             releaseStatus = "inProgress"
@@ -198,7 +198,7 @@ dependencies {
     // For WebP support, without animations
     implementation 'com.facebook.fresco:webpsupport:1.11.0'
 
-    // Provide the Android support library (you might already have this or a similar dependency)
+    //  Android support library
     implementation 'com.android.support:support-core-utils:28.2.1'
 
     // photo drawee view

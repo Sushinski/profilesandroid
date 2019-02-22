@@ -2,9 +2,7 @@ package ru.profiles.ui.registration
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.ContentResolver
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -32,7 +30,6 @@ import kotlinx.android.synthetic.main.registration_fragment_2.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import ru.profiles.extensions.disableBackButton
-import ru.profiles.viewmodel.LoginViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

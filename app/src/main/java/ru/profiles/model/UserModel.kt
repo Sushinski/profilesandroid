@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName
 )
 data class UserModel(
 
+    @ColumnInfo(name = "user_id")
     @SerializedName("user_id")
     @Expose
     var mUserId: Long = 0,
@@ -28,6 +29,7 @@ data class UserModel(
     @ColumnInfo(name = "phone")
     var mPhone: String? = null,
 
+    @ColumnInfo(name = "expired")
     @SerializedName("exp")
     @Expose
     var mExp: String = "",
@@ -41,19 +43,23 @@ data class UserModel(
     @Expose
     var mRefreshTokenId: Int = 0,
 
+    @ColumnInfo(name = "has_email")
     @SerializedName("has_email")
     @Expose
     var mHasEmail: Boolean? = null,
 
+    @ColumnInfo(name = "is_email_verified")
     @SerializedName("is_email_verified")
     @Expose
     var mEmailVerified: Boolean? = null,
 
+    @ColumnInfo(name = "email_for_verification")
     @SerializedName("email_for_verification")
     @Expose
     var mEmailForVerification: String? = null,
 
     @ColumnInfo(name = "image_uri")
+    @Expose
     val mImageUrl: String? = null,
 
     @ColumnInfo(name = "local_image_uri")
@@ -65,10 +71,8 @@ data class UserModel(
 ) {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    @SerializedName("id")
     @Expose
-    var mId: Int = 0
+    var id: Long = 0
 
     override fun toString() = "$mEmail"
 

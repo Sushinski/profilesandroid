@@ -2,6 +2,7 @@ package ru.profiles.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.DaggerFragment
@@ -10,6 +11,7 @@ import ru.profiles.profiles.R
 import ru.profiles.viewmodel.SearchViewModel
 import javax.inject.Inject
 import android.view.LayoutInflater
+import androidx.lifecycle.Observer
 import androidx.transition.AutoTransition
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
@@ -56,9 +58,13 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
 
         }
         cancel_button.setOnClickListener {
-                _->search_text_view.setText("")
+                search_text_view.setText("")
                 search_text_view.clearFocus()
         }
+        mViewModel.getPopularServices(false).observe(this, Observer {
+            list->
+            Log.i("ProfilesInfo", "Popular services list size ${list.size}")
+        })
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

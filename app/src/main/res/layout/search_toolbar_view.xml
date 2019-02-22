@@ -9,20 +9,21 @@
 
 
     <EditText
-        android:id="@+id/search_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_corners"
-        android:focusableInTouchMode="true"
-        android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/search_areas_layout"
-        app:layout_constraintEnd_toStartOf="@+id/cancel_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/search_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_corners"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            app:layout_constraintBottom_toTopOf="@+id/search_areas_layout"
+            app:layout_constraintEnd_toStartOf="@+id/cancel_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:textAlignment="center"
+            android:textColor="@android:color/white"/>
 
     <Button
         android:id="@+id/search_button"

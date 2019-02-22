@@ -71,7 +71,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                 }
 
                 it.login_reg_button.setOnClickListener{
-                    _ -> NavHostFragment
+                    NavHostFragment
                         .findNavController(this)
                         .navigate(R.id.action_login_to_reg_frag_1)
                 }
@@ -84,7 +84,7 @@ class LoginFragment : DaggerFragment(), LoginFragmentOps {
                     //Toast.makeText(context, user.toString() + " logged successfully", Toast.LENGTH_SHORT).show()
                     NavHostFragment.findNavController(this).navigate(R.id.action_login_to_main)
                 }
-                login_reg_button.isEnabled = true // todo enable UI
+                login_reg_button.isEnabled = true
             })
 
             viewModel.getErrorStatus().observe(this, Observer {

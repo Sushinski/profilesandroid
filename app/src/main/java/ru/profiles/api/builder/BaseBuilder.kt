@@ -4,7 +4,7 @@ import android.util.Log
 import okhttp3.Interceptor
 import java.io.IOException
 
-abstract class BaseBuilder(){
+abstract class BaseBuilder{
 
     protected class LoggingInterceptor(private val mTag: String) : Interceptor {
         @Throws(IOException::class)

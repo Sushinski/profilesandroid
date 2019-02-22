@@ -2,6 +2,7 @@ package ru.profiles.model.pojo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import ru.profiles.model.PhotoDataModel
 
 class UserInfoResponse(
     @SerializedName("id")
@@ -21,5 +22,5 @@ class UserInfoResponse(
     var mGender: Int,
     @SerializedName("photo")
     @Expose
-    var mPhotoData: PhotoData?
+    var mPhotoData: PhotoDataModel?
 )
