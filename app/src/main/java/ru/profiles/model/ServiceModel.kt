@@ -42,60 +42,60 @@ data class ServiceModel(
     var organization: OrganizationModel? = null,
     @Expose
     @SerializedName("service_type")
-    var serviceType: Int = 0,
+    var serviceType: Int? = null,
     @Expose
     @SerializedName("title")
-    var title: String = "",
+    var title: String? = null,
     @Expose
     @SerializedName("description")
-    var description: String = "",
+    var description: String? = null,
     @Expose
     @SerializedName("members_count")
-    var membersCount: Int = 0,
+    var membersCount: Int? = null,
     @Expose
     @SerializedName("locations")
     @Ignore
-    var locations: List<Location> = listOf(),// todonetomany
+    var locations: List<Location>? = null,// todonetomany
     @Expose
     @SerializedName("is_published")
-    var isPublished: Boolean = false,
+    var isPublished: Boolean? = null,
     @Expose
     @SerializedName("created")
-    var created: String = "",
+    var created: String? = null,
     @Expose
     @SerializedName("profile")
     @Ignore
     var profile: ProfileModel? = null,
     @Expose
     @SerializedName("duration")
-    var duration: Int = 0,
+    var duration: Int? = null,
     @Expose
     @SerializedName("address")
-    var address: String = "",
+    var address: String? = null,
     @Expose
     @SerializedName("cost")
-    var cost: String = "",
+    var cost: String? = null,
     @Expose
     @SerializedName("cost_to")
-    var costTo: String = "",
+    var costTo: String? = null,
     @Expose
     @SerializedName("cost_type")
-    var costType: Int = 0,
+    var costType: Int? = null,
     @Expose
     @SerializedName("unit")
-    var unit: String = "",
+    var unit: String? = null,
     @Expose
     @SerializedName("files")
     @Ignore
-    var files: List<Any> = listOf(), // todo onetomany
+    var files: List<Any>? = null,
     @Expose
     @SerializedName("regular_schedule")
     @Ignore
-    var regularSchedule: List<Any> = listOf(), // todo onetomany
+    var regularSchedule: List<Any>? = null,
     @Expose
     @SerializedName("irregular_schedule")
     @Ignore
-    var irregularSchedule: List<Any> = listOf(), // todo onetomany
+    var irregularSchedule: List<Any>? = null,
     @Expose
     @SerializedName("ratings")
     @Ignore
@@ -103,9 +103,10 @@ data class ServiceModel(
     @Expose
     @SerializedName("categories")
     @Ignore
-    var categories: List<CategoryModel> = listOf() // todo onetomany
+    var categories: List<CategoryModel>? = null
 ){
-    var organization_id: Long = organization?.id ?: 0
-    var profile_id: Long = profile?.id ?: 0
-    var ratings_id: Long = ratings?.id ?: 0
+    var organization_id: Long? = null
+    var profile_id: Long? = null
+    var ratings_id: Long? = null
+    var isOnline: Boolean = true
 }

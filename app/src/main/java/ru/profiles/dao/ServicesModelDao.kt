@@ -1,6 +1,9 @@
 package ru.profiles.dao
 
+import android.app.Service
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import ru.profiles.model.*
 import ru.profiles.model.CategoryModel
@@ -9,35 +12,66 @@ import ru.profiles.model.pojo.Location
 @Dao
 interface ServicesModelDao {
 
-    @Transaction @Query("SELECT * FROM services")
-    fun getServices(): LiveData<List<ServiceModel>>
+    @Query("SELECT * FROM services ORDER BY id ASC")
+    fun getServices(): DataSource.Factory<Int, ServiceModel>
+
+    @Query("SELECT * FROM services WHERE isOnline = 1 ORDER BY id ASC")
+    fun getOnlineServices():  DataSource.Factory<Int, ServiceModel>
 
     @Transaction
     fun saveServiceModel(serviceModel: ServiceModel){
-        serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }
+        /*serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }
         serviceModel.profile?.let{ serviceModel.profile_id = insertProfile(it) }
         serviceModel.ratings?.let{ serviceModel.ratings_id = insert(it)}
         serviceModel.categories?.let{
-            saveCategoriesChildren(0, it)
+            saveCategoriesChildren(null, it)
         }
-        serviceModel.locations.let{
+        serviceModel.locations?.let{
              for(location in it){
                  insertLocation(location)
              }
-        }
+        }*/
+        val id = insert(serviceModel)
+        Log.i("ProfilesInfo", "Service ${serviceModel.title} saved with $id")
     }
+
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(serviceModel: ServiceModel) : Long
 
     @Transaction
-    fun saveCategoriesChildren(parentId: Long, children: List<CategoryModel>){
+    fun saveCategoriesChildren(parentId: Long?, children: List<CategoryModel>){
         for (category: CategoryModel in children) {
             category.parentId = parentId
             val id = insert(category)
-            saveCategoriesChildren(id, category.children)
+            //category.children?.let{saveCategoriesChildren(id, it)}
         }
     }
+
+    @Transaction
+    fun insertOrganization(organizationModel: OrganizationModel) : Long{
+        organizationModel.phone?.let {
+            organizationModel.phone_id = insert(it)
+        }
+        organizationModel.ratings?.let {
+            organizationModel.ratings_id = insert(it)
+        }
+        val orgId = insert(organizationModel)
+        organizationModel.areas?.let{
+            for(area in it){
+                val areaId = insert(area)
+                val oa = OrganizationArea(orgId, areaId)
+                insert(oa)
+            }
+        }
+        return orgId
+    }
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(phoneModel: PhoneModel) : Long
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(org_area: OrganizationArea)
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(organizationModel: OrganizationModel) : Long
@@ -45,7 +79,7 @@ interface ServicesModelDao {
     @Transaction
     fun insertProfile(profileModel: ProfileModel): Long{
         profileModel.organization?.let{
-            profileModel.organizationId = insert(it)
+            profileModel.organizationId = insertOrganization(it)
         }
         profileModel.photo?.let{
             profileModel.photoId = insert(it)
@@ -83,4 +117,7 @@ interface ServicesModelDao {
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(metro: MetroStationModel) : Long
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(area: AreaModel) : Long
 }

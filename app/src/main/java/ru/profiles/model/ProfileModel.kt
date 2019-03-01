@@ -18,35 +18,35 @@ data class ProfileModel(
     var id: Long = 0,
     @Expose
     @SerializedName("is_specialist")
-    var isSpecialist: Boolean = false,
+    var isSpecialist: Boolean? = null,
     @Expose
     @SerializedName("is_subscribed")
-    var isSubscribed: Boolean = false,
+    var isSubscribed: Boolean? = null,
     @Expose
     @SerializedName("slug")
-    var slug: String = "",
+    var slug: String? = null,
     @Expose
     @SerializedName("first_name")
-    var firstName: String = "",
+    var firstName: String? = null,
     @Expose
     @SerializedName("display_name")
-    var displayName: String = "",
+    var displayName: String? = null,
     @Expose
     @SerializedName("photo")
     @Ignore
     var photo: PhotoModel? = null, // todo foreign key
     @Expose
     @SerializedName("gender")
-    var gender: Int = 0,
+    var gender: Int? = null,
     @Expose
     @SerializedName("display_marital_status")
-    var displayMaritalStatus: String = "",
+    var displayMaritalStatus: String? = null,
     @Expose
     @SerializedName("display_birthdate")
-    var displayBirthdate: String = "",
+    var displayBirthdate: String? = null,
     @Expose
     @SerializedName("birth_date_view")
-    var birthDateView: Int = 0,
+    var birthDateView: Int? = null,
     @Expose
     @SerializedName("city")
     @Ignore

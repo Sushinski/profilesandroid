@@ -136,7 +136,7 @@ class RegistrationFragment2 : DaggerFragment() {
                      PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
                  false
              } else true
-         }
+         } ?: return false
      }
 
     private fun runCamera(ctx: Context){

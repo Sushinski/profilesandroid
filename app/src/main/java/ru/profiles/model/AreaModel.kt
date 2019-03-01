@@ -14,9 +14,8 @@ data class AreaModel(
     @PrimaryKey
     @SerializedName("id")
     @Expose
-    val id: Long,
+    val id: Long = 0,
     @Expose
     @SerializedName("name")
-    val name: String
-
+    val name: String? = null
 )

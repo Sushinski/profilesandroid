@@ -54,7 +54,7 @@ class MainFragment : DaggerFragment() {
 
     private fun initPager(ctx: Context){
         activity?.supportFragmentManager?.let {
-            val a = FragmentTabsAdapter(it)
+            val a = FragmentTabsAdapter(childFragmentManager)
             for (f in mFragments.withIndex()) {
                 a.addTab(f.value)
             }
@@ -69,7 +69,7 @@ class MainFragment : DaggerFragment() {
                 R.drawable.round_notifications_black_48dp,
                 R.drawable.round_menu_black_48dp)
             for (t in 0 until content_tablayout.tabCount) content_tablayout.getTabAt(t)?.setIcon(imageResIds[t])
-            content_viewpager.setOnTouchListener { _, _ -> true }
+            //content_viewpager.setOnTouchListener { _, _ -> true }
             content_viewpager.offscreenPageLimit = 4 // all pages keeped
         }
 

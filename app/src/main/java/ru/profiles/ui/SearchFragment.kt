@@ -12,13 +12,19 @@ import ru.profiles.viewmodel.SearchViewModel
 import javax.inject.Inject
 import android.view.LayoutInflater
 import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import androidx.transition.AutoTransition
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.android.synthetic.main.search_toolbar_view.*
+import ru.profiles.data.ServicesAdapter
 import ru.profiles.extensions.hideKeyBoard
 import ru.profiles.interfaces.AppBarSetter
+import ru.profiles.model.ServiceModel
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import ru.profiles.utils.MarginItemDecorator
 
 
 class SearchFragment : DaggerFragment(), AppBarSetter {
@@ -61,11 +67,15 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
                 search_text_view.setText("")
                 search_text_view.clearFocus()
         }
-        mViewModel.getPopularServices(false).observe(this, Observer {
-            list->
-            Log.i("ProfilesInfo", "Popular services list size ${list.size}")
+        popular_recycler_view.addItemDecoration(MarginItemDecorator(8))
+        val adapter = ServicesAdapter()
+        popular_recycler_view.adapter = adapter
+        mViewModel.getPopularServices().observe(this, Observer<PagedList<ServiceModel>> {
+            //adapter.submitList(null)
+            adapter.submitList(it)
         })
     }
+
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)

@@ -7,7 +7,10 @@
     android:layout_height="match_parent"
     tools:context="ru.profiles.ui.SearchFragment">
 
-    <include android:id="@+id/search_bar" layout="@layout/search_toolbar_view" />
+    <include android:id="@+id/search_bar" layout="@layout/search_toolbar_view"
+             app:layout_constraintTop_toTopOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"/>
     <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -20,9 +23,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-        />
-    </ScrollView>
+                android:orientation="vertical">
+
     <TextView
             android:text="Популярные услуги в Санкт-Петербурге"
             android:layout_width="wrap_content"
@@ -32,52 +34,83 @@
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/scrollView2"
             android:textStyle="bold"/>
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="95dp" android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintTop_toBottomOf="@+id/popular_services_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:orientation="horizontal" android:id="@+id/popular_recycler_view"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal"
+            android:clipToPadding = "false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:id="@+id/popular_recycler_view"/>
     <TextView
             android:text="Популярные online-услуги"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/popular_online_services_title" android:layout_marginTop="8dp"
+            android:id="@+id/popular_online_services_title"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/popular_recycler_view"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:textStyle="bold"/>
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"/>
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="95dp" android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintTop_toBottomOf="@+id/popular_online_services_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/popular_online_recycler_view"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:id="@+id/popular_online_recycler_view"/>
     <TextView
             android:text="Популярные товары"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/popular_goods_title" android:layout_marginTop="8dp"
+            android:id="@+id/popular_goods_title"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/popular_online_recycler_view"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:textStyle="bold"/>
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"/>
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="95dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/popular_goods_title" app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/popular_goods_title"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:id="@+id/popular_goods_recycler_view"/>
     <TextView
             android:text="Популярные статьи"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/popular_articles_title" android:layout_marginTop="8dp"
+            android:id="@+id/popular_articles_title"
+            android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/popular_goods_recycler_view"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp" android:textStyle="bold"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:textStyle="bold"/>
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="115dp" android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/popular_articles_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
-
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

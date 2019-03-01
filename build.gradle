@@ -3,7 +3,7 @@
 buildscript {
     ext{
         room_version = '2.1.0-alpha03'
-        kotlin_version = '1.3.11'
+        kotlin_version = '1.3.21'
         ktx_version = '1.0.0'
         coroutines_version = '1.0.1'
         material_version = '1.0.0'
@@ -12,7 +12,7 @@ buildscript {
         support_library_version = '1.0.2'
         recycler_view_version = '1.0.0'
         work_version = '1.0.0-beta01'
-        dagger_version ='2.16'
+        dagger_version ='2.21'
         app_compat_version = '28.0.0'
         okhttp_version = '3.9.0'
         retrofit_version = '2.5.0'
@@ -31,11 +31,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath("com.github.triplet.gradle:play-publisher:2.1.0")
         // safe args
-        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha09"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-rc01"
     }
 }
 
