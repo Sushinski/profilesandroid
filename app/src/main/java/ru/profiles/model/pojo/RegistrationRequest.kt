@@ -28,4 +28,9 @@ data class RegistrationRequest (
     @SerializedName("gender")
     @Expose
     var mGender: Int
-)
+
+){
+    @SerializedName("eula_accepted")
+    @Expose
+    var mEula: Boolean = true
+}

@@ -59,10 +59,11 @@ class ImageEditorFragment: DaggerFragment() {
         arguments?.let{
             val h = GenericDraweeHierarchyBuilder
                 .newInstance(context?.resources)
-                .setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP)
+                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .build()
             photo_drawee_view.hierarchy = h
             photo_drawee_view.minimumScale = 1f
+            photo_drawee_view.maximumScale = 2.5f
             mSaveUri = Uri.parse(ImageEditorFragmentArgs.fromBundle(it).imageUri)
             photo_drawee_view.setPhotoUri(mSaveUri)
         }

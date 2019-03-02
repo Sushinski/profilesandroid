@@ -10,7 +10,6 @@
         android:id="@+id/photo_drawee_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:actualImageScaleType="centerCrop"
         app:failureImage="@drawable/ic_error"
         app:failureImageScaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
