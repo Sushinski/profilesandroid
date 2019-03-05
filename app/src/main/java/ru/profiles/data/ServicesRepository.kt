@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import ru.profiles.api.interfaces.ServicesApi
 import ru.profiles.dao.ServicesModelDao
+import ru.profiles.model.SearchModel
 import ru.profiles.model.ServiceModel
 import ru.profiles.model.pojo.ServicesResponse
 import java.util.concurrent.TimeUnit
@@ -30,8 +31,8 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi, val 
             }
     }
 
-    fun updateServiceList(pageNum: Int): Single<ServicesResponse?> {
-        return  mServicesApi.getServices(pageNum, mapOf())
+    fun updateServiceList(pageNum: Int, params: Map<String, String>): Single<ServicesResponse?> {
+        return  mServicesApi.getServices(pageNum, params)
             .subscribeOn(Schedulers.io())
             .timeout(10, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).firstOrError()
@@ -43,11 +44,22 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi, val 
         }
     }
 
-    fun getServicesList(): LiveData<PagedList<ServiceModel>>{
+    fun getActualSearch(): LiveData<SearchModel> {
+        return mServicesModelDao.getActualSearch("service")
+    }
+
+    fun getServicesList(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{
         return mServicesModelDao.getServices().toLiveData(
             ServicesBoundaryCallback.DATABASE_PAGE_SIZE,
             null,
-            ServicesBoundaryCallback(this)
+            ServicesBoundaryCallback(this, params)
         )
     }
+
+    suspend fun applySearch(searchString: String){
+        withContext(IO){
+            mServicesModelDao.insert(SearchModel(searchString, "service"))
+        }
+    }
+
 }

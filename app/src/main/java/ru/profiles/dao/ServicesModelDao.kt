@@ -15,8 +15,17 @@ interface ServicesModelDao {
     @Query("SELECT * FROM services ORDER BY id ASC")
     fun getServices(): DataSource.Factory<Int, ServiceModel>
 
+    @Transaction @Query("SELECT * FROM services WHERE title LIKE :searchString")
+    fun searchServices(searchString: String): DataSource.Factory<Int, ServiceModel>
+
     @Query("SELECT * FROM services WHERE isOnline = 1 ORDER BY id ASC")
     fun getOnlineServices():  DataSource.Factory<Int, ServiceModel>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(searchModel: SearchModel)
+
+    @Query("SELECT * FROM search WHERE searchTarget = :searchTarget")
+    fun getActualSearch(searchTarget: String): LiveData<SearchModel>
 
     @Transaction
     fun saveServiceModel(serviceModel: ServiceModel){

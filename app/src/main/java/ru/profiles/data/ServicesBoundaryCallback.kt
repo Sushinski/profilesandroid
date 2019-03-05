@@ -8,7 +8,8 @@ import kotlinx.coroutines.*
 import ru.profiles.model.ServiceModel
 import java.util.concurrent.Executors
 
-class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository)
+class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
+                               private val updateParams: Map<String, String>)
     : PagedList.BoundaryCallback<ServiceModel>() {
 
     private var pagetoLoad = 2 // next pager from 2
@@ -24,14 +25,14 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository)
     @MainThread
     override fun onZeroItemsLoaded() {
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            updateServices(1) // start page
+            updateServices(1, updateParams) // start page
         }
     }
 
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: ServiceModel) {
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER){
-            updateServices(pagetoLoad)
+            updateServices(pagetoLoad, updateParams)
             pagetoLoad += 1
         }
     }
@@ -39,9 +40,9 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository)
     override fun onItemAtFrontLoaded(itemAtFront: ServiceModel) {
     }
 
-    private fun updateServices(page: Int){
+    private fun updateServices(page: Int, params: Map<String, String>){
         mDisposables.add(
-            mServicesRepo.updateServiceList(page).subscribe { s, _ ->
+            mServicesRepo.updateServiceList(page, params).subscribe { s, _ ->
                 s?.result?.let {
                     for (sm in it) {
                         GlobalScope.launch(Dispatchers.Main) { mServicesRepo.saveService(sm) }
