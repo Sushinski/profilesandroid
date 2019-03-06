@@ -58,6 +58,7 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.applySearch( "" ) //reset search
         activity?.let { initPager(it.applicationContext) }
         search_text_view.onFocusChangeListener = View.OnFocusChangeListener { v, b ->
             if(!b) this.activity?.hideKeyBoard(v)
@@ -73,6 +74,7 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
             search_text_view.setText("")
             search_text_view.clearFocus()
         }
+
         mDisposables.add(
             search_text_view.textChanges()
                 .skipInitialValue()

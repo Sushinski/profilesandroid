@@ -56,7 +56,6 @@ class SearchResultFragment: Fragment() {
         popular_goods_recycler_view.addItemDecoration(MarginItemDecorator(8))
         popular_articles_recycler_view.adapter = mPopularAdapter
         popular_articles_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        observeNewSearch("") // observe initial search (all)
         mViewModel.getActualSearch().observe(this, Observer {
             it?.searchString?.let{ s->observeNewSearch(s)}
         })
@@ -67,7 +66,7 @@ class SearchResultFragment: Fragment() {
         mPopularAllLiveData = mViewModel.getServices(
             if(searchString.isNotEmpty()) mapOf("search" to searchString) else mapOf()
         )
-        mPopularAdapter.submitList(null)
+        //mPopularAdapter.submitList(null)
         mPopularAllLiveData.observe(this, mPopularObserver)
     }
 }

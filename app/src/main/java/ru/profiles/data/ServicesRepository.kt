@@ -49,7 +49,7 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi, val 
     }
 
     fun getServicesList(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{
-        return mServicesModelDao.getServices().toLiveData(
+        return mServicesModelDao.searchServices( params["search"]?.let{"%$it%"} ?: "%").toLiveData(
             ServicesBoundaryCallback.DATABASE_PAGE_SIZE,
             null,
             ServicesBoundaryCallback(this, params)
@@ -58,7 +58,8 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi, val 
 
     suspend fun applySearch(searchString: String){
         withContext(IO){
-            mServicesModelDao.insert(SearchModel(searchString, "service"))
+            val m = SearchModel(searchString, "service")
+            mServicesModelDao.insert(m)
         }
     }
 

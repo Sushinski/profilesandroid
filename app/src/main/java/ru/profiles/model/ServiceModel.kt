@@ -1,6 +1,7 @@
 package ru.profiles.model
 
 import androidx.room.*
+import androidx.room.ColumnInfo.NOCASE
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.profiles.model.pojo.Location
@@ -45,6 +46,7 @@ data class ServiceModel(
     var serviceType: Int? = null,
     @Expose
     @SerializedName("title")
+    @ColumnInfo(collate = NOCASE)
     var title: String? = null,
     @Expose
     @SerializedName("description")
