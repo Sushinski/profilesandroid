@@ -43,5 +43,8 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector
     abstract fun bindProfileFragment() : ProfileFragment
 
+    @ContributesAndroidInjector
+    abstract fun bindSearchResultFragment(): SearchResultFragment
+
 
 }

@@ -26,14 +26,13 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
                                           private val mGoodsRepository: GoodsRepository
 ) :  ViewModel() {
 
-    private val mDisposables = CompositeDisposable()
-
     private val viewModelJob = Job()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     init{
         Log.i("ProfilesInfo", "$this constructor")
+        applySearch("") // reset search on create
     }
 
     fun getServices(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{

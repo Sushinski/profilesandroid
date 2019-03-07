@@ -1,5 +1,6 @@
 package ru.profiles.ui.view
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ class ServiceViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView
     fun bind(service: ServiceModel?) {
         mServiceModel = service
         mView.card_imageView.setImageURI(service?.files?.get(0)  as String?)// todo get image
-        mView.card_serviceTitle.text = service?.title
+        mView.card_serviceTitle.text = Html.fromHtml(service?.title)
         mView.card_serviceCost.text = service?.cost ?: "0.0" // todo on empty cost
         mView.card_ratingValue.text = service?.ratings?.common?.toString() ?: "0.0"
         mView.card_respText.text = service?.membersCount?.toString() ?: "0"

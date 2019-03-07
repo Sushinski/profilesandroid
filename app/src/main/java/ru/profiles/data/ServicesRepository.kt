@@ -17,7 +17,8 @@ import ru.profiles.model.ServiceModel
 import ru.profiles.model.pojo.ServicesResponse
 import java.util.concurrent.TimeUnit
 
-class ServicesRepository private constructor(val mServicesApi: ServicesApi, val mServicesModelDao: ServicesModelDao){
+class ServicesRepository private constructor(val mServicesApi: ServicesApi,
+                                             val mServicesModelDao: ServicesModelDao){
 
     companion object {
         @Volatile private var instance: ServicesRepository? = null

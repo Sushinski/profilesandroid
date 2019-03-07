@@ -7,22 +7,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import com.jakewharton.rxbinding3.widget.textChanges
+import dagger.android.support.DaggerFragment
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.main_search_tab_layout.*
 import kotlinx.android.synthetic.main.search_toolbar_view.*
 import ru.profiles.data.ServicesAdapter
+import ru.profiles.di.ViewModelFactory
 import ru.profiles.model.ServiceModel
 import ru.profiles.utils.MarginItemDecorator
 import ru.profiles.viewmodel.SearchViewModel
 import ru.profiles.profiles.R
+import javax.inject.Inject
 
-class SearchResultFragment: Fragment() {
+class SearchResultFragment: DaggerFragment() {
 
     private lateinit var mViewModel: SearchViewModel
 
-    private val mDisposables = CompositeDisposable()
+    @Inject
+    lateinit var mViewModelFactory: ViewModelFactory
 
     private lateinit var mPopularAdapter: ServicesAdapter
 
@@ -33,14 +38,13 @@ class SearchResultFragment: Fragment() {
     private lateinit var mPopularAllLiveData: LiveData<PagedList<ServiceModel>>
 
     companion object {
-        fun newInstance(viewModel: SearchViewModel): SearchResultFragment{
-            val f = SearchResultFragment()
-            f.mViewModel = viewModel
-            return f
+        fun newInstance(): SearchResultFragment{
+            return SearchResultFragment()
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SearchViewModel::class.java)
         mPopularAllLiveData = mViewModel.getServices(mapOf())
         return inflater.inflate(R.layout.main_search_tab_layout, container, false)
     }
@@ -66,7 +70,6 @@ class SearchResultFragment: Fragment() {
         mPopularAllLiveData = mViewModel.getServices(
             if(searchString.isNotEmpty()) mapOf("search" to searchString) else mapOf()
         )
-        //mPopularAdapter.submitList(null)
         mPopularAllLiveData.observe(this, mPopularObserver)
     }
 }
