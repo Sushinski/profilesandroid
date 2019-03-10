@@ -24,6 +24,9 @@ interface ServicesModelDao {
     @Query("SELECT * FROM search WHERE searchTarget = :searchTarget ORDER BY id DESC LIMIT 1")
     fun getActualSearch(searchTarget: String): LiveData<SearchModel>
 
+    @Query("SELECT title FROM services WHERE title LIKE :searchString ")
+    fun getSearchSuggestions(searchString: String): List<String>
+
     @Transaction
     fun saveServiceModel(serviceModel: ServiceModel){
         /*serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }

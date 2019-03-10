@@ -1,4 +1,4 @@
-package ru.profiles.data
+package ru.profiles.adapters
 
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
@@ -31,9 +31,6 @@ class ServicesAdapter  : PagedListAdapter<ServiceModel, RecyclerView.ViewHolder>
         }
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount()
-    }
 
     override fun getItemViewType(position: Int): Int {
         return R.layout.service_card_layout

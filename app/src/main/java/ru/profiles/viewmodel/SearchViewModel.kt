@@ -49,6 +49,10 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
         return mServicesRepository.getActualSearch()
     }
 
+    fun getSearchSuggestions(suggestString: String): List<String>{
+        return mServicesRepository.getSearchSuggestions(suggestString)
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()

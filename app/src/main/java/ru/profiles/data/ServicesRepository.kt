@@ -64,4 +64,8 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
         }
     }
 
+    fun getSearchSuggestions(searchStr: String): List<String>{
+        return mServicesModelDao.getSearchSuggestions("%$searchStr%")
+    }
+
 }

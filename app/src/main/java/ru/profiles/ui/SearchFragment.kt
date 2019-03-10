@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.android.synthetic.main.search_toolbar_view.*
 import ru.profiles.adapters.FragmentTabsAdapter
+import ru.profiles.adapters.SearchListAdapter
 import ru.profiles.extensions.hideKeyBoard
 import ru.profiles.interfaces.AppBarSetter
 import java.util.concurrent.TimeUnit
@@ -50,6 +51,7 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let { initPager(it.applicationContext) }
+        search_text_view.setAdapter(SearchListAdapter(this.requireContext(), mViewModel ))
         search_text_view.onFocusChangeListener = View.OnFocusChangeListener { v, b ->
             if(!b) this.activity?.hideKeyBoard(v)
             val t = ChangeBounds()
@@ -60,9 +62,10 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
         cancel_button.setOnClickListener {
             search_text_view.setText("")
             search_text_view.clearFocus()
+            mViewModel.applySearch("")
         }
 
-        mDisposables.add(
+        /*mDisposables.add(
             search_text_view
                 .textChanges()
                 .skipInitialValue()
@@ -72,7 +75,10 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
                 .subscribe {
                         t->mViewModel.applySearch(t)
                 }
-        )
+        )*/
+        search_text_view.setOnItemClickListener{
+            a,v,i,l->mViewModel.applySearch(a.getItemAtPosition(i).toString())
+        }
     }
 
     override fun onStart() {
