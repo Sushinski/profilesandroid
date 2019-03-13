@@ -17,6 +17,8 @@ import ru.profiles.model.ServiceModel
 import ru.profiles.model.pojo.ServicesResponse
 import java.util.concurrent.TimeUnit
 
+
+
 class ServicesRepository private constructor(val mServicesApi: ServicesApi,
                                              val mServicesModelDao: ServicesModelDao){
 
@@ -32,10 +34,10 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
             }
     }
 
-    fun updateServiceList(pageNum: Int, params: Map<String, String>): Single<ServicesResponse?> {
+    fun updateServiceList(pageNum: Long, params: Map<String, String>): Single<ServicesResponse?> {
         return  mServicesApi.getServices(pageNum, params)
             .subscribeOn(Schedulers.io())
-            .timeout(10, TimeUnit.SECONDS)
+            .timeout(30, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).firstOrError()
     }
 
@@ -49,9 +51,18 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
         return mServicesModelDao.getActualSearch("service")
     }
 
+    suspend fun getItemNumber(itemAtEnd: ServiceModel): Long{
+        return withContext(IO) {
+            mServicesModelDao.getItemsCountForId(itemAtEnd.id)
+        }
+    }
+
     fun getServicesList(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{
-        return mServicesModelDao.searchServices( params["search"]?.let{"%$it%"} ?: "%").toLiveData(
-            ServicesBoundaryCallback.DATABASE_PAGE_SIZE,
+        /*return when(params.get("search")){
+            null->
+            else->mServicesModelDao.searchServices( params["search"]?.let{"%$it%"} ?: "%")
+        }*/return mServicesModelDao.getServices().toLiveData(
+            10,
             null,
             ServicesBoundaryCallback(this, params)
         )

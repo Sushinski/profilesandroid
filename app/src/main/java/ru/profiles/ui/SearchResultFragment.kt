@@ -1,6 +1,7 @@
 package ru.profiles.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class SearchResultFragment: DaggerFragment() {
         mPopularAdapter.submitList(it)
     }
 
-    private lateinit var mPopularAllLiveData: LiveData<PagedList<ServiceModel>>
+    private var mPopularAllLiveData: LiveData<PagedList<ServiceModel>>? = null
 
     companion object {
         fun newInstance(): SearchResultFragment{
@@ -40,8 +41,7 @@ class SearchResultFragment: DaggerFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SearchViewModel::class.java)
-        mPopularAllLiveData = mViewModel.getServices(mapOf())
+        mViewModel = ViewModelProviders.of(requireActivity(), mViewModelFactory).get(SearchViewModel::class.java)
         return inflater.inflate(R.layout.main_search_tab_layout, container, false)
     }
 
@@ -50,22 +50,21 @@ class SearchResultFragment: DaggerFragment() {
         mPopularAdapter = ServicesAdapter()
         popular_recycler_view.adapter = mPopularAdapter
         popular_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        popular_online_recycler_view.adapter = mPopularAdapter
+        //popular_online_recycler_view.adapter = mPopularAdapter
         popular_online_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        popular_goods_recycler_view.adapter = mPopularAdapter
+        //popular_goods_recycler_view.adapter = mPopularAdapter
         popular_goods_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        popular_articles_recycler_view.adapter = mPopularAdapter
+        //popular_articles_recycler_view.adapter = mPopularAdapter
         popular_articles_recycler_view.addItemDecoration(MarginItemDecorator(8))
         mViewModel.getActualSearch().observe(this, Observer {
-            it?.searchString?.let{ s->observeNewSearch(s)}
+            it?.searchString?.let{
+                observeNewSearch()
+            }
         })
     }
 
-    private fun observeNewSearch(searchString: String){
-        mPopularAllLiveData.removeObserver(mPopularObserver)
-        mPopularAllLiveData = mViewModel.getServices(
-            if(searchString.isNotEmpty()) mapOf("search" to searchString) else mapOf()
-        )
-        mPopularAllLiveData.observe(this, mPopularObserver)
+    private fun observeNewSearch(){
+        mPopularAllLiveData?.removeObserver(mPopularObserver)
+        mPopularAllLiveData = mViewModel.getServices().also { it.observe(this, mPopularObserver) }
     }
 }

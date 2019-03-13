@@ -11,12 +11,6 @@ interface ServicesApi {
 
     @Headers("Content-Type: application/json", "Cache-Control: no-cache")
     @GET("/api/v1/common/services/")
-    fun getServices(@Query("page") page: Int, @QueryMap params: Map<String, String>) : Observable<ServicesResponse>
-
-    @Headers("Content-Type: application/json", "Cache-Control: no-cache")
-    @GET("/api/v1/common/services/")
-    fun searchServices(@Query("search") searchString: String,
-                       @Query("page") page: Int,
-                       @QueryMap params: Map<String, String>) : Observable<ServicesResponse>
+    fun getServices(@Query("page") page: Long, @QueryMap params: Map<String, String>) : Observable<ServicesResponse>
 
 }

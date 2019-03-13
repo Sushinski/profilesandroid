@@ -16,8 +16,8 @@ class ServiceViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView
 
     fun bind(service: ServiceModel?) {
         mServiceModel = service
-        mView.card_imageView.setImageURI(service?.files?.get(0)  as String?)// todo get image
-        mView.card_serviceTitle.text = Html.fromHtml(service?.title)
+        //mView.card_imageView.setImageURI(service?.files?.get(0)  as String?)// todo get image
+        mView.card_serviceTitle.text = Html.fromHtml(Html.fromHtml(service?.title).toString())
         mView.card_serviceCost.text = service?.cost ?: "0.0" // todo on empty cost
         mView.card_ratingValue.text = service?.ratings?.common?.toString() ?: "0.0"
         mView.card_respText.text = service?.membersCount?.toString() ?: "0"

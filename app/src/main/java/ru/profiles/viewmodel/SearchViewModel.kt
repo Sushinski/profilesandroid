@@ -11,14 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.profiles.data.GoodsRepository
-import ru.profiles.data.ServicesBoundaryCallback
-import ru.profiles.data.ServicesRepository
-import ru.profiles.data.UserRepository
-import ru.profiles.model.GoodsModel
 import ru.profiles.model.SearchModel
 import ru.profiles.model.ServiceModel
+import java.util.concurrent.Executors
 import javax.inject.Inject
+import ru.profiles.data.*
 
 
 class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
@@ -30,16 +27,40 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    private val executor = Executors.newFixedThreadPool(5)
+
+    private var mSearchLiveData:  LiveData<PagedList<ServiceModel>>
+
+    private val  mPagedListConfig = PagedList.Config.Builder()
+        .setEnablePlaceholders(true)
+        .setInitialLoadSizeHint(10)
+        .setPrefetchDistance(10)
+        .setPageSize(10).build()
+
     init{
         Log.i("ProfilesInfo", "$this constructor")
         applySearch("") // reset search on create
+        mSearchLiveData = LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, mapOf()), mPagedListConfig)
+            .setFetchExecutor(executor)
+            .build()
     }
 
-    fun getServices(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{
-        return mServicesRepository.getServicesList(params)
+    fun getServices(): LiveData<PagedList<ServiceModel>>{
+        //return mServicesRepository.getServicesList(params)
+        /*return LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, params), mPagedListConfig)
+            .setFetchExecutor(executor)
+            .build()*/
+        return mSearchLiveData
     }
 
     fun applySearch(searchString: String){
+        mSearchLiveData = LivePagedListBuilder(
+            ServiceDataSourceFactory(
+                mServicesRepository,
+                mapOf("search" to searchString)
+            ),
+            mPagedListConfig
+        ).setFetchExecutor(executor).build()
         viewModelScope.launch {
             mServicesRepository.applySearch(searchString)
         }

@@ -1,5 +1,6 @@
 package ru.profiles.data
 
+import android.util.Log
 import androidx.annotation.MainThread
 import androidx.paging.PagedList
 import androidx.paging.PagingRequestHelper
@@ -12,9 +13,12 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
                                private val updateParams: Map<String, String>)
     : PagedList.BoundaryCallback<ServiceModel>() {
 
-    private var pagetoLoad = 2 // next pager from 2
 
     private val mDisposables = CompositeDisposable()
+
+    private val callbackJob = Job()
+
+    private val callbackScope = CoroutineScope(Dispatchers.Main + callbackJob)
 
     private val mHelper = PagingRequestHelper(Executors.newSingleThreadExecutor())
 
@@ -32,22 +36,24 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: ServiceModel) {
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER){
-            updateServices(pagetoLoad, updateParams)
-            pagetoLoad += 1
+            val page  = (runBlocking { mServicesRepo.getItemNumber(itemAtEnd) } / DATABASE_PAGE_SIZE) + 1
+            updateServices(page, updateParams)
         }
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: ServiceModel) {
     }
 
-    private fun updateServices(page: Int, params: Map<String, String>){
+    private fun updateServices(page: Long, params: Map<String, String>){
         mDisposables.add(
-            mServicesRepo.updateServiceList(page, params).subscribe { s, _ ->
-                s?.result?.let {
+            mServicesRepo.updateServiceList(page, params).subscribe {
+                    s, e -> s?.result?.let {
                     for (sm in it) {
-                        GlobalScope.launch(Dispatchers.Main) { mServicesRepo.saveService(sm) }
+                        callbackScope.launch { mServicesRepo.saveService(sm) }
                     }
-                }
+                } ?: e?.let {
+                Log.i("ProfilesInfo", "Error update services: ${it.cause}")
+            }
             }
         )
     }

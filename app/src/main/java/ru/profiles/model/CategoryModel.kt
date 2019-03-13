@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName
             childColumns = arrayOf("parentId"),
             onDelete = ForeignKey.RESTRICT)
     ],
-    indices = [Index("id"), Index("parentId")]
+    indices = [Index("id"), Index("parentId"), Index("title", unique = true)]
 )
 data class CategoryModel(
     @PrimaryKey

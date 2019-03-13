@@ -23,9 +23,6 @@ class ServicesApiBuilder private constructor() : BaseBuilder() {
                     OkHttpClient()
                         .newBuilder()
                         .addInterceptor(interceptor)
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .writeTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(10, TimeUnit.SECONDS)
                         .build() )
                 .build().create()
         }

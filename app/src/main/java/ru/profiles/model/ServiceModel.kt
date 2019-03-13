@@ -27,6 +27,7 @@ import ru.profiles.model.pojo.Location
     ],
     indices = [
         Index("id"),
+        Index("title"),
         Index("organization_id"),
         Index("profile_id"),
         Index("ratings_id")
@@ -111,4 +112,5 @@ data class ServiceModel(
     var profile_id: Long? = null
     var ratings_id: Long? = null
     var isOnline: Boolean = true
+    // todo catgories
 }
