@@ -2,6 +2,7 @@ package ru.profiles.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -29,45 +30,38 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     private val executor = Executors.newFixedThreadPool(5)
 
-    private var mSearchLiveData:  LiveData<PagedList<ServiceModel>>
-
-    private val  mPagedListConfig = PagedList.Config.Builder()
-        .setEnablePlaceholders(true)
-        .setInitialLoadSizeHint(10)
-        .setPrefetchDistance(10)
-        .setPageSize(10).build()
+    private val mSearchString = MutableLiveData<String>()
 
     init{
         Log.i("ProfilesInfo", "$this constructor")
-        applySearch("") // reset search on create
-        mSearchLiveData = LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, mapOf()), mPagedListConfig)
+        val pagedListConfig = PagedList.Config.Builder()
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(10)
+            .setPrefetchDistance(10)
+            .setPageSize(10).build()
+
+        /*mServiceLiveData = LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, mapOf()), pagedListConfig)
             .setFetchExecutor(executor)
-            .build()
+            .build()*/
+        applySearch("%") // reset search on create
     }
 
     fun getServices(): LiveData<PagedList<ServiceModel>>{
-        //return mServicesRepository.getServicesList(params)
-        /*return LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, params), mPagedListConfig)
-            .setFetchExecutor(executor)
-            .build()*/
-        return mSearchLiveData
+        return mServicesRepository.getServicesList()
+        //return mServiceLiveData
     }
 
     fun applySearch(searchString: String){
-        mSearchLiveData = LivePagedListBuilder(
-            ServiceDataSourceFactory(
-                mServicesRepository,
-                mapOf("search" to searchString)
-            ),
-            mPagedListConfig
-        ).setFetchExecutor(executor).build()
-        viewModelScope.launch {
-            mServicesRepository.applySearch(searchString)
+        if(mSearchString.value != searchString) {
+            viewModelScope.launch {
+                mServicesRepository.applySearch(searchString)
+                mSearchString.value = searchString
+            }
         }
     }
 
-    fun getActualSearch(): LiveData<SearchModel>{
-        return mServicesRepository.getActualSearch()
+    fun getActualSearch(): LiveData<String>{
+        return mSearchString
     }
 
     fun getSearchSuggestions(suggestString: String): List<String>{

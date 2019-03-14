@@ -37,6 +37,8 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
         fun newInstance() = SearchFragment()
     }
 
+    private val mTabs = mapOf("Все" to SearchResultFragment.newInstance())
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +61,7 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
         cancel_button.setOnClickListener {
             search_text_view.setText("")
             search_text_view.clearFocus()
-            mViewModel.applySearch("")
+            mViewModel.applySearch("%")
         }
 
         search_text_view.setOnItemClickListener{
@@ -83,15 +85,14 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
     private fun initPager() {
         activity?.supportFragmentManager?.let {
             val a = FragmentTabsAdapter(childFragmentManager)
-            for (f in arrayOf(SearchResultFragment.newInstance()).withIndex()) {
-                a.addTab(f.value)
-            }
-            a
-        }?.also{
-            search_content_viewpager.adapter = it
+            search_content_viewpager.adapter = a
             search_content_tablayout.setupWithViewPager(search_content_viewpager)
-            for (t in 0 until search_content_tablayout.tabCount)
-                search_content_tablayout.getTabAt(t)?.text = "${t + 1}"
+            for (f in mTabs.iterator().withIndex()) {
+                a.addTab(f.value.value)
+                a.notifyDataSetChanged()
+                search_content_tablayout.getTabAt(f.index)?.text = f.value.key
+            }
+
         }
     }
 

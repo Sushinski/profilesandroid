@@ -12,7 +12,7 @@ import ru.profiles.model.pojo.Location
 @Dao
 interface ServicesModelDao {
 
-    @Query("SELECT * FROM services ORDER BY id ASC")
+    @Query("SELECT * FROM services")
     fun getServices(): DataSource.Factory<Int, ServiceModel>
 
     @Transaction @Query("SELECT * FROM services WHERE title LIKE :searchString ORDER BY id ASC")
@@ -31,15 +31,8 @@ interface ServicesModelDao {
     fun getItemsCountForId(id: Long): Long
 
     @Transaction
-    fun saveServicesList(list: List<ServiceModel>){
-        for(item in list)
-            saveServiceModel(item)
-    }
-
-
-    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveServiceModel(serviceModel: ServiceModel){
-        serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }
+        /*serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }
         serviceModel.profile?.let{ serviceModel.profile_id = insertProfile(it) }
         serviceModel.ratings?.let{ serviceModel.ratings_id = insert(it)}
         serviceModel.categories?.let{
@@ -49,11 +42,16 @@ interface ServicesModelDao {
              for(location in it){
                  insertLocation(location)
              }
-        }
+        }*/
         val id = insert(serviceModel)
         Log.i("ProfilesInfo", "Service ${serviceModel.title} ${serviceModel.description} saved with $id")
     }
 
+    @Transaction
+    fun saveServicesList(list: List<ServiceModel>){
+        for(item in list)
+            saveServiceModel(item)
+    }
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(serviceModel: ServiceModel) : Long

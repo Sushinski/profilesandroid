@@ -20,7 +20,8 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
 
     private val callbackScope = CoroutineScope(Dispatchers.Main + callbackJob)
 
-    private val mHelper = PagingRequestHelper(Executors.newSingleThreadExecutor())
+    private val mHelper = PagingRequestHelper(Executors.newFixedThreadPool(5))
+
 
     companion object {
         const val DATABASE_PAGE_SIZE = 10
@@ -29,31 +30,35 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
     @MainThread
     override fun onZeroItemsLoaded() {
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.INITIAL) {
-            updateServices(1, updateParams) // start page
+            updateServices(1, updateParams, it) // start page
         }
     }
 
     @MainThread
     override fun onItemAtEndLoaded(itemAtEnd: ServiceModel) {
+        val page = (runBlocking { mServicesRepo.getItemNumber(itemAtEnd) } / DATABASE_PAGE_SIZE) + 1
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER){
-            val page  = (runBlocking { mServicesRepo.getItemNumber(itemAtEnd) } / DATABASE_PAGE_SIZE) + 1
-            updateServices(page, updateParams)
+            updateServices(page, updateParams, it)
         }
     }
 
     override fun onItemAtFrontLoaded(itemAtFront: ServiceModel) {
     }
 
-    private fun updateServices(page: Long, params: Map<String, String>){
+    private fun updateServices(page: Long,
+                               params: Map<String, String>,
+                               callback: PagingRequestHelper.Request.Callback){
         mDisposables.add(
             mServicesRepo.updateServiceList(page, params).subscribe {
                     s, e -> s?.result?.let {
-                    for (sm in it) {
-                        callbackScope.launch { mServicesRepo.saveService(sm) }
+                    callbackScope.launch {
+                        mServicesRepo.saveServicesList(it)
+                        callback.recordSuccess()
                     }
                 } ?: e?.let {
-                Log.i("ProfilesInfo", "Error update services: ${it.cause}")
-            }
+                    Log.i("ProfilesInfo", "Error update services: ${it.cause}")
+                    callback.recordFailure(e)
+                }
             }
         )
     }

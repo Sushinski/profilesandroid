@@ -34,6 +34,7 @@ class SearchResultFragment: DaggerFragment() {
 
     private var mPopularAllLiveData: LiveData<PagedList<ServiceModel>>? = null
 
+
     companion object {
         fun newInstance(): SearchResultFragment{
             return SearchResultFragment()
@@ -50,14 +51,14 @@ class SearchResultFragment: DaggerFragment() {
         mPopularAdapter = ServicesAdapter()
         popular_recycler_view.adapter = mPopularAdapter
         popular_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        //popular_online_recycler_view.adapter = mPopularAdapter
+        popular_online_recycler_view.adapter = mPopularAdapter
         popular_online_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        //popular_goods_recycler_view.adapter = mPopularAdapter
+        popular_goods_recycler_view.adapter = mPopularAdapter
         popular_goods_recycler_view.addItemDecoration(MarginItemDecorator(8))
-        //popular_articles_recycler_view.adapter = mPopularAdapter
+        popular_articles_recycler_view.adapter = mPopularAdapter
         popular_articles_recycler_view.addItemDecoration(MarginItemDecorator(8))
         mViewModel.getActualSearch().observe(this, Observer {
-            it?.searchString?.let{
+            it?.let{
                 observeNewSearch()
             }
         })

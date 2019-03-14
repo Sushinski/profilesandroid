@@ -1,8 +1,6 @@
 package ru.profiles.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import io.reactivex.Single
@@ -19,8 +17,16 @@ import java.util.concurrent.TimeUnit
 
 
 
-class ServicesRepository private constructor(val mServicesApi: ServicesApi,
-                                             val mServicesModelDao: ServicesModelDao){
+class ServicesRepository private constructor(private val mServicesApi: ServicesApi,
+                                             private val mServicesModelDao: ServicesModelDao){
+
+    private var mCurrentLiveData: LiveData<PagedList<ServiceModel>>
+
+    private val mPagedListConfig = PagedList.Config.Builder()
+        .setEnablePlaceholders(true)
+        .setInitialLoadSizeHint(30)
+        .setPrefetchDistance(10)
+        .setPageSize(10).build()
 
     companion object {
         @Volatile private var instance: ServicesRepository? = null
@@ -34,6 +40,14 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
             }
     }
 
+    init {
+        mCurrentLiveData = mServicesModelDao.searchServices("%").toLiveData(
+            mPagedListConfig,
+            null,
+            ServicesBoundaryCallback(this, mapOf())
+        )
+    }
+
     fun updateServiceList(pageNum: Long, params: Map<String, String>): Single<ServicesResponse?> {
         return  mServicesApi.getServices(pageNum, params)
             .subscribeOn(Schedulers.io())
@@ -41,9 +55,9 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
             .observeOn(AndroidSchedulers.mainThread()).firstOrError()
     }
 
-    suspend fun saveService(service: ServiceModel){
+    suspend fun saveServicesList(list: List<ServiceModel>){
         withContext(IO) {
-            mServicesModelDao.saveServiceModel(service)
+            mServicesModelDao.saveServicesList(list)
         }
     }
 
@@ -57,18 +71,18 @@ class ServicesRepository private constructor(val mServicesApi: ServicesApi,
         }
     }
 
-    fun getServicesList(params: Map<String, String>): LiveData<PagedList<ServiceModel>>{
-        /*return when(params.get("search")){
-            null->
-            else->mServicesModelDao.searchServices( params["search"]?.let{"%$it%"} ?: "%")
-        }*/return mServicesModelDao.getServices().toLiveData(
-            10,
-            null,
-            ServicesBoundaryCallback(this, params)
-        )
+    fun getServicesList(): LiveData<PagedList<ServiceModel>>{
+        return mCurrentLiveData
     }
 
     suspend fun applySearch(searchString: String){
+        mCurrentLiveData = mServicesModelDao.searchServices(searchString).toLiveData(
+            mPagedListConfig,
+            null,
+            ServicesBoundaryCallback(this,
+                if(searchString != "%") mapOf("search" to searchString) else mapOf()
+            )
+        )
         withContext(IO){
             val m = SearchModel(searchString, "service")
             mServicesModelDao.insert(m)
