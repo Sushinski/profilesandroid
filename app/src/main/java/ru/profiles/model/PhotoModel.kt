@@ -29,6 +29,5 @@ data class PhotoModel(
 ){
 
     @PrimaryKey(autoGenerate = true)
-    @Expose
     var mId: Long = 0
 }

@@ -9,16 +9,15 @@ import com.google.gson.annotations.SerializedName
     foreignKeys = [
         ForeignKey(entity = CategoryModel::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf("parentId"),
+            childColumns = arrayOf("parent_id"),
             onDelete = ForeignKey.RESTRICT)
     ],
-    indices = [Index("id"), Index("parentId"), Index("title", unique = true)]
+    indices = [Index("id"), Index("parent_id"), Index("title", unique = true)]
 )
 data class CategoryModel(
-    @PrimaryKey
     @Expose
     @SerializedName("id")
-    var id: Long = 0,
+    var orig_id: Long? = null,
     @Expose
     @SerializedName("title")
     var title: String? = null,
@@ -28,5 +27,7 @@ data class CategoryModel(
     var children: List<CategoryModel>? = null
 
 ){
-    var parentId: Long? = null
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null
+    var parent_id: Long? = null
 }

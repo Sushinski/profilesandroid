@@ -12,10 +12,9 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id")]
 )
 data class ProfileModel(
-    @PrimaryKey
     @Expose
     @SerializedName("id")
-    var id: Long = 0,
+    var orig_id: Long? = null,
     @Expose
     @SerializedName("is_specialist")
     var isSpecialist: Boolean? = null,
@@ -64,6 +63,8 @@ data class ProfileModel(
     @Ignore
     var specializations: List<SpecializationPrefsModel>? = null // todo onetomany
 ){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null
     var organizationId: Long = organization?.id ?: 0
     var ratingsId: Long = ratings?.id ?: 0
     var photoId: Long = photo?.mId ?: 0

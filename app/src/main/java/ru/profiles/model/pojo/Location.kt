@@ -1,5 +1,6 @@
 package ru.profiles.model.pojo
 
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.profiles.model.CityModel
@@ -12,4 +13,7 @@ data class Location(
     @Expose
     @SerializedName("metro_stations")
     val metroStations: List<MetroStationModel>
-)
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null
+}

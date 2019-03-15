@@ -23,10 +23,11 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
     private var mCurrentLiveData: LiveData<PagedList<ServiceModel>>
 
     private val mPagedListConfig = PagedList.Config.Builder()
-        .setEnablePlaceholders(true)
-        .setInitialLoadSizeHint(30)
-        .setPrefetchDistance(10)
-        .setPageSize(10).build()
+        .setEnablePlaceholders(false)
+        .setInitialLoadSizeHint(40)
+        .setPrefetchDistance(20)
+        .setPageSize(20)
+        .build()
 
     companion object {
         @Volatile private var instance: ServicesRepository? = null
@@ -66,8 +67,9 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
     }
 
     suspend fun getItemNumber(itemAtEnd: ServiceModel): Long{
+        if(itemAtEnd.id == null) return 0
         return withContext(IO) {
-            mServicesModelDao.getItemsCountForId(itemAtEnd.id)
+            mServicesModelDao.getItemsCountForId(itemAtEnd.id ?: 0)
         }
     }
 

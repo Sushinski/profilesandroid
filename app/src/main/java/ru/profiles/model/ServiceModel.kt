@@ -36,7 +36,7 @@ import ru.profiles.model.pojo.Location
 data class ServiceModel(
     @Expose
     @SerializedName("id")
-    var orig_id: Long = 0,
+    var orig_id: Long? = null,
     @Expose
     @Ignore
     @SerializedName("organization")
@@ -108,10 +108,11 @@ data class ServiceModel(
     var categories: List<CategoryModel>? = null
 ){
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    var id: Long? = null
     var organization_id: Long? = null
     var profile_id: Long? = null
     var ratings_id: Long? = null
-    var isOnline: Boolean = true
+    var isOnline: Boolean? = null
+    var category_id: Long? = null
     // todo catgories
 }

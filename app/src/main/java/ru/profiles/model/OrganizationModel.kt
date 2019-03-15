@@ -12,10 +12,9 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id"), Index("title")]
 )
 data class OrganizationModel(
-    @PrimaryKey
     @Expose
     @SerializedName("id")
-    var id: Long = 0,
+    var orig_id: Long? = null,
     @Expose
     @SerializedName("title")
     var title: String? = null,
@@ -63,6 +62,8 @@ data class OrganizationModel(
     @SerializedName("slug")
     var slug: String? = null
 ){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null
     var ratings_id: Long = ratings?.id ?: 0
     var phone_id: Long = phone?.id ?: 0
 }

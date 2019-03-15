@@ -11,6 +11,10 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id")]
 )
 data class RatingsModel(
+
+    @SerializedName("id")
+    @Expose
+    var orig_id: Long? = null,
     @Expose
     @SerializedName("common")
     val common: Int? = null,
@@ -19,7 +23,5 @@ data class RatingsModel(
     val professional: Int? = null
 ){
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
-    @Expose
-    var id: Long = 0
+    var id: Long? = null
 }

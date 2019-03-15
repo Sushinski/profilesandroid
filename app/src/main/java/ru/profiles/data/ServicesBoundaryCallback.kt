@@ -20,11 +20,11 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
 
     private val callbackScope = CoroutineScope(Dispatchers.Main + callbackJob)
 
-    private val mHelper = PagingRequestHelper(Executors.newFixedThreadPool(5))
+    private val mHelper = PagingRequestHelper(Executors.newFixedThreadPool(3))
 
 
     companion object {
-        const val DATABASE_PAGE_SIZE = 10
+        const val DATABASE_PAGE_SIZE = 20
     }
 
     @MainThread

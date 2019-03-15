@@ -11,20 +11,22 @@ import com.google.gson.annotations.SerializedName
     indices = [Index("id"), Index("number")]
 )
 data class PhoneModel(
-    @PrimaryKey
     @Expose
     @SerializedName("id")
-    val id: Long,
+    val orig_id: Long? = null,
     @Expose
     @SerializedName("number")
-    val number: String,
+    val number: String? = null,
     @Expose
     @SerializedName("note")
-    val note: String,
+    val note: String? = null,
     @Expose
     @SerializedName("order")
-    val order: Int,
+    val order: Int? = null,
     @Expose
     @SerializedName("is_default")
-    val isDefault: Boolean
-)
+    val isDefault: Boolean? = null
+){
+    @PrimaryKey(autoGenerate = true)
+    var id: Long? = null
+}

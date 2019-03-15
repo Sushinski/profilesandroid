@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 @Entity(
         tableName = "organization_area",
@@ -26,8 +27,10 @@ data class OrganizationArea(
     var organizationId: Long,
     var areaId: Long
 ) {
+    @SerializedName("id")
+    @Expose
+    var orig_id: Long? = null
 
     @PrimaryKey(autoGenerate = true)
-    @Expose
-    var id: Long = 0
+    var id: Long? = null
 }

@@ -1,6 +1,5 @@
 package ru.profiles.dao
 
-import android.app.Service
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
@@ -30,19 +29,38 @@ interface ServicesModelDao {
     @Query("SELECT COUNT(*) FROM services WHERE id <= :id")
     fun getItemsCountForId(id: Long): Long
 
+    @Update
+    fun update(model: ServiceModel)
+
     @Transaction
     fun saveServiceModel(serviceModel: ServiceModel){
-        /*serviceModel.organization?.let{ serviceModel.organization_id = insert(it) }
-        serviceModel.profile?.let{ serviceModel.profile_id = insertProfile(it) }
-        serviceModel.ratings?.let{ serviceModel.ratings_id = insert(it)}
-        serviceModel.categories?.let{
-            saveCategoriesChildren(null, it)
+
+        try {
+            serviceModel.organization?.let {
+                serviceModel.organization_id = insert(it)
+                Log.i("ProfilesInfo", "Organization saved with ${serviceModel.organization_id}")
+            }
+            serviceModel.profile?.let {
+                serviceModel.profile_id = insertProfile(it)
+                Log.i("ProfilesInfo", "Profile saved with ${serviceModel.profile_id}")
+            }
+            serviceModel.ratings?.let {
+                serviceModel.ratings_id = insert(it)
+                Log.i("ProfilesInfo", "Rating saved with ${serviceModel.ratings_id}")
+            }
+            /*serviceModel.categories?.let {
+                saveCategoriesChildren(null, it)
+                Log.i("ProfilesInfo", "Categories saved")
+            }*/
+            serviceModel.locations?.let {
+                for (location in it) {
+                    insertLocation(location)
+                }
+                Log.i("ProfilesInfo", "Locations saved")
+            }
+        }catch (e: Exception){
+            Log.i("ProfilesInfo", "Failed create embedded objects: $e")
         }
-        serviceModel.locations?.let{
-             for(location in it){
-                 insertLocation(location)
-             }
-        }*/
         val id = insert(serviceModel)
         Log.i("ProfilesInfo", "Service ${serviceModel.title} ${serviceModel.description} saved with $id")
     }
@@ -59,9 +77,9 @@ interface ServicesModelDao {
     @Transaction
     fun saveCategoriesChildren(parentId: Long?, children: List<CategoryModel>){
         for (category: CategoryModel in children) {
-            category.parentId = parentId
+            category.parent_id = parentId
             //Log.i("ProfilesInfo", "To insert category: id=${category.id} parentId=${category.parentId}")
-            val id  = getCategory(category.id)?.id ?: insert(category)
+            val id  = getCategory(category.orig_id ?: 0)?.id ?: insert(category)
             category.children?.let{saveCategoriesChildren(id, it)}
         }
     }
@@ -94,7 +112,7 @@ interface ServicesModelDao {
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(organizationModel: OrganizationModel) : Long
 
-    @Transaction @Query("SELECT * FROM category WHERE id=:categoryId")
+    @Transaction @Query("SELECT * FROM category WHERE orig_id=:categoryId")
     fun getCategory(categoryId: Long): CategoryModel?
 
     @Transaction
