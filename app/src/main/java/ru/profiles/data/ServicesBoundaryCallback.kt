@@ -7,11 +7,12 @@ import androidx.paging.PagingRequestHelper
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import ru.profiles.model.ServiceModel
+import ru.profiles.model.ServiceWithRelations
 import java.util.concurrent.Executors
 
 class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
                                private val updateParams: Map<String, String>)
-    : PagedList.BoundaryCallback<ServiceModel>() {
+    : PagedList.BoundaryCallback<ServiceWithRelations>() {
 
 
     private val mDisposables = CompositeDisposable()
@@ -35,14 +36,14 @@ class ServicesBoundaryCallback(private val mServicesRepo: ServicesRepository,
     }
 
     @MainThread
-    override fun onItemAtEndLoaded(itemAtEnd: ServiceModel) {
+    override fun onItemAtEndLoaded(itemAtEnd: ServiceWithRelations) {
         val page = (runBlocking { mServicesRepo.getItemNumber(itemAtEnd) } / DATABASE_PAGE_SIZE) + 1
         mHelper.runIfNotRunning(PagingRequestHelper.RequestType.AFTER){
             updateServices(page, updateParams, it)
         }
     }
 
-    override fun onItemAtFrontLoaded(itemAtFront: ServiceModel) {
+    override fun onItemAtFrontLoaded(itemAtFront: ServiceWithRelations) {
     }
 
     private fun updateServices(page: Long,

@@ -8,12 +8,12 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(
     tableName = "photo",
-    indices = [Index("id"), Index("mId")]
+    indices = [Index("id"), Index("origId", unique = true)]
 )
 data class PhotoModel(
     @Expose
     @SerializedName("id")
-    var id: String = "",
+    var origId: String? = null,
     @Expose
     @SerializedName("file_name")
     var fileName: String = "",
@@ -29,5 +29,5 @@ data class PhotoModel(
 ){
 
     @PrimaryKey(autoGenerate = true)
-    var mId: Long = 0
+    var id: Long? = null
 }

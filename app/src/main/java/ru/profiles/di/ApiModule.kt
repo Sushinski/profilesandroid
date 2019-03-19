@@ -3,14 +3,8 @@ package ru.profiles.di
 import dagger.Module
 import dagger.Provides
 import retrofit2.Converter
-import ru.profiles.api.builder.AuthApiBuilder
-import ru.profiles.api.builder.RegistrationApiBuilder
-import ru.profiles.api.builder.ResourcesApiBuilder
-import ru.profiles.api.builder.ServicesApiBuilder
-import ru.profiles.api.interfaces.AuthApi
-import ru.profiles.api.interfaces.RegistrationApi
-import ru.profiles.api.interfaces.ResourcesApi
-import ru.profiles.api.interfaces.ServicesApi
+import ru.profiles.api.builder.*
+import ru.profiles.api.interfaces.*
 import ru.profiles.profiles.BuildConfig
 import javax.inject.Singleton
 
@@ -40,5 +34,5 @@ class ApiModule {
     fun providesServicesApi(converter_factory: Converter.Factory): ServicesApi {
         return ServicesApiBuilder.buildForUrl(BuildConfig.API_URL, converter_factory)
     }
-
+    
 }

@@ -5,6 +5,7 @@ import androidx.room.ColumnInfo.NOCASE
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.profiles.model.pojo.Location
+import ru.profiles.model.pojo.PhotoFile
 
 @Entity(
     tableName = "services",
@@ -89,7 +90,7 @@ data class ServiceModel(
     @Expose
     @SerializedName("files")
     @Ignore
-    var files: List<Any>? = null,
+    var files: List<PhotoFile>? = null,
     @Expose
     @SerializedName("regular_schedule")
     @Ignore

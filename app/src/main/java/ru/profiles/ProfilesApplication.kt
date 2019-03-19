@@ -1,6 +1,9 @@
 package ru.profiles
 
+import com.facebook.cache.disk.DiskCacheConfig
+import com.facebook.common.util.ByteConstants
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -11,7 +14,18 @@ class ProfilesApplication : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        Fresco.initialize(applicationContext)
+        val diskCacheConfig = DiskCacheConfig.newBuilder(this).setBaseDirectoryPath(this.cacheDir)
+            .setBaseDirectoryName("image")
+            .setMaxCacheSize((100 * ByteConstants.MB).toLong())
+            .setMaxCacheSizeOnLowDiskSpace((10 * ByteConstants.MB).toLong())
+            .setMaxCacheSizeOnVeryLowDiskSpace((5 * ByteConstants.MB).toLong())
+            .setVersion(1)
+            .build()
+
+        val imagePipelineConfig = ImagePipelineConfig.newBuilder(this)
+            .setMainDiskCacheConfig(diskCacheConfig)
+            .build()
+        Fresco.initialize(applicationContext, imagePipelineConfig)
         Stetho.initialize(Stetho.newInitializerBuilder(this)
             .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
             .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))

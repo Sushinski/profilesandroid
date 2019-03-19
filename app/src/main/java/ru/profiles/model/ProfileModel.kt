@@ -9,7 +9,15 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(
     tableName = "profile",
-    indices = [Index("id")]
+    indices = [Index("id"), Index("photoId")],
+    foreignKeys = [
+            androidx.room.ForeignKey(
+                entity = ru.profiles.model.PhotoModel::class,
+                parentColumns = kotlin.arrayOf("id"),
+                childColumns = kotlin.arrayOf("photoId"),
+                onDelete = androidx.room.ForeignKey.SET_NULL
+            )
+    ]
 )
 data class ProfileModel(
     @Expose
@@ -33,7 +41,7 @@ data class ProfileModel(
     @Expose
     @SerializedName("photo")
     @Ignore
-    var photo: PhotoModel? = null, // todo foreign key
+    var photo: PhotoModel? = null,
     @Expose
     @SerializedName("gender")
     var gender: Int? = null,
@@ -65,8 +73,8 @@ data class ProfileModel(
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
-    var organizationId: Long = organization?.id ?: 0
-    var ratingsId: Long = ratings?.id ?: 0
-    var photoId: Long = photo?.mId ?: 0
+    var organizationId: Long? = null
+    var ratingsId: Long? = null
+    var photoId: Long? = null
 
 }

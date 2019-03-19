@@ -3,10 +3,7 @@ package ru.profiles.di
 import dagger.Module
 import dagger.Provides
 import ru.profiles.ProfilesApplication
-import ru.profiles.api.interfaces.AuthApi
-import ru.profiles.api.interfaces.RegistrationApi
-import ru.profiles.api.interfaces.ResourcesApi
-import ru.profiles.api.interfaces.ServicesApi
+import ru.profiles.api.interfaces.*
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.dao.GoodsModelDao
 import ru.profiles.dao.ServicesModelDao
@@ -73,7 +70,8 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesServicesRepository(searchApi: ServicesApi, servicesDao: ServicesModelDao): ServicesRepository{
+    fun providesServicesRepository(searchApi: ServicesApi,
+                                   servicesDao: ServicesModelDao): ServicesRepository{
         return ServicesRepository.getInstance(searchApi, servicesDao)
     }
 

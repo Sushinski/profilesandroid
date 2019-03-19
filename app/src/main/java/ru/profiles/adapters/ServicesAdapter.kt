@@ -5,13 +5,14 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.profiles.model.ServiceModel
+import ru.profiles.model.ServiceWithRelations
 import ru.profiles.ui.view.ServiceViewHolder
 import ru.profiles.profiles.R
 
-class ServicesAdapter  : PagedListAdapter<ServiceModel, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class ServicesAdapter  : PagedListAdapter<ServiceWithRelations, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val service: ServiceModel? = getItem(position)
+        val service: ServiceWithRelations? = getItem(position)
         (holder as ServiceViewHolder).bind(service)
     }
 
@@ -38,13 +39,13 @@ class ServicesAdapter  : PagedListAdapter<ServiceModel, RecyclerView.ViewHolder>
 
     companion object {
         private val DIFF_CALLBACK = object :
-            DiffUtil.ItemCallback<ServiceModel>() {
+            DiffUtil.ItemCallback<ServiceWithRelations>() {
 
-            override fun areItemsTheSame(oldService: ServiceModel,
-                                         newService: ServiceModel) = oldService.id == newService.id
+            override fun areItemsTheSame(oldService: ServiceWithRelations,
+                                         newService: ServiceWithRelations) = oldService.service?.id == newService.service?.id
 
-            override fun areContentsTheSame(oldService: ServiceModel,
-                                            newService: ServiceModel) = oldService == newService
+            override fun areContentsTheSame(oldService: ServiceWithRelations,
+                                            newService: ServiceWithRelations) = oldService == newService
         }
     }
 }

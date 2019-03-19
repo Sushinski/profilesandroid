@@ -12,7 +12,9 @@ import ru.profiles.api.interfaces.ServicesApi
 import ru.profiles.dao.ServicesModelDao
 import ru.profiles.model.SearchModel
 import ru.profiles.model.ServiceModel
+import ru.profiles.model.ServiceWithRelations
 import ru.profiles.model.pojo.ServicesResponse
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit
 class ServicesRepository private constructor(private val mServicesApi: ServicesApi,
                                              private val mServicesModelDao: ServicesModelDao){
 
-    private var mCurrentLiveData: LiveData<PagedList<ServiceModel>>
+    private var mCurrentLiveData: LiveData<PagedList<ServiceWithRelations>>
 
     private val mPagedListConfig = PagedList.Config.Builder()
         .setEnablePlaceholders(false)
@@ -28,6 +30,8 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
         .setPrefetchDistance(20)
         .setPageSize(20)
         .build()
+
+    private val mFetchExecutor = Executors.newFixedThreadPool(3)
 
     companion object {
         @Volatile private var instance: ServicesRepository? = null
@@ -45,7 +49,8 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
         mCurrentLiveData = mServicesModelDao.searchServices("%").toLiveData(
             mPagedListConfig,
             null,
-            ServicesBoundaryCallback(this, mapOf())
+            ServicesBoundaryCallback(this, mapOf()),
+            mFetchExecutor
         )
     }
 
@@ -66,14 +71,14 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
         return mServicesModelDao.getActualSearch("service")
     }
 
-    suspend fun getItemNumber(itemAtEnd: ServiceModel): Long{
-        if(itemAtEnd.id == null) return 0
+    suspend fun getItemNumber(itemAtEnd: ServiceWithRelations): Long{
+        if(itemAtEnd.service?.id == null) return 0
         return withContext(IO) {
-            mServicesModelDao.getItemsCountForId(itemAtEnd.id ?: 0)
+            mServicesModelDao.getItemsCountForId(itemAtEnd.service?.id ?: 0)
         }
     }
 
-    fun getServicesList(): LiveData<PagedList<ServiceModel>>{
+    fun getServicesList(): LiveData<PagedList<ServiceWithRelations>>{
         return mCurrentLiveData
     }
 
@@ -83,7 +88,8 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
             null,
             ServicesBoundaryCallback(this,
                 if(searchString != "%") mapOf("search" to searchString) else mapOf()
-            )
+            ),
+            mFetchExecutor
         )
         withContext(IO){
             val m = SearchModel(searchString, "service")

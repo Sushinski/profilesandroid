@@ -7,15 +7,14 @@ import androidx.room.*
 import ru.profiles.model.*
 import ru.profiles.model.CategoryModel
 import ru.profiles.model.pojo.Location
+import ru.profiles.model.pojo.PhotoFile
 
 @Dao
 interface ServicesModelDao {
 
-    @Query("SELECT * FROM services")
-    fun getServices(): DataSource.Factory<Int, ServiceModel>
-
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Transaction @Query("SELECT * FROM services WHERE title LIKE :searchString ORDER BY id ASC")
-    fun searchServices(searchString: String): DataSource.Factory<Int, ServiceModel>
+    fun searchServices(searchString: String): DataSource.Factory<Int, ServiceWithRelations>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(searchModel: SearchModel)
@@ -46,7 +45,7 @@ interface ServicesModelDao {
             }
             serviceModel.ratings?.let {
                 serviceModel.ratings_id = insert(it)
-                Log.i("ProfilesInfo", "Rating saved with ${serviceModel.ratings_id}")
+                    Log.i("ProfilesInfo", "Rating saved with ${serviceModel.ratings_id}")
             }
             /*serviceModel.categories?.let {
                 saveCategoriesChildren(null, it)
@@ -62,6 +61,9 @@ interface ServicesModelDao {
             Log.i("ProfilesInfo", "Failed create embedded objects: $e")
         }
         val id = insert(serviceModel)
+        serviceModel.files?.let{
+            insertServicePhotos(id, it)
+        }
         Log.i("ProfilesInfo", "Service ${serviceModel.title} ${serviceModel.description} saved with $id")
     }
 
@@ -70,6 +72,22 @@ interface ServicesModelDao {
         for(item in list)
             saveServiceModel(item)
     }
+
+    @Transaction
+    fun insertServicePhotos(serviceId: Long, list: List<PhotoFile>){
+        for(item in list){
+            item.mFile.origId
+            ?.let{ getPhotoIdByOrigId(it) }
+            ?.let{ if(it > 0) it else insert(item.mFile) }
+            ?.also { insert(ServicePhotoModel(serviceId = serviceId, photoId = it)) }
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(servicePhoto: ServicePhotoModel)
+
+    @Transaction @Query("SELECT * FROM photo WHERE id = (SELECT photoId FROM service_photo WHERE serviceId = :serviceId)")
+    fun getServicePhotos(serviceId: Long): List<PhotoModel>
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(serviceModel: ServiceModel) : Long
@@ -117,22 +135,31 @@ interface ServicesModelDao {
 
     @Transaction
     fun insertProfile(profileModel: ProfileModel): Long{
-        profileModel.organization?.let{
-            profileModel.organizationId = insertOrganization(it)
+        var id: Long = profileModel.orig_id?.let { getProfileId(it) } ?: 0L
+        if(id == 0L){
+            profileModel.organization?.let{
+                    o->profileModel.organizationId = insertOrganization(o)
+            }
+            profileModel.photo?.also{
+                    p->profileModel.photoId = insert(p)
+                    Log.i("ProfilesInfo", "Photo inserted with ${profileModel.photoId}")
+            }
+            profileModel.ratings?.let{
+                    r->profileModel.ratingsId = insert(r)
+            }
+            id = insert(profileModel)
         }
-        profileModel.photo?.let{
-            profileModel.photoId = insert(it)
-        }
-        profileModel.ratings?.let{
-            profileModel.ratingsId = insert(it)
-        }
-        return insert(profileModel)
+        return id
     }
 
+    @Transaction @Query("SELECT id FROM profile WHERE orig_id = :origId")
+    fun getProfileId(origId: Long) : Long
 
-    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(photoModel: PhotoModel) : Long
 
+    @Query("SELECT id FROM photo WHERE origId = :origId")
+    fun getPhotoIdByOrigId(origId: String) : Long
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(profileModel: ProfileModel) : Long

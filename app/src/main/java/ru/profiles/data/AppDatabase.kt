@@ -29,7 +29,8 @@ import ru.profiles.model.*
         AuthModel::class,
         ServiceModel::class,
         OrganizationArea::class,
-        SearchModel::class
+        SearchModel::class,
+        ServicePhotoModel::class
     ], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
 

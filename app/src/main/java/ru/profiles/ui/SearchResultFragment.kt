@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.main_search_tab_layout.*
 import ru.profiles.adapters.ServicesAdapter
 import ru.profiles.di.ViewModelFactory
 import ru.profiles.model.ServiceModel
+import ru.profiles.model.ServiceWithRelations
 import ru.profiles.utils.MarginItemDecorator
 import ru.profiles.viewmodel.SearchViewModel
 import ru.profiles.profiles.R
@@ -28,11 +29,11 @@ class SearchResultFragment: DaggerFragment() {
 
     private lateinit var mPopularAdapter: ServicesAdapter
 
-    private val mPopularObserver =  Observer<PagedList<ServiceModel>> {
+    private val mPopularObserver =  Observer<PagedList<ServiceWithRelations>> {
         mPopularAdapter.submitList(it)
     }
 
-    private var mPopularAllLiveData: LiveData<PagedList<ServiceModel>>? = null
+    private var mPopularAllLiveData: LiveData<PagedList<ServiceWithRelations>>? = null
 
 
     companion object {

@@ -17,6 +17,7 @@ import ru.profiles.model.ServiceModel
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import ru.profiles.data.*
+import ru.profiles.model.ServiceWithRelations
 
 
 class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
@@ -28,27 +29,15 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private val executor = Executors.newFixedThreadPool(5)
-
     private val mSearchString = MutableLiveData<String>()
 
     init{
         Log.i("ProfilesInfo", "$this constructor")
-        val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(true)
-            .setInitialLoadSizeHint(10)
-            .setPrefetchDistance(10)
-            .setPageSize(10).build()
-
-        /*mServiceLiveData = LivePagedListBuilder(ServiceDataSourceFactory(mServicesRepository, mapOf()), pagedListConfig)
-            .setFetchExecutor(executor)
-            .build()*/
         applySearch("%") // reset search on create
     }
 
-    fun getServices(): LiveData<PagedList<ServiceModel>>{
+    fun getServices(): LiveData<PagedList<ServiceWithRelations>>{
         return mServicesRepository.getServicesList()
-        //return mServiceLiveData
     }
 
     fun applySearch(searchString: String){
