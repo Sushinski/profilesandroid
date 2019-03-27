@@ -12,7 +12,7 @@ import ru.profiles.profiles.BuildConfig
 import ru.profiles.profiles.R
 
 
-class ServiceViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView) {
+class ServiceViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
 
     private var mServiceModel: ServiceWithRelations? = null
 
@@ -22,7 +22,7 @@ class ServiceViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView
             ?.photos?.let { if(it.isNotEmpty()) it[0] else null }?.fileName
         u?.let{
             if(u.isNotEmpty()) mView.card_imageView.setImageURI(
-                Uri.parse("${BuildConfig.MINIO_URL}/profiles/small/$it")
+                Uri.parse("${BuildConfig.MINIO_URL}/profiles/medium/$it")
             )
         }
         mView.card_serviceTitle.text = Html.fromHtml(service?.service?.title).toString()

@@ -41,4 +41,33 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="email_confirm_title">Подтвердите, пожалуйста, свой email</string>
     <string name="proceed_to_email_button">Перейти в почту</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam non dolor in leo facilisis
+        ultrices. Aliquam erat volutpat. Proin ac malesuada ante. Donec in rhoncus erat. Donec ligula erat, bibendum sed
+        malesuada id, cursus quis orci. Nam blandit congue sapien in sagittis. Curabitur tincidunt libero felis, a
+        pellentesque ante ullamcorper bibendum. Sed ante nulla, egestas non iaculis et, dictum ultrices felis. Nulla nec
+        ex diam. Nunc dictum, tortor in rutrum sollicitudin, ante arcu consectetur mi, eleifend finibus magna ipsum sit
+        amet lacus. Suspendisse luctus at odio ac varius. Donec a erat condimentum, pretium magna eu, blandit felis.
+        Aenean vitae posuere nulla, sed aliquet diam. Vestibulum eget consectetur mi, vitae maximus mauris. Etiam
+        efficitur facilisis tempus. Maecenas et aliquam justo. Morbi ornare diam pellentesque, ullamcorper sem in,
+        dictum augue. Nam feugiat ullamcorper consequat. Proin gravida odio at nisl iaculis, eu interdum metus
+        venenatis. Suspendisse venenatis egestas lectus et bibendum. Donec ut dictum justo. Phasellus id fermentum
+        magna, nec sagittis erat. Vivamus vehicula scelerisque orci, nec scelerisque sem euismod sit amet. Vivamus risus
+        orci, cursus a ex in, tempus convallis nunc. Mauris massa ipsum, accumsan sed tristique lobortis, tristique quis
+        dolor. Aenean eu sapien nisl. Sed ultricies viverra lacus at sollicitudin. Praesent aliquam hendrerit viverra.
+        Nunc orci lectus, volutpat id dui id, vehicula rhoncus sapien. Nullam placerat mollis justo, eget lacinia metus
+        egestas ut. Maecenas pharetra est eu congue bibendum. Curabitur bibendum nisl eget leo interdum, at imperdiet
+        felis mollis. Morbi egestas in diam non elementum. Quisque vitae est non lacus pretium laoreet. Proin gravida mi
+        dui, vel placerat lacus iaculis quis. In ultrices eros nulla, eget blandit elit ornare eu. Sed malesuada orci
+        leo, quis ultrices ligula egestas at. In hac habitasse platea dictumst. Quisque pretium pulvinar nulla, eget
+        eleifend lorem pharetra non. Proin vitae lacinia ante, sed laoreet nulla. Pellentesque enim mauris, condimentum
+        sed quam sit amet, aliquet accumsan nulla. Nullam id auctor magna. In mollis elit leo, quis venenatis ligula
+        vehicula id. Vestibulum ornare placerat justo, vel mattis massa interdum in. Fusce blandit mauris eget felis
+        gravida faucibus. Mauris non accumsan orci. Duis et fermentum libero. Aliquam consectetur, lectus eu elementum
+        varius, justo nunc elementum leo, et efficitur turpis arcu id magna. Integer vestibulum fermentum augue, sed
+        viverra erat scelerisque sit amet. Aliquam id arcu ac eros pellentesque placerat at pharetra elit. Proin ornare
+        sagittis libero eget elementum. Phasellus et nibh ac enim molestie pretium. Nam cursus nisi ac purus dictum
+        maximus eu in urna. Proin enim tortor, bibendum ac tortor eget, tincidunt blandit eros. Donec feugiat et dolor
+        id finibus. Vestibulum quis molestie nulla. Sed elementum eget metus non aliquam.
+    </string>
+    <string name="show_all_descr">Показать всё описание</string>
 </resources>

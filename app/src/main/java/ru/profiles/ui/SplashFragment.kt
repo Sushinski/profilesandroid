@@ -21,7 +21,7 @@ class SplashFragment : DaggerFragment() {
 
     private lateinit var mViewModel: SplashViewModel
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(SplashViewModel::class.java)
     }

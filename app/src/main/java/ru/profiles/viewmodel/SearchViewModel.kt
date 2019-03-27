@@ -4,17 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import androidx.paging.toLiveData
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.profiles.model.SearchModel
-import ru.profiles.model.ServiceModel
-import java.util.concurrent.Executors
 import javax.inject.Inject
 import ru.profiles.data.*
 import ru.profiles.model.ServiceWithRelations

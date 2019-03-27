@@ -46,5 +46,8 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector
     abstract fun bindSearchResultFragment(): SearchResultFragment
 
+    @ContributesAndroidInjector
+    abstract fun bindServiceCardFragment(): ServiceCardFragment
+
 
 }

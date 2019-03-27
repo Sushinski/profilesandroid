@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'androidx.navigation.safeargs'
+apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -32,8 +32,8 @@ android {
         minSdkVersion 18
         multiDexEnabled true
         targetSdkVersion 28
-        versionCode 12
-        versionName "0.12"
+        versionCode 15
+        versionName "0.15"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -150,12 +150,10 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktx_version"
 
     // dagger
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
-    api "com.google.dagger:dagger:$dagger_version"
-    api "com.google.dagger:dagger-android-support:$dagger_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha03'
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
@@ -163,12 +161,12 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
-    testImplementation "androidx.room:room-testing:$room_version"
+    //testImplementation "androidx.room:room-testing:$room_version"
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
+    //implementation "com.squareup.retrofit2:retrofit-mock:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // rxjava
@@ -188,18 +186,19 @@ dependencies {
 
     // testing
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
 
     // navigation
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc01'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // fresco
     implementation 'com.facebook.fresco:fresco:1.12.1'
 
     //  Android support library
-    implementation 'com.android.support:support-core-utils:28.2.1'
-    implementation 'com.android.support:animated-vector-drawable:28.2.1'
+    //implementation 'com.android.support:support-core-utils:28.2.1'
+    //implementation 'com.android.support:animated-vector-drawable:28.2.1'
 
     // photo drawee view
     implementation 'me.relex:photodraweeview:2.0.0'

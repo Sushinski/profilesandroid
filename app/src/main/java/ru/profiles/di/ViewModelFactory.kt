@@ -85,5 +85,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainActivityViewModel::class)
     internal abstract fun mainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ServiceCardViewModel::class)
+    internal abstract fun serviceCardViewModel(viewModel: ServiceCardViewModel): ViewModel
     //Add more ViewModels here
 }
