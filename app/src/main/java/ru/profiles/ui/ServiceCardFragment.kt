@@ -5,32 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.service_card_fragment.*
 import kotlinx.android.synthetic.main.service_card_fragment.view.*
 import ru.profiles.di.ViewModelFactory
 import ru.profiles.model.ServiceWithRelations
-import ru.profiles.profiles.R
 import ru.profiles.viewmodel.ServiceCardViewModel
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.collapsed_header.*
+import android.graphics.drawable.ColorDrawable
+import ru.profiles.utils.ScreenUtils
+import android.R
+import android.graphics.Color
 
 
+class ServiceCardFragment : DaggerFragment(){
 
-class ServiceCardFragment : DaggerFragment(), ViewTreeObserver.OnScrollChangedListener{
-
-    // The height of your fully expanded header view (same than in the xml layout)
-    var headerHeight: Int = 0
-    // The height of your fully collapsed header view. Actually the Toolbar height (56dp)
-    var minHeaderHeight: Int = 0
-    // The left margin of the Toolbar title (according to specs, 72dp)
-    var toolbarTitleLeftMargin: Int = 0
-    // Added after edit
-    var minHeaderTranslation: Int = 0
-
-    private lateinit var headerView: View
 
     @Inject
     lateinit var mViewModelFactory: ViewModelFactory
@@ -41,65 +30,56 @@ class ServiceCardFragment : DaggerFragment(), ViewTreeObserver.OnScrollChangedLi
         fun newInstance(serviceModel: ServiceWithRelations) = ServiceCardFragment()
     }
 
-    override fun onScrollChanged() {
-
-        val scrollY = getScrollY()
-
-        // This will collapse the header when scrolling, until its height reaches
-        // the toolbar height
-        collapsed_header.translationY = Math.max(-scrollY, minHeaderTranslation).toFloat()//0.0f//Math.max(0, scrollY + minHeaderTranslation).toFloat()
-
-        // Scroll ratio (0 <= ratio <= 1).
-        // The ratio value is 0 when the header is completely expanded,
-        // 1 when it is completely collapsed
-        val offset = 1 - Math.max(
-            (-minHeaderTranslation - scrollY).toFloat() / -minHeaderTranslation, 0f
-        )
-
-
-        // Now that we have this ratio, we only have to apply translations, scales,
-        // alpha, etc. to the header views
-
-        // For instance, this will move the toolbar title & subtitle on the X axis
-        // from its original position when the ListView will be completely scrolled
-        // down, to the Toolbar title position when it will be scrolled up.
-        header_title.translationX = toolbarTitleLeftMargin * offset
-        header_subtitle.translationX = toolbarTitleLeftMargin * offset
-        /*val t = headerHeight * offset
-        collapsed_header.translationY = if(t > minHeaderHeight) collapsed_header.translationY else -t*/
-    }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(ServiceCardViewModel::class.java)
-        val rootView = inflater.inflate(R.layout.service_card_fragment, container, false)
-        headerHeight = resources.getDimensionPixelSize(R.dimen.header_height)
-        minHeaderTranslation = -headerHeight +
-                resources.getDimensionPixelOffset(R.dimen.action_bar_height)
+        val rootView = inflater.inflate(ru.profiles.profiles.R.layout.service_card_fragment, container, false)
+        val toolbarHeight = ScreenUtils.calculateBackdropHeight(ScreenUtils.getScreenWidth(requireContext()))/2
 
-        // Inflate your header view
-        //headerView = inflater.inflate(R.layout.collapsed_header, rootView., false)
+        // we want the title to be responsible for the background colour, not the toolbar
+        val toolbarBackground = rootView.toolbar.background as ColorDrawable
+        val colorInt = toolbarBackground.color
+        val toolbarColours = intArrayOf(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
+        rootView.backdrop_toolbar.background = toolbarBackground
+        rootView.toolbar.background = null
+        rootView.backdrop_toolbar.setTitle("Карточка")
 
-        // Add the headerView to your listView
-        rootView.scrollView.viewTreeObserver.addOnScrollChangedListener(this)
 
+        // ensure the title only gets as big as the required backdrop size
+        val layout = rootView.backdrop_toolbar.layoutParams
+        layout.height = toolbarHeight
+        rootView.backdrop_toolbar.layoutParams = layout
+
+        // ensure the scroll view starts at the required point in space
+        rootView.scrollView.setPadding(rootView.scrollView.paddingLeft, toolbarHeight, rootView.scrollView.paddingRight,
+            rootView.scrollView.paddingBottom)
+        rootView.scrollView.clipToPadding = false // this will allow the scroll view to draw *above* its padding limit (so it fills the gap between the title bar and the start of the padding)
+
+        rootView.scrollView.viewTreeObserver.addOnScrollChangedListener {
+
+            // calculate the new size of the collapsing title
+            val scrollY = rootView.scrollView.scrollY
+            val titleHeight = rootView.backdrop_toolbar.height
+            val toolbarHeight = rootView.toolbar.height
+            val heightRemaining = titleHeight - scrollY
+            var percent: Float = 0.0f
+            percent = if (heightRemaining > toolbarHeight) {
+                scrollY / (titleHeight - toolbarHeight).toFloat()
+            } else {
+                1.0f
+            }
+            // if the user flicks it can cause a negative percent, which causes the colour filter to flash black
+            percent = Math.max(0.0f, percent)
+
+            // set the size of the title bar
+            rootView.backdrop_toolbar.setScrollOffset(percent)
+            // tint the image on collapse cos it looks neat
+            rootView.backdrop_toolbar_image.setColorFilter(Color.argb((170f * percent).toInt(), toolbarColours[0], toolbarColours[1], toolbarColours[2]))
+        }
         return rootView
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        headerHeight = resources.getDimensionPixelSize(R.dimen.header_height)
-        minHeaderHeight = resources.getDimensionPixelSize(R.dimen.action_bar_height)
-        toolbarTitleLeftMargin = resources.getDimensionPixelSize(R.dimen.toolbar_left_margin)
-    }
-
-    // Method that allows us to get the scroll Y position of the ListView
-    private fun getScrollY(): Int {
-        return scrollView.scrollY
-    }
 
 }
