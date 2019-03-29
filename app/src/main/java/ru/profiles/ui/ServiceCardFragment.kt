@@ -1,6 +1,5 @@
 package ru.profiles.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +13,14 @@ import ru.profiles.viewmodel.ServiceCardViewModel
 import javax.inject.Inject
 import android.graphics.drawable.ColorDrawable
 import ru.profiles.utils.ScreenUtils
-import android.R
 import android.graphics.Color
+import android.net.Uri
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
+import kotlinx.android.synthetic.main.service_card_fragment.*
+import android.view.MenuItem
+import kotlinx.android.synthetic.main.service_card_layout.view.*
+import ru.profiles.profiles.BuildConfig
 
 
 class ServiceCardFragment : DaggerFragment(){
@@ -26,8 +31,12 @@ class ServiceCardFragment : DaggerFragment(){
 
     private lateinit var mViewModel: ServiceCardViewModel
 
+    private lateinit var mServiceModel: ServiceWithRelations
+
     companion object {
-        fun newInstance(serviceModel: ServiceWithRelations) = ServiceCardFragment()
+        fun newInstance(serviceModel: ServiceWithRelations) : ServiceCardFragment{
+            return ServiceCardFragment().also { it.mServiceModel = serviceModel }
+        }
     }
 
     override fun onCreateView(
@@ -36,7 +45,7 @@ class ServiceCardFragment : DaggerFragment(){
     ): View? {
         mViewModel = ViewModelProviders.of(this, mViewModelFactory).get(ServiceCardViewModel::class.java)
         val rootView = inflater.inflate(ru.profiles.profiles.R.layout.service_card_fragment, container, false)
-        val toolbarHeight = ScreenUtils.calculateBackdropHeight(ScreenUtils.getScreenWidth(requireContext()))/2
+        val toolbarHeight = ScreenUtils.calculateBackdropHeight(ScreenUtils.getScreenWidth(requireContext()))
 
         // we want the title to be responsible for the background colour, not the toolbar
         val toolbarBackground = rootView.toolbar.background as ColorDrawable
@@ -44,7 +53,9 @@ class ServiceCardFragment : DaggerFragment(){
         val toolbarColours = intArrayOf(Color.red(colorInt), Color.green(colorInt), Color.blue(colorInt))
         rootView.backdrop_toolbar.background = toolbarBackground
         rootView.toolbar.background = null
-        rootView.backdrop_toolbar.setTitle("Карточка")
+        rootView.toolbar.navigationIcon = resources.getDrawable(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+        rootView.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        rootView.backdrop_toolbar.setTitle("Услуга")
 
 
         // ensure the title only gets as big as the required backdrop size
@@ -64,8 +75,7 @@ class ServiceCardFragment : DaggerFragment(){
             val titleHeight = rootView.backdrop_toolbar.height
             val toolbarHeight = rootView.toolbar.height
             val heightRemaining = titleHeight - scrollY
-            var percent: Float = 0.0f
-            percent = if (heightRemaining > toolbarHeight) {
+            var percent = if (heightRemaining > toolbarHeight) {
                 scrollY / (titleHeight - toolbarHeight).toFloat()
             } else {
                 1.0f
@@ -75,11 +85,59 @@ class ServiceCardFragment : DaggerFragment(){
 
             // set the size of the title bar
             rootView.backdrop_toolbar.setScrollOffset(percent)
+            if(percent < 1.0f) rootView.backdrop_toolbar_image.translationY = -scrollY.toFloat()
             // tint the image on collapse cos it looks neat
-            rootView.backdrop_toolbar_image.setColorFilter(Color.argb((170f * percent).toInt(), toolbarColours[0], toolbarColours[1], toolbarColours[2]))
+            rootView.backdrop_toolbar_image.setColorFilter(Color.argb((255f * percent).toInt(), toolbarColours[0], toolbarColours[1], toolbarColours[2]))
+        }
+
+        rootView.foldingButton.setOnClickListener {
+            val t = AutoTransition()
+            t.duration = 200
+            TransitionManager.beginDelayedTransition(container as ViewGroup, t)
+            if (rootView.textServiceDescr.maxLines == 10) {
+                rootView.textServiceDescr.maxLines = 100
+                rootView.foldingButton.text = "Свернуть"
+            }else{
+                rootView.textServiceDescr.maxLines = 10
+                rootView.foldingButton.text = "Показать всё"
+            }
         }
         return rootView
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fillFields()
+    }
+
+    private fun fillFields(){
+        serviceTitle.text = mServiceModel.service?.title
+        serviceCost.text = mServiceModel.service?.cost
+        ratingBar.numStars = mServiceModel.service?.ratings?.common ?: 0
+        numRepliesText.text = "• ${mServiceModel.service?.ratings?.common ?:0}"
+        addressText.text = mServiceModel.service?.address
+        metroText.text = mServiceModel.service?.locations?.getOrNull(0)?.metroStations?.get(0)?.name
+        textServiceDescr.text = mServiceModel.service?.description
+        profileName.text = mServiceModel.profileModels?.getOrNull(0)?.profile?.displayName
+        mServiceModel.photoModels?.getOrNull(0)?.photos?.getOrNull(0)?.fileName?.let{
+            val uri = "${BuildConfig.MINIO_URL}/profiles/medium/$it"
+            if(it.isNotEmpty()) backdrop_toolbar_image.setImageURI(uri)
+        }
+
+        mServiceModel.profileModels?.getOrNull(0)?.photoModels?.getOrNull(0)?.fileName?.let {
+            val uri = "${BuildConfig.MINIO_URL}/profiles/small/$it"
+            if(it.isNotEmpty()) profileImage.setImageURI(uri)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home ->{
+                requireActivity().onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }

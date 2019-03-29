@@ -2,7 +2,7 @@
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@android:color/background_light"
+        android:background="@android:color/darker_gray"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,18 +18,12 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/background_light"
                 android:orientation="vertical">
 
-            <Button android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_corners"
-                    android:text="Услуга"
-                    android:textColor="@android:color/white"
-                    android:layout_margin="8dp"
-                    android:textSize="10sp"
-                    android:padding="0dp"/>
             <TextView android:layout_width="match_parent"
                       android:layout_height="wrap_content"
+                      android:id="@+id/serviceTitle"
                       android:text="Двухстрочный заголовок услуги/товара"
                       android:layout_margin="8dp"
                       android:textSize="24sp"
@@ -47,6 +41,7 @@
 
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <RatingBar
                         android:layout_width="wrap_content"
@@ -72,11 +67,12 @@
                     android:layout_weight="1"/>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_margin="8dp"
-                           app:srcCompat="@drawable/baseline_done_black_48"/>
+                           app:srcCompat="@drawable/round_place_black_48dp"/>
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -86,11 +82,12 @@
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <ImageView android:layout_width="wrap_content"
                            android:layout_height="match_parent"
                            android:layout_margin="8dp"
-                           app:srcCompat="@drawable/baseline_done_black_48"/>
+                           app:srcCompat="@drawable/round_train_black_48dp"/>
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -107,12 +104,14 @@
                     android:text="Категории и описание"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/background_light"
                     android:id="@+id/descrHeader"
                     android:layout_margin="8dp"
                     android:textSize="20sp"/>
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/background_light"
                     android:orientation="vertical">
                 <TextView
                         android:layout_margin="8dp"
@@ -129,6 +128,91 @@
                         android:textAllCaps="false"
                         android:text="@string/show_all_descr"/>
             </LinearLayout>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
+                          android:layout_gravity="center"
+                          android:orientation="horizontal">
+                <com.facebook.drawee.view.SimpleDraweeView
+                        app:roundAsCircle="true"
+                        android:layout_width="36dp"
+                        android:id="@+id/profileImage"
+                        android:layout_height="36dp"
+                        app:actualImageScaleType="centerCrop"
+                        app:placeholderImageScaleType="centerCrop"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:roundingBorderColor="@android:color/darker_gray"
+                        app:roundingBorderWidth="1dp"
+                        app:placeholderImage="@drawable/ic_placeholder"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/profileName"
+                        android:layout_gravity="center_vertical"
+                        android:text="Гарик Оливандер"
+                        android:layout_margin="8dp"
+                        android:maxLines="1" android:textSize="18sp"/>
+            </LinearLayout>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"/>
+            <TextView
+                    android:text="13:00 • 27 янв"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/schedule_header"
+                    android:background="@android:color/background_light"
+                    android:layout_margin="8dp"/>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="8dp"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"/>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_margin="8dp"
+                           app:srcCompat="@drawable/round_visibility_black_48dp"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/views_text"
+                        android:text="Просмотров, всего: 214, сегодня: 2"
+                        android:layout_margin="8dp" android:maxLines="1"
+                        />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@android:color/background_light"
+                          android:orientation="horizontal">
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="match_parent"
+                           android:layout_margin="8dp"
+                           app:srcCompat="@drawable/round_shopping_basket_black_48dp"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/orders_text"
+                        android:text="Заказов, всего: 103, сегодня: 1"
+                        android:layout_margin="8dp" android:maxLines="1"/>
+            </LinearLayout>
+            <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"/>
+
         </LinearLayout>
     </ScrollView>
 
@@ -139,24 +223,38 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:expandedTextSize="40dp"
             app:expandedMargin="16dp">
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/backdrop_toolbar_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:scaleType="fitXY"
-                android:src="@drawable/card_header"
+                app:actualImageScaleType="centerCrop"
+                app:actualImageResource="@drawable/ic_placeholder"
                 android:baselineAlignBottom="true"/>
 
         <androidx.appcompat.widget.Toolbar
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/toolbar"
                 android:minHeight="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 android:paddingEnd="8dp" />
     </ru.profiles.ui.view.CollapsingTitleLayout>
+
+    <Button
+            android:text="Заказать"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:textColor="@android:color/white"
+            android:id="@+id/order_button"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"/>
+
 
 </RelativeLayout>

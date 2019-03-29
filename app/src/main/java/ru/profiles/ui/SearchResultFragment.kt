@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +26,13 @@ import javax.inject.Inject
 
 class SearchResultFragment: DaggerFragment() {
 
+    companion object {
+        const val CARD_FRAG_TAG = "card_fragment"
+        fun newInstance(): SearchResultFragment{
+            return SearchResultFragment()
+        }
+    }
+
     private lateinit var mViewModel: SearchViewModel
 
     @Inject
@@ -40,11 +49,7 @@ class SearchResultFragment: DaggerFragment() {
     private var mPopularAllLiveData: LiveData<PagedList<ServiceWithRelations>>? = null
 
 
-    companion object {
-        fun newInstance(): SearchResultFragment{
-            return SearchResultFragment()
-        }
-    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // todo move scope to parent fragment
@@ -54,9 +59,9 @@ class SearchResultFragment: DaggerFragment() {
 
     override fun onResume() {
         super.onResume()
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         mClickDisposable = mPopularAdapter.getPositionClicks()
             .throttleFirst(2, TimeUnit.SECONDS)
-            .distinct()
             .subscribe {
                 viewServiceCard(it)
             }
@@ -87,8 +92,9 @@ class SearchResultFragment: DaggerFragment() {
     }
 
     private fun viewServiceCard(serviceModel: ServiceWithRelations){
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity?.supportFragmentManager?.beginTransaction()?.let{
-            it.add(R.id.card_container, ServiceCardFragment.newInstance(serviceModel))
+            it.replace(R.id.card_container, ServiceCardFragment.newInstance(serviceModel), CARD_FRAG_TAG)
             it.addToBackStack(null)
             it.commit()
         }

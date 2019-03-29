@@ -25,9 +25,8 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
     private var mCurrentLiveData: LiveData<PagedList<ServiceWithRelations>>
 
     private val mPagedListConfig = PagedList.Config.Builder()
-        .setEnablePlaceholders(false)
+        .setEnablePlaceholders(true)
         .setInitialLoadSizeHint(40)
-        .setPrefetchDistance(20)
         .setPageSize(20)
         .build()
 

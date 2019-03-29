@@ -16,7 +16,7 @@ class ProfilesApplication : DaggerApplication() {
         super.onCreate()
         val diskCacheConfig = DiskCacheConfig.newBuilder(this).setBaseDirectoryPath(this.cacheDir)
             .setBaseDirectoryName("image")
-            .setMaxCacheSize((100 * ByteConstants.MB).toLong())
+            .setMaxCacheSize((200 * ByteConstants.MB).toLong())
             .setMaxCacheSizeOnLowDiskSpace((10 * ByteConstants.MB).toLong())
             .setMaxCacheSizeOnVeryLowDiskSpace((5 * ByteConstants.MB).toLong())
             .setVersion(1)

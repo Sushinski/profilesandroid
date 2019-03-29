@@ -20,7 +20,7 @@ class ServicesAdapter  : PagedListAdapter<ServiceWithRelations, RecyclerView.Vie
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val service: ServiceWithRelations? = getItem(position)
         (holder as ServiceViewHolder).itemView.setOnClickListener {
-            getItem(position)?.let{ onClickSubject.onNext(it) }
+            service?.let{ onClickSubject.onNext(it) }
         }
         holder.bind(service)
     }
