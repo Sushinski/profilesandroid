@@ -111,23 +111,28 @@ class ServiceCardFragment : DaggerFragment(){
     private fun fillFields(){
         serviceTitle.text = mServiceModel.service?.title
         serviceCost.text = mServiceModel.service?.cost
-        ratingBar.numStars = mServiceModel.service?.ratings?.common ?: 0
-        numRepliesText.text = "• ${mServiceModel.service?.ratings?.common ?: 0}"
+            .also { if(it?.isNotBlank() == true) serviceCost.visibility = View.VISIBLE}?.let{"$it руб."}
+        ratingBar.numStars = (mServiceModel.service?.ratings?.common ?: 0)
+            .also{ if(it > 0) ratingBarLayout.visibility = View.VISIBLE }
+        numRepliesText.text = (mServiceModel.service?.ratings?.common ?: 0)
+            .also{ if(it > 0) numRepliesText.visibility = View.VISIBLE }.let{ "• $it"}
         addressText.text = mServiceModel.locationModels?.getOrNull(0)
             ?.serviceLocations?.getOrNull(0)?.let {
                 "${it.city?.getOrNull(0)?.name}" +
                         "${it.location?.street?.let{ s->if(s.isNotBlank()) ", ул.$s" else "" }}" +
                         "${it.location?.block?.let{ b->if(b.isNotBlank()) ", д.$b" else "" }}" +
                         "${it.location?.office?.let{ o->if(o.isNotBlank()) ", офис $o" else ""}}"
-            } ?: "Не указан"
+            }.also { if(it?.isNotBlank() == true) addressLayout.visibility = View.VISIBLE  } ?: "Не указан"
         metroText.text = mServiceModel.locationModels?.getOrNull(0)
             ?.serviceLocations?.getOrNull(0)
             ?.metroStations?.getOrNull(0)
             ?.stations?.getOrNull(0)
-            ?.name ?: "Не указана"
+            ?.name.also{ if(it?.isNotBlank() == true) metroLayout.visibility = View.VISIBLE } ?: "Не указана"
 
         textServiceDescr.text = mServiceModel.service?.description
+            .also{ if(it?.isNotBlank()== true) descrLayout.visibility = View.VISIBLE}
         profileName.text = mServiceModel.profileModels?.getOrNull(0)?.profile?.displayName
+            //.also{ if(it?.isNotBlank() == true) profileName.visibility = View.VISIBLE}
         mServiceModel.photoModels?.getOrNull(0)?.photos?.getOrNull(0)?.fileName?.let{
             val uri = "${BuildConfig.MINIO_URL}/profiles/large/$it"
             if(it.isNotEmpty()) backdrop_toolbar_image.setImageURI(uri)
@@ -137,6 +142,7 @@ class ServiceCardFragment : DaggerFragment(){
             val uri = "${BuildConfig.MINIO_URL}/profiles/small/$it"
             if(it.isNotEmpty()) profileImage.setImageURI(uri)
         }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

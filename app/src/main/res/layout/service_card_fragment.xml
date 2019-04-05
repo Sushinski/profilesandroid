@@ -26,15 +26,13 @@
                       android:id="@+id/serviceTitle"
                       android:text="Двухстрочный заголовок услуги/товара"
                       android:layout_margin="8dp"
-                      android:textSize="24sp"
-                      android:lines="2"
-                      android:maxLines="2"
-                      android:minLines="2"/>
+                      android:textSize="24sp"/>
             <TextView
                     android:text="100000 руб."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/serviceCost"
+                    android:visibility="gone"
                     android:textSize="26sp"
                     android:layout_margin="8dp"
                     android:textStyle="bold"/>
@@ -42,6 +40,8 @@
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:background="@android:color/background_light"
+                          android:id="@+id/ratingBarLayout"
+                          android:visibility="gone"
                           android:orientation="horizontal">
                 <RatingBar
                         android:layout_width="wrap_content"
@@ -54,18 +54,21 @@
                 <TextView
                         android:id="@+id/numRepliesText"
                         android:layout_width="wrap_content"
+                        android:visibility="gone"
                         android:layout_margin="8dp"
-                        android:layout_height="wrap_content"
-                        android:text="• 27 отз"/>
-
+                        android:layout_height="wrap_content"/>
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="26dp"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
             </LinearLayout>
 
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
+
+
             <LinearLayout android:layout_width="match_parent"
+                          android:id="@+id/addressLayout"
+                          android:visibility="gone"
                           android:layout_height="wrap_content"
                           android:background="@android:color/background_light"
                           android:orientation="horizontal">
@@ -82,6 +85,8 @@
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:id="@+id/metroLayout"
+                          android:visibility="gone"
                           android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <ImageView android:layout_width="wrap_content"
@@ -95,24 +100,30 @@
                         android:text="Елизаровская"
                         android:layout_margin="8dp" android:maxLines="1"/>
             </LinearLayout>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
-            <TextView
-                    android:text="Категории и описание"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/background_light"
-                    android:id="@+id/descrHeader"
-                    android:layout_margin="8dp"
-                    android:textSize="20sp"/>
+
+
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/descrLayout"
+                    android:visibility="gone"
                     android:background="@android:color/background_light"
                     android:orientation="vertical">
+
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
+
+                <TextView
+                        android:text="Категории и описание"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/background_light"
+                        android:id="@+id/descrHeader"
+                        android:layout_margin="8dp"
+                        android:textSize="20sp"/>
                 <TextView
                         android:layout_margin="8dp"
                         android:text="@string/lorem_ipsum"
@@ -127,12 +138,15 @@
                         android:background="?android:attr/selectableItemBackground"
                         android:textAllCaps="false"
                         android:text="@string/show_all_descr"/>
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
             </LinearLayout>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
+
+
+
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:background="@android:color/background_light"
@@ -155,29 +169,35 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/profileName"
                         android:layout_gravity="center_vertical"
-                        android:text="Гарик Оливандер"
                         android:layout_margin="8dp"
                         android:maxLines="1" android:textSize="18sp"/>
             </LinearLayout>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
-            <TextView
-                    android:text="13:00 • 27 янв"
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/schedule_header"
-                    android:background="@android:color/background_light"
-                    android:layout_margin="8dp"/>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="8dp"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="26dp"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/scheduleHeader"
+                        android:background="@android:color/background_light"
+                        android:layout_margin="8dp"/>
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="8dp"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
+            </LinearLayout>
+
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:id="@+id/viewsDescrLayout"
                           android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <ImageView android:layout_width="wrap_content"
@@ -189,11 +209,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/views_text"
                         android:text="Просмотров, всего: 214, сегодня: 2"
-                        android:layout_margin="8dp" android:maxLines="1"
-                        />
+                        android:layout_margin="8dp" android:maxLines="1"/>
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
+                          android:id="@+id/ordersDescrLayout"
                           android:background="@android:color/background_light"
                           android:orientation="horizontal">
                 <ImageView android:layout_width="wrap_content"
@@ -206,12 +226,14 @@
                         android:id="@+id/orders_text"
                         android:text="Заказов, всего: 103, сегодня: 1"
                         android:layout_margin="8dp" android:maxLines="1"/>
+                <Space
+                        android:layout_width="0dp"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@android:color/transparent"
+                        android:layout_weight="1"/>
             </LinearLayout>
-            <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    android:layout_weight="1"/>
+            <Space android:layout_width="0dp" android:layout_height="?attr/actionBarSize"/>
+
 
         </LinearLayout>
     </ScrollView>

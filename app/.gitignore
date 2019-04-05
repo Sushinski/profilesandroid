@@ -1,5 +1,6 @@
 /build
 *.json
 /release
+/development
 *.jks
 *.iml
