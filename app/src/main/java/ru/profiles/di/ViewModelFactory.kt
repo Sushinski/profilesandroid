@@ -90,5 +90,5 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ServiceCardViewModel::class)
     internal abstract fun serviceCardViewModel(viewModel: ServiceCardViewModel): ViewModel
-    //Add more ViewModels here
+
 }

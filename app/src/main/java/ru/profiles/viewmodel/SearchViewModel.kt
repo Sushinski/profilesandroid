@@ -11,6 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import ru.profiles.data.*
+import ru.profiles.model.CategoryModel
 import ru.profiles.model.ServiceWithRelations
 
 
@@ -32,6 +33,10 @@ class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
 
     fun getServices(): LiveData<PagedList<ServiceWithRelations>>{
         return mServicesRepository.getServicesList()
+    }
+
+    fun searchCategories(searchString: String): LiveData<Array<CategoryModel>>{
+        return mServicesRepository.searchCategories(searchString)
     }
 
     fun applySearch(searchString: String){

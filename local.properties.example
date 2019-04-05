@@ -2,7 +2,7 @@
 Keys.repo=/keys/
 
 # AndroidSDK path
-# Define location with sdk.dir in the local.properties f ile or with an ANDROID_HOME environment variable.
+# Define locationModel with sdk.dir in the local.properties f ile or with an ANDROID_HOME environment variable.
 # sdk.dir=
 # export ANDROID_HOME=android-sdk-linux
 

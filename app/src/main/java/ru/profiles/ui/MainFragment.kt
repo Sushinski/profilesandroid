@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.main_fragment.*
+import ru.profiles.adapters.ArrayTabsAdapter
 import ru.profiles.adapters.FragmentTabsAdapter
 import ru.profiles.di.ViewModelFactory
 import ru.profiles.interfaces.AppBarSetter
@@ -27,11 +28,11 @@ class MainFragment : DaggerFragment() {
     private lateinit var mViewModel: MainViewModel
 
     private val mFragments: Array<Fragment> = arrayOf(
-        FeedFragment(),
-        SearchFragment(),
-        ChatFragment(),
-        NotificationFragment(),
-        ProfileFragment()
+        FeedFragment.newInstance(),
+        SearchFragment.newInstance(),
+        ChatFragment.newInstance(),
+        NotificationFragment.newInstance(),
+        ProfileFragment.newInstance()
     )
 
     companion object {
@@ -54,11 +55,7 @@ class MainFragment : DaggerFragment() {
 
     private fun initPager(ctx: Context){
         activity?.supportFragmentManager?.let {
-            val a = FragmentTabsAdapter(childFragmentManager)
-            for (f in mFragments.withIndex()) {
-                a.addTab(f.value)
-            }
-            a
+            ArrayTabsAdapter(childFragmentManager, mFragments)
         }?.also{
             content_viewpager.adapter = it
             content_tablayout.setupWithViewPager(content_viewpager)

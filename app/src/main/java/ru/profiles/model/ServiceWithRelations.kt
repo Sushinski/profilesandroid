@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 class ServiceWithRelations {
+
     @Embedded
     var service: ServiceModel? = null
 
@@ -12,5 +13,8 @@ class ServiceWithRelations {
 
     @Relation(parentColumn = "id", entityColumn = "serviceId", entity = ServicePhotoModel::class)
     var photoModels: List<ServicePhotoRelation>? = null
+
+    @Relation(parentColumn = "id", entityColumn = "serviceId", entity = ServiceLocationModel::class)
+    var locationModels: List<ServiceLocationRelation>? = null
 
 }

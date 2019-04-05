@@ -30,8 +30,12 @@ import ru.profiles.model.*
         ServiceModel::class,
         OrganizationArea::class,
         SearchModel::class,
-        ServicePhotoModel::class
-    ], version = 1, exportSchema = false)
+        LocationModel::class,
+        ServicePhotoModel::class,
+        LocationMetroStation::class,
+        ServiceLocationModel::class,
+        CountryModel::class
+    ], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase(){
 
     abstract fun userModelDao(): UserModelDao
@@ -50,7 +54,9 @@ abstract class AppDatabase : RoomDatabase(){
         }
 
         private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "Profiles.db").build()
+            return Room.databaseBuilder(context, AppDatabase::class.java, "Profiles.db")
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

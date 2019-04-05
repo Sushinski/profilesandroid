@@ -14,12 +14,10 @@ import javax.inject.Inject
 import android.graphics.drawable.ColorDrawable
 import ru.profiles.utils.ScreenUtils
 import android.graphics.Color
-import android.net.Uri
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.service_card_fragment.*
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.service_card_layout.view.*
 import ru.profiles.profiles.BuildConfig
 
 
@@ -114,13 +112,24 @@ class ServiceCardFragment : DaggerFragment(){
         serviceTitle.text = mServiceModel.service?.title
         serviceCost.text = mServiceModel.service?.cost
         ratingBar.numStars = mServiceModel.service?.ratings?.common ?: 0
-        numRepliesText.text = "• ${mServiceModel.service?.ratings?.common ?:0}"
-        addressText.text = mServiceModel.service?.address
-        metroText.text = mServiceModel.service?.locations?.getOrNull(0)?.metroStations?.get(0)?.name
+        numRepliesText.text = "• ${mServiceModel.service?.ratings?.common ?: 0}"
+        addressText.text = mServiceModel.locationModels?.getOrNull(0)
+            ?.serviceLocations?.getOrNull(0)?.let {
+                "${it.city?.getOrNull(0)?.name}" +
+                        "${it.location?.street?.let{ s->if(s.isNotBlank()) ", ул.$s" else "" }}" +
+                        "${it.location?.block?.let{ b->if(b.isNotBlank()) ", д.$b" else "" }}" +
+                        "${it.location?.office?.let{ o->if(o.isNotBlank()) ", офис $o" else ""}}"
+            } ?: "Не указан"
+        metroText.text = mServiceModel.locationModels?.getOrNull(0)
+            ?.serviceLocations?.getOrNull(0)
+            ?.metroStations?.getOrNull(0)
+            ?.stations?.getOrNull(0)
+            ?.name ?: "Не указана"
+
         textServiceDescr.text = mServiceModel.service?.description
         profileName.text = mServiceModel.profileModels?.getOrNull(0)?.profile?.displayName
         mServiceModel.photoModels?.getOrNull(0)?.photos?.getOrNull(0)?.fileName?.let{
-            val uri = "${BuildConfig.MINIO_URL}/profiles/medium/$it"
+            val uri = "${BuildConfig.MINIO_URL}/profiles/large/$it"
             if(it.isNotEmpty()) backdrop_toolbar_image.setImageURI(uri)
         }
 

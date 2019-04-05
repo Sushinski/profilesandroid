@@ -49,5 +49,6 @@ abstract class FragmentBuilderModule {
     @ContributesAndroidInjector
     abstract fun bindServiceCardFragment(): ServiceCardFragment
 
-
+    @ContributesAndroidInjector
+    abstract fun bindCardResultFragment(): CardResultFragment
 }

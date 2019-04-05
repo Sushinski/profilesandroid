@@ -4,7 +4,6 @@ import androidx.room.*
 import androidx.room.ColumnInfo.NOCASE
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.profiles.model.pojo.Location
 import ru.profiles.model.pojo.PhotoFile
 
 @Entity(
@@ -58,7 +57,7 @@ data class ServiceModel(
     @Expose
     @SerializedName("locations")
     @Ignore
-    var locations: List<Location>? = null,// todonetomany
+    var locationModels: List<LocationModel>? = null,// todonetomany
     @Expose
     @SerializedName("is_published")
     var isPublished: Boolean? = null,
@@ -91,14 +90,6 @@ data class ServiceModel(
     @SerializedName("files")
     @Ignore
     var files: List<PhotoFile>? = null,
-    @Expose
-    @SerializedName("regular_schedule")
-    @Ignore
-    var regularSchedule: List<Any>? = null,
-    @Expose
-    @SerializedName("irregular_schedule")
-    @Ignore
-    var irregularSchedule: List<Any>? = null,
     @Expose
     @SerializedName("ratings")
     @Ignore

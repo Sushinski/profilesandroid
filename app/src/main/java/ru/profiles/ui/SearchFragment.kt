@@ -13,12 +13,16 @@ import android.view.LayoutInflater
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.search_fragment.*
 import kotlinx.android.synthetic.main.search_toolbar_view.*
 import ru.profiles.adapters.FragmentTabsAdapter
 import ru.profiles.adapters.SearchListAdapter
 import ru.profiles.extensions.hideKeyBoard
 import ru.profiles.interfaces.AppBarSetter
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 
 class SearchFragment : DaggerFragment(), AppBarSetter {
@@ -37,7 +41,10 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
         fun newInstance() = SearchFragment()
     }
 
-    private val mTabs = mapOf("Все" to SearchResultFragment.newInstance())
+    private val mTabs = mapOf(
+        "Топ" to SearchResultFragment.newInstance(),
+        "Услуги" to CardResultFragment.newInstance()
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,21 +91,42 @@ class SearchFragment : DaggerFragment(), AppBarSetter {
 
     private fun initPager() {
         activity?.supportFragmentManager?.let {
-            val a = FragmentTabsAdapter(childFragmentManager)
-            search_content_viewpager.adapter = a
+            FragmentTabsAdapter(childFragmentManager, mTabs)
+        }?.also{
+            search_content_viewpager.adapter = it
             search_content_tablayout.setupWithViewPager(search_content_viewpager)
-            for (f in mTabs.iterator().withIndex()) {
-                a.addTab(f.value.value)
-                a.notifyDataSetChanged()
-                search_content_tablayout.getTabAt(f.index)?.text = f.value.key
-            }
-
+            //for (t in 0 until content_tablayout.tabCount) search_content_tablayout.getTabAt(t)?.text = mTabs
         }
+
+
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         search_text_view?.clearFocus()
+    }
+
+    inner class ExamplePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+
+        // tab titles
+        private val tabTitles = arrayOf("Tab1", "Tab2", "Tab3")
+
+        // overriding getPageTitle()
+        override fun getPageTitle(position: Int): CharSequence? {
+            return tabTitles[position]
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return when (position) {
+                0 -> SearchFragment.newInstance()
+                else -> CardResultFragment.newInstance()
+                // shouldn't happen
+            }
+        }
+
+        override fun getCount(): Int {
+            return tabTitles.size
+        }
     }
 
 }

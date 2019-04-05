@@ -229,7 +229,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
                 app:actualImageScaleType="centerCrop"
-                app:actualImageResource="@drawable/ic_placeholder"
+                app:placeholderImageScaleType="centerCrop"
+                app:placeholderImage="@drawable/ic_placeholder"
                 android:baselineAlignBottom="true"/>
 
         <androidx.appcompat.widget.Toolbar

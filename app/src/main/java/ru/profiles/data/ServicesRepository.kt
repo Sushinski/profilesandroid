@@ -10,6 +10,8 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import ru.profiles.api.interfaces.ServicesApi
 import ru.profiles.dao.ServicesModelDao
+import ru.profiles.data.ServicesBoundaryCallback.Companion.DATABASE_PAGE_SIZE
+import ru.profiles.model.CategoryModel
 import ru.profiles.model.SearchModel
 import ru.profiles.model.ServiceModel
 import ru.profiles.model.ServiceWithRelations
@@ -25,9 +27,8 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
     private var mCurrentLiveData: LiveData<PagedList<ServiceWithRelations>>
 
     private val mPagedListConfig = PagedList.Config.Builder()
-        .setEnablePlaceholders(true)
-        .setInitialLoadSizeHint(40)
-        .setPageSize(20)
+        .setEnablePlaceholders(false)
+        .setPageSize(DATABASE_PAGE_SIZE)
         .build()
 
     private val mFetchExecutor = Executors.newFixedThreadPool(3)
@@ -68,6 +69,10 @@ class ServicesRepository private constructor(private val mServicesApi: ServicesA
 
     fun getActualSearch(): LiveData<SearchModel> {
         return mServicesModelDao.getActualSearch("service")
+    }
+
+    fun searchCategories(searchString: String): LiveData<Array<CategoryModel>>{
+        return mServicesModelDao.searchCategories("%$searchString%")
     }
 
     suspend fun getItemNumber(itemAtEnd: ServiceWithRelations): Long{

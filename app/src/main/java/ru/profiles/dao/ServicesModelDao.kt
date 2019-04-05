@@ -6,7 +6,7 @@ import androidx.paging.DataSource
 import androidx.room.*
 import ru.profiles.model.*
 import ru.profiles.model.CategoryModel
-import ru.profiles.model.pojo.Location
+import ru.profiles.model.LocationModel
 import ru.profiles.model.pojo.PhotoFile
 
 @Dao
@@ -28,6 +28,9 @@ interface ServicesModelDao {
     @Query("SELECT COUNT(*) FROM services WHERE id <= :id")
     fun getItemsCountForId(id: Long): Long
 
+    @Query("SELECT * FROM category WHERE title LIKE :searchString")
+    fun searchCategories(searchString: String): LiveData<Array<CategoryModel>>
+
     @Update
     fun update(model: ServiceModel)
 
@@ -37,34 +40,31 @@ interface ServicesModelDao {
         try {
             serviceModel.organization?.let {
                 serviceModel.organization_id = insert(it)
-                Log.i("ProfilesInfo", "Organization saved with ${serviceModel.organization_id}")
             }
             serviceModel.profile?.let {
                 serviceModel.profile_id = insertProfile(it)
-                Log.i("ProfilesInfo", "Profile saved with ${serviceModel.profile_id}")
             }
             serviceModel.ratings?.let {
                 serviceModel.ratings_id = insert(it)
-                    Log.i("ProfilesInfo", "Rating saved with ${serviceModel.ratings_id}")
+            }
+            val sid = insert(serviceModel)
+            serviceModel.files?.let{
+                insertServicePhotos(sid, it)
             }
             /*serviceModel.categories?.let {
                 saveCategoriesChildren(null, it)
                 Log.i("ProfilesInfo", "Categories saved")
             }*/
-            serviceModel.locations?.let {
+            serviceModel.locationModels?.let {
                 for (location in it) {
-                    insertLocation(location)
+                    insertLocation(location)?.let{
+                        lid->insert(ServiceLocationModel(sid, lid))
+                    }
                 }
-                Log.i("ProfilesInfo", "Locations saved")
             }
         }catch (e: Exception){
             Log.i("ProfilesInfo", "Failed create embedded objects: $e")
         }
-        val id = insert(serviceModel)
-        serviceModel.files?.let{
-            insertServicePhotos(id, it)
-        }
-        Log.i("ProfilesInfo", "Service ${serviceModel.title} ${serviceModel.description} saved with $id")
     }
 
     @Transaction
@@ -108,14 +108,14 @@ interface ServicesModelDao {
             organizationModel.phone_id = insert(it)
         }
         organizationModel.ratings?.let {
-            organizationModel.ratings_id = insert(it)
+            organizationModel.ratings_id = insert(it) ?: 0
         }
         val orgId = insert(organizationModel)
-        organizationModel.areas?.let{
+        organizationModel.areas?.also{
             for(area in it){
-                val areaId = insert(area)
-                val oa = OrganizationArea(orgId, areaId)
-                insert(oa)
+                insert(area)?.let {
+                    aId-> insert(OrganizationArea(orgId, aId))
+                }
             }
         }
         return orgId
@@ -134,8 +134,8 @@ interface ServicesModelDao {
     fun getCategory(categoryId: Long): CategoryModel?
 
     @Transaction
-    fun insertProfile(profileModel: ProfileModel): Long{
-        var id: Long = profileModel.orig_id?.let { getProfileId(it) } ?: 0L
+    fun insertProfile(profileModel: ProfileModel): Long?{
+        var id: Long? = profileModel.orig_id?.let { getProfileId(it) } ?: 0L
         if(id == 0L){
             profileModel.organization?.let{
                     o->profileModel.organizationId = insertOrganization(o)
@@ -162,28 +162,62 @@ interface ServicesModelDao {
     fun getPhotoIdByOrigId(origId: String) : Long
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(profileModel: ProfileModel) : Long
+    fun insert(profileModel: ProfileModel) : Long?
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ratingsModel: RatingsModel) : Long
+    fun insert(ratingsModel: RatingsModel) : Long?
 
     @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(categoryModel: CategoryModel): Long
+    fun insert(categoryModel: CategoryModel): Long?
 
     @Transaction
-    fun insertLocation(location: Location){
-        insert(location.city)
-        location.metroStations.let{
-            for(station in it) insert(station)
+    fun insertLocation(locationModel: LocationModel): Long? {
+        return locationModel.country?.let {
+            getCountry(it.name ?: CountryModel.UNDEFINED) ?: insert(it)
+        }?.let {
+            locationModel.countryId = it
+            locationModel.city?.let{ c->getCity(c.name ?: CityModel.UNDEFINED) ?: insert(c) }
+        }?.let {
+            locationModel.cityId = it
+            insert(locationModel)
+        }?.also {
+            locationModel.metroStations?.let{
+                list->for(st in list) {
+                    getMetroStation(st.name ?: MetroStationModel.UNDEFINED) ?: insert(st) ?.let {
+                        stId->insert(LocationMetroStation(it, stId))
+                    }
+                }
+            }
         }
     }
 
-    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(city: CityModel) : Long
+    @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(location: LocationModel): Long?
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(city: CityModel) : Long?
+
+    @Query ("SELECT id FROM city WHERE name=:cityName")
+    fun getCity(cityName: String) : Long?
+
+    @Transaction @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(metro: MetroStationModel) : Long?
+
+    @Query("SELECT id FROM metro_station WHERE name=:stationName")
+    fun getMetroStation(stationName: String): Long?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(locationMetro: LocationMetroStation): Long?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(serviceLocation: ServiceLocationModel)
 
     @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(metro: MetroStationModel) : Long
+    fun insert(area: AreaModel) : Long?
 
-    @Transaction @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(area: AreaModel) : Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(country: CountryModel): Long?
+
+    @Query("SELECT id FROM country WHERE name=:countryName")
+    fun getCountry(countryName: String): Long?
 }

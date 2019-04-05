@@ -49,8 +49,6 @@ class SearchResultFragment: DaggerFragment() {
     private var mPopularAllLiveData: LiveData<PagedList<ServiceWithRelations>>? = null
 
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // todo move scope to parent fragment
         mViewModel = ViewModelProviders.of(requireActivity(), mViewModelFactory).get(SearchViewModel::class.java)
