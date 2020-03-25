@@ -8,6 +8,7 @@ import kotlinx.coroutines.*
 import ru.profiles.dao.AuthModelDao
 import ru.profiles.model.AuthModel
 import ru.profiles.api.interfaces.AuthApi
+import ru.profiles.interfaces.AuthRepositoryOps
 import ru.profiles.model.pojo.AuthRequest
 import ru.profiles.model.pojo.AuthResponse
 import ru.profiles.model.pojo.TokenRefreshBody
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 
 class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
-                                         private val mAuthApi: AuthApi) {
+                                         private val mAuthApi: AuthApi) : AuthRepositoryOps{
 
 
 
@@ -30,38 +31,38 @@ class AuthRepository private constructor(private val mAuthDao: AuthModelDao,
             }
     }
 
-    suspend fun saveAuth(authModel: AuthModel){
+    override suspend fun saveAuth(authModel: AuthModel){
         withContext(Dispatchers.IO) {
             mAuthDao.saveAuth(authModel)
         }
     }
 
-    suspend fun updateAuth(authModel: AuthModel){
+    override  suspend fun updateAuth(authModel: AuthModel){
         withContext(Dispatchers.IO) {
             mAuthDao.updateAuth(authModel)
         }
     }
 
-    suspend fun clearAuth(){
+    override suspend fun clearAuth(){
         withContext(Dispatchers.IO){
             mAuthDao.deleteAuth()
         }
     }
 
-    fun getAuth(): Observable<AuthModel?> {
+    override fun getAuth(): Observable<AuthModel?> {
         return mAuthDao.getUserAuth()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).share()
     }
 
-    fun refreshToken(refreshToken: String): Observable<AuthResponse>{
+    override fun refreshToken(refreshToken: String): Observable<AuthResponse>{
         return mAuthApi.updateAuth(TokenRefreshBody(refreshToken))
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread()).share()
     }
 
-    fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
+    override fun authUser(identity: String, pswd: String) : Single<AuthResponse> {
         return mAuthApi.authorizeUser(AuthRequest(identity, pswd))
             .subscribeOn(Schedulers.io())
             .timeout(5, TimeUnit.SECONDS)

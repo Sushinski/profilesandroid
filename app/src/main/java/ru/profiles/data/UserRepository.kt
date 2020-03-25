@@ -5,10 +5,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.UserModelDao
+import ru.profiles.interfaces.UserRepositoryOps
 import ru.profiles.model.UserModel
 
 class UserRepository private constructor(private val mUserDao: UserModelDao,
-                                         private val mAuthApi: AuthApi ) {
+                                         private val mAuthApi: AuthApi ) : UserRepositoryOps {
 
     companion object {
         @Volatile private var instance: UserRepository? = null
@@ -20,27 +21,27 @@ class UserRepository private constructor(private val mUserDao: UserModelDao,
             }
     }
 
-    fun getLoggedUser() : LiveData<UserModel> {
+    override fun getLoggedUser() : LiveData<UserModel> {
         return mUserDao.getLoggedUser()
     }
 
-    fun getRegisteredUser() : LiveData<UserModel>{
+    override fun getRegisteredUser() : LiveData<UserModel>{
         return mUserDao.getRegisteredUser()
     }
 
-    suspend fun saveUser(user: UserModel){
+    override suspend fun saveUser(user: UserModel){
         withContext(IO) {
             mUserDao.save(user)
         }
     }
 
-    suspend fun deleteRegisteredUser(){
+    override suspend fun deleteRegisteredUser(){
         withContext(IO){
             mUserDao.clearUser(false)
         }
     }
 
-    suspend fun deleteLoggedUser(){
+    override suspend fun deleteLoggedUser(){
         withContext(IO){
             mUserDao.clearUser(true)
         }

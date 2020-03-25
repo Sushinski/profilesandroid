@@ -8,9 +8,9 @@ import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import retrofit2.HttpException
-import ru.profiles.data.AuthRepository
-import ru.profiles.data.UserRepository
 import ru.profiles.extensions.toSingleEvent
+import ru.profiles.interfaces.AuthRepositoryOps
+import ru.profiles.interfaces.UserRepositoryOps
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.AuthModel
 import ru.profiles.model.ErrorModel
@@ -19,8 +19,8 @@ import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 
-class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
-                                         private val mAuthRep: AuthRepository,
+class LoginViewModel @Inject constructor(private val mUserRep: UserRepositoryOps,
+                                         private val mAuthRep: AuthRepositoryOps,
                                          private val mGson: Gson
 ) : ViewModel() {
 
@@ -31,8 +31,6 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
     private val viewModelJob = Job()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    private val mLoginEvent = mUserRep.getLoggedUser().toSingleEvent()
 
     fun loginUser(identity: String, pswd: String) {
         mDisposables.add(mAuthRep.authUser(identity, pswd).subscribe (
@@ -65,7 +63,7 @@ class LoginViewModel @Inject constructor(private val mUserRep: UserRepository,
     }
 
     fun getLoggedUser(): LiveData<UserModel> {
-        return mLoginEvent
+        return mUserRep.getLoggedUser().toSingleEvent()
     }
 
     override fun onCleared() {

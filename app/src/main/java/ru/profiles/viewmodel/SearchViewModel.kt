@@ -11,11 +11,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import ru.profiles.data.*
+import ru.profiles.interfaces.UserRepositoryOps
 import ru.profiles.model.CategoryModel
 import ru.profiles.model.ServiceWithRelations
 
 
-class SearchViewModel @Inject constructor(private val mUserRep: UserRepository,
+class SearchViewModel @Inject constructor(private val mUserRep: UserRepositoryOps,
                                           private val mServicesRepository: ServicesRepository,
                                           private val mGoodsRepository: GoodsRepository
 ) :  ViewModel() {

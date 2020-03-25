@@ -17,12 +17,12 @@ import okhttp3.RequestBody
 import retrofit2.HttpException
 import ru.profiles.api.interfaces.AuthApi
 import ru.profiles.dao.AuthModelDao
-import ru.profiles.data.AuthRepository
 import ru.profiles.data.RegistrationRepository
 import ru.profiles.data.ResourcesRepository
-import ru.profiles.data.UserRepository
 import ru.profiles.extensions.isEmailValid
 import ru.profiles.extensions.toSingleEvent
+import ru.profiles.interfaces.AuthRepositoryOps
+import ru.profiles.interfaces.UserRepositoryOps
 import ru.profiles.livedata.SingleLiveEvent
 import ru.profiles.model.AuthModel
 import ru.profiles.model.ErrorModel
@@ -32,10 +32,10 @@ import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 
-class RegistrationViewModel @Inject constructor(private val mUserRep: UserRepository,
+class RegistrationViewModel @Inject constructor(private val mUserRep: UserRepositoryOps,
                                                 private val mRegRep: RegistrationRepository,
                                                 private val mResRep: ResourcesRepository,
-                                                private val mAuthRep: AuthRepository,
+                                                private val mAuthRep: AuthRepositoryOps,
                                                 private val mGson: Gson
 ) : ViewModel() {
 

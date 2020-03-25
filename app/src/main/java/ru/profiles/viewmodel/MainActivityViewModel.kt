@@ -8,12 +8,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.profiles.data.AuthRepository
+import ru.profiles.interfaces.AuthRepositoryOps
 import ru.profiles.model.AuthModel
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class MainActivityViewModel  @Inject constructor(private val mAuthRep: AuthRepository) : ViewModel() {
+class MainActivityViewModel  @Inject constructor(private val mAuthRep: AuthRepositoryOps) : ViewModel() {
 
     private var mAuthLookupDisposable: Disposable? = null
 

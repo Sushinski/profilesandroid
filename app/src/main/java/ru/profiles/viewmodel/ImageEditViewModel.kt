@@ -10,12 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.profiles.data.UserRepository
+import ru.profiles.interfaces.UserRepositoryOps
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-class ImageEditViewModel @Inject constructor(private val mUserRep: UserRepository) : ViewModel() {
+class ImageEditViewModel @Inject constructor(private val mUserRep: UserRepositoryOps) : ViewModel() {
 
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
